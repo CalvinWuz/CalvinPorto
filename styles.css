@@ -41,7 +41,7 @@
   --ease:cubic-bezier(.22,1,.36,1);
   --bar:64px;
   /* satu pita kanan untuk maskot: dipesan di satu sisi saja, bukan dua */
-  --catlane:76px;
+  --catlane:120px;
 }
 /* Tanpa JavaScript tidak ada data-theme, jadi preferensi perangkat tetap dihormati. */
 @media (prefers-color-scheme:dark){
@@ -679,23 +679,27 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
 /* ═══════════ maskot ═══════════
    Lapisan sendiri. Peran node dipisah: companion = dock, actor = jalan,
    hop = lompat, puppet = arah hadap, pose = miring, visual = napas. */
+/* Satu pemilik posisi: controller gerak menulis --cat-x/--cat-y.
+   Tidak ada lagi dock lama, transisi dock, atau --walk. */
 .companion{
-  position:fixed;left:0;top:0;z-index:30;width:72px;height:72px;
-  pointer-events:none;
-  transform:translate3d(var(--dock-x,24px),var(--dock-y,50vh),0);
-  transition:transform var(--dock-ms,720ms) cubic-bezier(.33,1,.5,1);
+  position:fixed;left:0;top:0;z-index:30;
+  --cat-size:72px;--cat-x:calc(100vw - 110px);--cat-y:190px;
+  width:var(--cat-size);height:var(--cat-size);
+  pointer-events:none;transition:none;
+  transform:translate3d(var(--cat-x),var(--cat-y),0);
   will-change:transform;
 }
-.companion.is-settling{opacity:.001;transition:transform 0ms,opacity 180ms linear}
 .cat-actor{
-  position:absolute;left:0;top:0;width:72px;height:72px;
+  position:absolute;left:0;top:0;width:var(--cat-size);height:var(--cat-size);
   padding:0;border:0;background:transparent;border-radius:14px;
-  pointer-events:auto;touch-action:manipulation;cursor:pointer;
-  transform:translate3d(var(--walk,0px),0,0);
+  pointer-events:auto;touch-action:manipulation;cursor:pointer;transform:none;
 }
 .cat-actor:focus-visible{outline:3px solid var(--accent-text);outline-offset:4px}
 .cat-actor *{pointer-events:none}
-.cat-hop,.cat-puppet,.cat-pose,.cat-visual{display:block;position:absolute;inset:0}
+.cat-hop,.cat-locomotion,.cat-puppet,.cat-pose,.cat-gait,.cat-visual{display:block;position:absolute;inset:0}
+.cat-locomotion{transform:rotate(var(--cat-lean,0deg));transform-origin:50% 92%}
+.cat-puppet{transform:scaleX(var(--cat-face,1));transform-origin:50% 90%}
+.cat-gait{transform:translateY(var(--cat-bob,0px));transform-origin:50% 92%}
 .cat-pose{transform-origin:50% 91.8%;transition:transform 750ms cubic-bezier(.2,.7,.2,1)}
 .cat-visual{overflow:clip}
 .cat-sprite{
@@ -771,14 +775,14 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
 .companion[data-cat-state=sleep] .cat-pose{transform:rotate(-12deg) scale(1.02,.93)}
 .companion[data-cat-state=sleep] .cat-visual{animation:cat-breathe 2600ms ease-in-out infinite;transform-origin:50% 91.8%}
 .companion[data-cat-state=sleep] .cat-sleep-mark{opacity:1}
-.is-walking .cat-visual{animation:cat-walk-bob 340ms ease-in-out infinite}
-.is-walking .cat-foot-left{animation:cat-left-step 340ms ease-in-out infinite}
-.is-walking .cat-foot-right{animation:cat-right-step 340ms ease-in-out infinite}
-.companion.is-paused .cat-actor *{animation-play-state:paused;transition-duration:0s}
+.companion .cat-foot-left{animation:none;transform:translateY(var(--lift-left,0px)) rotate(var(--step-left,0deg))}
+.companion .cat-foot-right{animation:none;transform:translateY(var(--lift-right,0px)) rotate(var(--step-right,0deg))}
+.companion.is-walking .cat-visual{animation:none}
+.companion.is-paused *{animation-play-state:paused !important;transition-duration:0s !important}
+/* Isi halaman bisa berpindah tepat di bawah actor fixed (anchor jump, rotasi).
+   Menyembunyikan adalah fallback keselamatan, bukan transisi section biasa. */
+.companion.is-safety-hidden{visibility:hidden;pointer-events:none}
 
-@keyframes cat-walk-bob{50%{transform:translateY(-1px) scaleY(.99)}}
-@keyframes cat-left-step{0%,100%{transform:rotate(6deg) translateY(-.1px)}50%{transform:rotate(-6deg) translateY(-1.2px)}}
-@keyframes cat-right-step{0%,100%{transform:rotate(-6deg) translateY(-1.2px)}50%{transform:rotate(6deg) translateY(-.1px)}}
 @keyframes cat-breathe{50%{transform:scale(1.01,.98)}}
 @keyframes cat-yawn{0%,100%{transform:scale(.48,.12)}35%,70%{transform:scale(.55,.5)}}
 @keyframes cat-stretch{0%,100%{transform:scale(1)}23%{transform:scale(1.05,.94)}57%,72%{transform:translateY(-2px) scale(.94,1.08)}}
@@ -805,7 +809,7 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
 @media (max-width:980px){
   /* Satu kolom tidak punya ruang samping, jadi pita kanan disediakan untuk maskot
      dan seluruh dock sempit memakai pita itu. */
-  :root{--catlane:66px}
+  :root{--catlane:96px}
   .scribble-point{right:clamp(4px,3vw,30px)}
 
   .hero-grid{grid-template-columns:1fr;gap:18px}
@@ -818,6 +822,8 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
 
 /* ═══════════ ponsel ═══════════ */
 @media (max-width:720px){
+  :root{--catlane:66px}
+
   :root{--bar:58px}
   body{font-size:1rem}
   .brand-name{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
@@ -866,8 +872,7 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
   .foot-top{flex-direction:column;align-items:flex-start;gap:6px}
   .foot-nav{margin-left:-10px}
 
-  .companion{width:56px;height:56px}
-  .cat-actor{width:54px;height:54px}
+  .companion{--cat-size:54px}
   .cat-props{left:-9px;top:-9px;width:72px;height:72px}
   .cat-prop-thumb,.cat-prop-flower{width:54px;height:54px}
   .cat-prop-flower{left:24px}
@@ -910,4 +915,30 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
   .cat-actor *{animation:none !important}
   .companion{transition:none}
   .js .sketch-demo{opacity:.9}
+}
+
+
+/* ═══════════ tekstur tepi ═══════════
+   Hanya margin luar yang bergeser; bidang teks di tengah tetap bersih. */
+.cm-edge-texture{
+  position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  user-select:none;contain:strict;color:var(--ink-scribble);
+}
+.cm-edge{position:absolute;top:-32px;bottom:-32px;width:clamp(40px,7vw,116px);overflow:hidden;opacity:.42}
+.cm-edge::before{
+  content:"";position:absolute;inset:-28px;background:currentColor;
+  -webkit-mask:url(img/textures/sparse-pencil-dots.svg) 0 0/200px 180px repeat;
+  mask:url(img/textures/sparse-pencil-dots.svg) 0 0/200px 180px repeat;
+  animation:cm-edge-drift 76s ease-in-out infinite alternate;will-change:transform;
+}
+.cm-edge-left{left:0;-webkit-mask-image:linear-gradient(90deg,#000,transparent);mask-image:linear-gradient(90deg,#000,transparent)}
+.cm-edge-right{right:0;-webkit-mask-image:linear-gradient(90deg,transparent,#000);mask-image:linear-gradient(90deg,transparent,#000)}
+.cm-edge-right::before{animation-duration:91s;animation-delay:-31s;animation-direction:alternate-reverse}
+@keyframes cm-edge-drift{from{transform:translate3d(-5px,-14px,0)}to{transform:translate3d(7px,14px,0)}}
+html[data-motion=paused] .cm-edge::before{animation-play-state:paused;will-change:auto}
+@media (max-width:720px){.cm-edge{width:40px;opacity:.3}.cm-edge::before{animation-duration:102s}}
+@media (prefers-reduced-motion:reduce){
+  .cm-edge::before{animation:none;transform:none;will-change:auto}
+  .companion *{animation:none !important;transition:none !important}
+  .cat-gait,.cat-locomotion{transform:none}
 }

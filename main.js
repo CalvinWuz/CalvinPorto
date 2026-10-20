@@ -16,14 +16,27 @@
   function drop(k) { try { localStorage.removeItem(k); } catch (e) {} }
 
   /* Satu tombol jeda mengendalikan maskot dan deretan logo. */
-  var motionPaused = reduced || read('calvin-motion') === 'paused';
+  var manualPaused = read('calvin-motion') === 'paused';
+  var motionPaused = manualPaused || reduced;
   var motionListeners = [];
   function onMotionChange(fn) { motionListeners.push(fn); }
-  function setMotionPaused(v, persist) {
-    motionPaused = Boolean(v);
-    if (persist) store('calvin-motion', motionPaused ? 'paused' : 'playing');
+  function broadcastMotion() {
+    // Effective pause = jeda manual ATAU reduced motion ATAU tab tersembunyi.
+    motionPaused = manualPaused || reduced || document.hidden;
+    document.documentElement.setAttribute('data-motion', motionPaused ? 'paused' : 'playing');
     motionListeners.forEach(function (fn) { try { fn(motionPaused); } catch (e) {} });
   }
+  function setMotionPaused(v, persist) {
+    manualPaused = Boolean(v);
+    if (persist) store('calvin-motion', manualPaused ? 'paused' : 'playing');
+    broadcastMotion();
+  }
+  document.addEventListener('visibilitychange', broadcastMotion);
+  // Preferensi OS dipegang state pusat, bukan oleh masing-masing fitur.
+  var onReduceChange = function (e) { reduced = e.matches; broadcastMotion(); };
+  if (motionQuery.addEventListener) motionQuery.addEventListener('change', onReduceChange);
+  else if (motionQuery.addListener) motionQuery.addListener(onReduceChange);
+  broadcastMotion();
 
   /* Perubahan layout disiarkan sekali, bukan diukur ulang tiap frame. */
   var layoutListeners = [];
@@ -70,14 +83,14 @@
     var btn = document.getElementById('motionBtn');
     if (!btn) return;
     function paint() {
-      btn.setAttribute('aria-pressed', motionPaused ? 'true' : 'false');
-      btn.querySelector('.vh').textContent = motionPaused
-        ? 'Lanjutkan gerakan kucing dan deretan logo'
-        : 'Jeda gerakan kucing dan deretan logo';
+      btn.setAttribute('aria-pressed', manualPaused ? 'true' : 'false');
+      btn.querySelector('.vh').textContent = manualPaused
+        ? 'Lanjutkan gerakan kucing, deretan logo, dan tekstur tepi'
+        : 'Jeda gerakan kucing, deretan logo, dan tekstur tepi';
     }
     paint();
     onMotionChange(paint);
-    btn.addEventListener('click', function () { setMotionPaused(!motionPaused, true); });
+    btn.addEventListener('click', function () { setMotionPaused(!manualPaused, true); });
   });
 
   /* ── menu ponsel ────────────────────────────────────── */
@@ -148,15 +161,9 @@
         below = Math.max(0, b.bottom - a.top + 16);
       }
       var lane = w >= 721 ? CAT_LANE : 64;
+      // Batas stiker stabil dan tidak membaca posisi maskot. Kucinglah yang
+      // menghindari stiker, jadi perjalanannya tidak menggeser bidang main.
       var max = w - lane;
-      // Hanya sebagai batas tambahan setelah maskot benar-benar ditempatkan.
-      // Posisi default TIDAK dihitung dari sini, supaya stiker tidak pernah
-      // menumpuk saat maskot masih dalam transisi pembukaan.
-      var cat = document.getElementById('companion');
-      if (cat && cat.style.getPropertyValue('--dock-x')) {
-        var cr = cat.getBoundingClientRect();
-        if (cr.width) max = Math.min(max, cr.left - a.left - 8);
-      }
       return {
         w: w, h: h,
         max: Math.max(160, max),
@@ -651,375 +658,70 @@
   });
 
   /* ── maskot kucing ───────────────────────────────────────
-     Satu actor pada lapisan fixed. Dock diambil dari elemen .cat-slot yang
-     memang disediakan tiap section, jadi safe zone-nya lokal, bukan gutter
-     104 px sepanjang halaman. Jalan kecil dibatasi ruang nyata di dock. */
+     Controller gerak (paket 06) memiliki satu-satunya kendali posisi, rute,
+     ritme kaki, dan ekspresi. Tidak ada dock lama, listener scroll dock,
+     observer pemilihan dock, atau loop gait CSS yang berjalan berdampingan. */
   feature(function () {
     var root = document.getElementById('companion');
-    if (!root) return;
-    var actor = root.querySelector('.cat-actor');
-    var puppet = root.querySelector('.cat-puppet');
-    var hop = root.querySelector('.cat-hop');
-    var live = document.getElementById('cat-live');
-    if (!actor || !puppet || !hop) return;
+    if (!root || !root.querySelector('.cat-actor')) return;
 
-    var speed = 90, rest = 7;
-    var durations = { greet: 1800, cool: 4000, stretch: 1000, approve: 2200, flower: 2600, peek: 1400 };
-    var lowPriority = { walk: 1, idle: 1, curious: 1, coffee: 1, yawn: 1 };
+    import('./js/motion.js').then(function (mod) {
+      var cat = new mod.CalvinCompanion({
+        root: root,
+        // Penghalang dipasang pada blok materi, bukan wadahnya: menandai section
+        // utuh akan menelan seluruh ruang jelajah setelah diperbesar radius kucing.
+        obstacles: [
+          '.topbar', '.sticker',
+          '.eyebrow', '.name', '.role', '.motto', '.lede', '.cta', '.hint',
+          '.chapter-kicker', '.display', '.bridge',
+          '.case-tag', '.case h3', '.case-lede', '.case-sub', '.case-fact', '.case-role',
+          '.case-media img', '.case-media figcaption', '.crop-frame', '.case-crop figcaption',
+          '.flow-step', '.pipe li', '.pipeline figcaption', '.sketch',
+          '.stack', '.link', 'details.study',
+          '.portrait', '.pull', '.about-text p', '.note-list li', '.notes-title',
+          '.marquee-label', '.marquee-view', '.learn-list', '.tools-note',
+          '.tl-group', '.timeline li',
+          '.mailto', '.contact-lede', '.contact-actions', '.contact-list',
+          '.foot-top', '.foot-note'
+        ].join(','),
+        perches: '[data-cat-perch]'
+      }).start();
 
-    var greets = 0;
-    try {
-      var saved = JSON.parse(read('calvin-cat') || 'null');
-      if (saved && saved.v === 2 && Number.isSafeInteger(saved.greets) && saved.greets >= 0) greets = saved.greets;
-    } catch (e) {}
+      // Satu pemilik state: jeda manual ATAU reduced motion ATAU tab tersembunyi.
+      cat.setPaused(motionPaused);
+      onMotionChange(function (v) { cat.setPaused(v); });
+      onLayout(function () { cat.invalidate(); });
 
-    var state = reduced ? 'idle' : 'walk';
-    var stateUntil = reduced ? Infinity : 2400;
-    var followingCool = false, pendingAction = null;
-    var restUntil = Infinity, coffeeAt = Infinity, coffeeUntil = Infinity, restNumber = 0;
-    var pointerNear = false;
-    var x = 0, lane = 0, direction = 1, gaze = 0;
-    var hopAt = null, winkUntil = 0, lastActivityAt = 0, lastPointer = null;
-    var elapsed = 0, runningSince = null, previousClock = 0;
-    var frame = 0, timer = 0;
-    var cooldown = {};
+      // Stiker yang digeser mengubah geometri; kabari dengan frekuensi terbatas.
+      var nudge = 0;
+      document.addEventListener('pointerup', function (e) {
+        if (!e.target || !e.target.closest || !e.target.closest('.sticker')) return;
+        clearTimeout(nudge);
+        nudge = setTimeout(function () { cat.invalidate(); }, 140);
+      }, true);
 
-    var slots = Array.prototype.slice.call(document.querySelectorAll('.cat-slot'));
-    var activeSlot = slots[0] || null;
-    var dockX = 24, dockY = window.innerHeight * 0.5;
-
-    function clock(now) {
-      if (now === undefined) now = performance.now();
-      return elapsed + (runningSince === null ? 0 : now - runningSince);
-    }
-    function canRun() { return !motionPaused && !document.hidden; }
-    function cancelScheduled() {
-      if (frame) cancelAnimationFrame(frame);
-      if (timer) clearTimeout(timer);
-      frame = 0; timer = 0;
-    }
-    function remember() { store('calvin-cat', JSON.stringify({ v: 2, greets: greets })); }
-    function announce(m) { if (live) live.textContent = m; }
-    function cool(key, ms) {
-      var at = clock();
-      if (cooldown[key] && at < cooldown[key]) return false;
-      cooldown[key] = at + ms;
-      return true;
-    }
-
-    /* Pita bebas = dari tepi kanan kolom isi sampai tepi viewport.
-       Diukur dari layout yang sebenarnya, bukan angka tetap, dan jalan kecil
-       dibatasi ke dalam pita itu. */
-    function freeBand() {
-      var holder = activeSlot && (activeSlot.closest('.section') || activeSlot.closest('.field') || activeSlot.closest('.hero'));
-      var left = window.innerWidth * 0.82;
-      if (holder) {
-        var hr = holder.getBoundingClientRect();
-        var pad = parseFloat(getComputedStyle(holder).paddingRight) || 0;
-        left = hr.right - pad + 8;
-      }
-      return { left: clamp(left, 0, window.innerWidth - 24), right: window.innerWidth - 8 };
-    }
-    function placeDock(instant) {
-      if (!activeSlot) return;
-      var size = root.offsetWidth || 72;
-      var r = activeSlot.getBoundingClientRect();
-      // Horizontalnya selalu di pita kanan yang dipesan layout, jadi kucing tidak
-      // pernah menyapu teks di posisi scroll mana pun. Slot hanya memberi ketinggian.
-      var band = freeBand();
-      dockX = clamp(band.left + (band.right - band.left - size) / 2, 8, window.innerWidth - size - 8);
-      dockY = clamp(r.top - size / 2, 76, window.innerHeight - size - 18);
-      root.style.setProperty('--dock-ms', (instant || reduced) ? '0ms' : '720ms');
-      root.style.setProperty('--dock-x', dockX.toFixed(1) + 'px');
-      root.style.setProperty('--dock-y', dockY.toFixed(1) + 'px');
-      var half = Math.min(dockX - band.left, band.right - size - dockX);
-      lane = clamp(half, 0, 60);
-      if (Math.abs(x) > lane) x = clamp(x, -lane, lane);
-    }
-
-    function paint(at) {
-      if (at === undefined) at = clock();
-      if (root.dataset.catState !== state) root.dataset.catState = state;
-      root.classList.toggle('is-paused', !canRun() || reduced);
-      actor.classList.toggle('is-walking', state === 'walk' && !reduced && lane > 10);
-      actor.classList.toggle('is-winking', at < winkUntil);
-      actor.style.setProperty('--walk', x.toFixed(2) + 'px');
-      puppet.style.transform = 'scaleX(' + direction + ')';
-      root.style.setProperty('--cat-gaze', (gaze * direction).toFixed(2) + 'px');
-      var progress = hopAt === null ? 1 : clamp((at - hopAt) / 420, 0, 1);
-      var lift = (reduced || progress >= 1) ? 0 : -7 * Math.sin(Math.PI * progress);
-      hop.style.transform = 'translateY(' + lift.toFixed(2) + 'px)';
-    }
-
-    function clearRest() { restUntil = Infinity; coffeeAt = Infinity; coffeeUntil = Infinity; }
-    function startRest(at, allowCoffee) {
-      state = 'idle';
-      restUntil = reduced ? Infinity : at + rest * 1000;
-      stateUntil = restUntil;
-      coffeeAt = Infinity; coffeeUntil = Infinity;
-      if (allowCoffee) {
-        restNumber += 1;
-        if (!reduced && (restNumber - 1) % 3 === 0) {
-          coffeeAt = at + 900;
-          coffeeUntil = Math.min(restUntil, coffeeAt + 2200);
+      // Pemicu kontekstual: bunga saat bagian kontak benar-benar masuk.
+      // Dulu ini berada di blok controller yang diganti.
+      if (hasIO) {
+        var contact = document.querySelector('[data-cat-contact]');
+        if (contact) {
+          var wasIn = false;
+          new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+              var isIn = en.isIntersecting && en.intersectionRatio >= 0.35;
+              if (isIn && !wasIn) {
+                window.dispatchEvent(new CustomEvent('calvin:companion', { detail: { action: 'contact' } }));
+              }
+              wasIn = isIn;
+            });
+          }, { threshold: 0.35 }).observe(contact);
         }
       }
-    }
-    function startWalk(at) {
-      clearRest();
-      if (reduced || lane <= 10) { startRest(at); return; }   // tidak cukup ruang: berdiri saja
-      state = 'walk'; stateUntil = at + 2400;
-    }
-    function sleep() {
-      clearRest();
-      state = 'sleep'; stateUntil = Infinity;
-      pendingAction = null; followingCool = false; winkUntil = 0; hopAt = null; gaze = 0;
-    }
-    function beginAction(action, at) {
-      clearRest();
-      pendingAction = null;
-      followingCool = action.kind === 'greet' && action.cool;
-      state = action.kind;
-      stateUntil = at + (durations[state] || 1500);
-      winkUntil = state === 'greet' ? at + 420 : 0;
-      hopAt = (state === 'greet' && !reduced) ? at : null;
-    }
-    function beginStretch(at, after) {
-      clearRest();
-      state = 'stretch'; stateUntil = at + durations.stretch;
-      pendingAction = after || null; followingCool = false; winkUntil = 0; hopAt = null; gaze = 0;
-    }
-    function curiosity(at) {
-      if (motionPaused) return;
-      if (pointerNear && (state === 'walk' || state === 'idle' || state === 'coffee')) {
-        clearRest(); state = 'curious'; stateUntil = Infinity;
-      } else if (!pointerNear && state === 'curious') startRest(at);
-    }
-    function advanceState(at) {
-      if (state === 'walk') startRest(at, true);
-      else if (state === 'idle') startWalk(at);
-      else if (state === 'coffee') { state = 'idle'; stateUntil = restUntil; coffeeAt = Infinity; coffeeUntil = Infinity; }
-      else if (state === 'stretch') { if (pendingAction) beginAction(pendingAction, at); else startRest(at); }
-      else if (state === 'greet' && followingCool) { followingCool = false; state = 'cool'; stateUntil = at + durations.cool; }
-      else if (state === 'yawn') sleep();
-      else startRest(at);
-    }
-    function schedule(at) {
-      if (!canRun()) return;
-      if (!reduced && ((state === 'walk' && lane > 10) || hopAt !== null)) { frame = requestAnimationFrame(update); return; }
-      var deadlines = [stateUntil];
-      if (state === 'idle') deadlines.push(coffeeAt);
-      if (lowPriority[state]) {
-        if (state !== 'yawn') deadlines.push(lastActivityAt + 12400);
-        deadlines.push(lastActivityAt + 14000);
-      }
-      if (winkUntil > at) deadlines.push(winkUntil);
-      var next = Infinity;
-      deadlines.forEach(function (t) { if (isFinite(t) && t > at && t < next) next = t; });
-      if (isFinite(next)) timer = setTimeout(update, Math.max(16, next - at));
-    }
-    function update() {
-      frame = 0; timer = 0;
-      if (!canRun()) { sync(); return; }
-      var at = clock();
-      var dt = clamp((at - previousClock) / 1000, 0, 0.05);
-      previousClock = at;
-      for (var i = 0; i < 3 && at >= stateUntil; i += 1) advanceState(at);
-      if (state === 'idle' && at >= coffeeAt && at < restUntil) {
-        state = 'coffee'; stateUntil = coffeeUntil; coffeeAt = Infinity;
-      }
-      if (lowPriority[state]) {
-        var idleFor = at - lastActivityAt;
-        if (idleFor >= 14000) sleep();
-        else if (idleFor >= 12400 && state !== 'yawn') {
-          clearRest();
-          state = 'yawn'; stateUntil = lastActivityAt + 14000; winkUntil = 0; hopAt = null;
-        } else curiosity(at);
-      }
-      if (state === 'walk' && !reduced && lane > 10) {
-        x += direction * speed * dt;
-        if (x >= lane) { x = lane; direction = -1; }
-        if (x <= -lane) { x = -lane; direction = 1; }
-      }
-      if (hopAt !== null && at - hopAt >= 420) hopAt = null;
-      paint(at);
-      schedule(at);
-    }
-    function sync() {
-      cancelScheduled();
-      if (!canRun()) {
-        if (runningSince !== null) { elapsed = clock(); runningSince = null; }
-        paint(elapsed);
-        return;
-      }
-      if (runningSince === null) { runningSince = performance.now(); previousClock = clock(); }
-      update();
-    }
-    function activity() {
-      var at = clock();
-      lastActivityAt = at;
-      if (motionPaused) return;
-      if (state === 'sleep') beginStretch(at);
-      else if (state === 'yawn') startRest(at);
-      curiosity(at);
-      sync();
-    }
-    function requestAction(action, explicit) {
-      if (motionPaused) {
-        if (explicit) announce('Pilih Lanjutkan gerakan untuk menyapa kucing.');
-        return;
-      }
-      if (!explicit && !lowPriority[state] && state !== 'sleep') return;
-      var at = clock();
-      lastActivityAt = at;
-      if (state === 'sleep') beginStretch(at, action);
-      else if (state === 'stretch') pendingAction = action;
-      else beginAction(action, at);
-      sync();
-    }
-    function greet() {
-      if (motionPaused) { announce('Pilih Lanjutkan gerakan untuk menyapa kucing.'); return; }
-      greets = greets >= Number.MAX_SAFE_INTEGER ? 1 : greets + 1;
-      var queued = state === 'stretch' && pendingAction && pendingAction.kind === 'greet' && pendingAction.cool;
-      var isCool = greets % 3 === 0 || (state === 'greet' && followingCool) || queued;
-      requestAction({ kind: 'greet', cool: isCool }, true);
-      announce(isCool ? 'Halo! Kucingmu sedang bergaya.' : 'Halo! Kucing menyapamu.');
-      remember();
-    }
-    function contextualAction(action, explicit) {
-      if (action === 'sketch') {
-        if (!cool('sketch', 6000)) return;        // tidak tersenyum ulang tiap pointermove
-        requestAction({ kind: 'greet', cool: false }, false);
-        return;
-      }
-      var kind = action === 'contact' ? 'flower'
-        : (action === 'project' || action === 'cv') ? 'approve'
-        : action === 'peek' ? 'peek' : null;
-      if (!kind) return;
-      if (kind === 'flower' && !cool('flower', 20000)) return;
-      if (kind === 'peek' && !cool('peek', 9000)) return;
-      var wasPaused = motionPaused;
-      requestAction({ kind: kind === 'peek' ? 'curious' : kind }, explicit);
-      if (kind === 'peek') { stateUntil = clock() + durations.peek; sync(); }
-      if (explicit && !wasPaused) {
-        announce(action === 'contact' ? 'Bunga untukmu!'
-          : action === 'cv' ? 'Kucing menyetujui pilihan CV-mu.' : 'Kucing menyukai proyek ini.');
-      }
-    }
-
-    actor.addEventListener('click', greet);
-    document.addEventListener('pointermove', function (e) {
-      if (e.pointerType === 'touch') { pointerNear = false; return; }
-      var r = actor.getBoundingClientRect();
-      var nearLimit = pointerNear ? 128 : 110;
-      var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-      var wasNear = pointerNear;
-      pointerNear = Math.hypot(e.clientX - cx, e.clientY - cy) <= nearLimit;
-      if (!motionPaused && !reduced && state !== 'sleep') {
-        gaze = clamp((e.clientX - cx) / 70, -2.5, 2.5);
-        root.style.setProperty('--cat-gaze', (gaze * direction).toFixed(2) + 'px');
-      }
-      // Hanya gerakan dekat kucing yang dihitung aktivitas, bukan setiap jitter.
-      if (pointerNear) {
-        if (!lastPointer || Math.hypot(e.clientX - lastPointer.x, e.clientY - lastPointer.y) >= 6) {
-          lastPointer = { x: e.clientX, y: e.clientY };
-          activity();
-          return;
-        }
-      }
-      if (wasNear !== pointerNear && !motionPaused) {
-        var prior = state;
-        curiosity(clock());
-        if (state !== prior) sync();
-      }
-    }, { passive: true });
-
-    actor.addEventListener('focus', activity);
-    document.addEventListener('visibilitychange', function () {
-      if (document.hidden) { pointerNear = false; lastPointer = null; }
-      sync();
+    }).catch(function (e) {
+      // Tanpa controller, maskot tetap terlihat diam di tempat aman.
+      try { console.error('[portofolio] motion', e); } catch (_) {}
+      root.classList.add('is-paused');
     });
-    onMotionChange(function () { sync(); });
-
-    function preferenceChanged(e) {
-      reduced = e.matches;
-      if (reduced) {
-        hopAt = null; gaze = 0;
-        if (state === 'walk' || state === 'coffee' || state === 'curious') startRest(clock());
-        motionPaused = true;
-      }
-      sync();
-    }
-    if (motionQuery.addEventListener) motionQuery.addEventListener('change', preferenceChanged);
-    else if (motionQuery.addListener) motionQuery.addListener(preferenceChanged);
-
-    window.addEventListener('calvin:companion', function (e) {
-      contextualAction(e.detail && e.detail.action, true);
-    });
-
-    /* Dock mengikuti slot section yang sedang dominan, dengan histeresis. */
-    if (hasIO && slots.length) {
-      var ratios = new Map();
-      var owners = slots.map(function (s) { return s.closest('section') || s.parentNode; });
-      var pick = 0;
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) { ratios.set(en.target, en.isIntersecting ? en.intersectionRatio : 0); });
-        var best = null, top = 0;
-        ratios.forEach(function (v, k) { if (v > top) { top = v; best = k; } });
-        if (!best || top <= 0.34) return;
-        var i = owners.indexOf(best);
-        var next = i >= 0 ? slots[i] : null;
-        if (!next || next === activeSlot) return;
-        clearTimeout(pick);
-        pick = setTimeout(function () {
-          var far = Math.abs(next.getBoundingClientRect().left - dockX) > window.innerWidth * 0.45;
-          activeSlot = next;
-          if (far && !reduced) {
-            // sisi jauh: hilang dan muncul di dock baru, tidak menyapu teks
-            root.classList.add('is-settling');
-            setTimeout(function () {
-              placeDock(true);
-              root.classList.remove('is-settling');
-              contextualAction('peek', false);
-            }, 180);
-          } else {
-            placeDock(false);
-            contextualAction('peek', false);
-          }
-          lastActivityAt = clock();     // pindah bab = pengunjung aktif
-          sync();
-        }, 90);
-      }, { threshold: [0.12, 0.34, 0.55, 0.8] });
-      owners.forEach(function (o) { if (o) io.observe(o); });
-    }
-
-    /* Bagian kontak memicu bunga sekali saat benar-benar masuk. */
-    if (hasIO) {
-      var contact = document.querySelector('[data-cat-contact]');
-      if (contact) {
-        var wasIn = false;
-        new IntersectionObserver(function (entries) {
-          entries.forEach(function (en) {
-            var isIn = en.isIntersecting && en.intersectionRatio >= 0.35;
-            if (isIn && !wasIn) contextualAction('contact', false);
-            wasIn = isIn;
-          });
-        }, { threshold: 0.35 }).observe(contact);
-      }
-    }
-
-    var scrollTick = 0;
-    window.addEventListener('scroll', function () {
-      if (scrollTick) return;
-      scrollTick = requestAnimationFrame(function () {
-        scrollTick = 0;
-        placeDock(true);   // satu rect per frame scroll, bukan puluhan
-      });
-    }, { passive: true });
-    onLayout(function () { placeDock(true); });
-
-    placeDock(true);
-    paint();
-    sync();
   });
+
 })();

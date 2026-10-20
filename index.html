@@ -43,6 +43,11 @@ catch(e){d.setAttribute('data-theme','light');}})();
 <link rel="stylesheet" href="styles.css">
 </head>
 <body id="top">
+<div class="cm-edge-texture" aria-hidden="true">
+  <div class="cm-edge cm-edge-left"></div>
+  <div class="cm-edge cm-edge-right"></div>
+</div>
+
 <a class="skip" href="#proyek">Lewati ke proyek</a>
 
 <header class="topbar">
@@ -104,7 +109,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
           Stikernya bisa digeser. Fokuskan lalu pakai tombol panah.
           <button type="button" id="resetStickers" class="link-btn">Kembalikan posisi</button>
         </p>
-        <span class="cat-slot" data-slot="hero" aria-hidden="true"></span>
+        <span class="cat-slot" data-cat-perch data-slot="hero" aria-hidden="true"></span>
       </div>
     </div>
 
@@ -140,7 +145,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
       </div>
       <div class="opener-side">
         <p class="bridge">Saya tertarik melihat apa yang terjadi saat sebuah ide dipakai dalam kondisi nyata. Dua proyek pribadi, satu proyek kampus bersama tim lima orang. Ketiganya masih berjalan, dan tiap cerita menyebut batasnya.</p>
-        <span class="cat-slot" data-slot="opener" aria-hidden="true"></span>
+        <span class="cat-slot" data-cat-perch data-slot="opener" aria-hidden="true"></span>
       </div>
     </div>
     <svg class="scribble scribble-down" viewBox="0 0 44 96" aria-hidden="true" focusable="false">
@@ -157,7 +162,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
       <p class="case-lede">Membuat sesuatu yang tersembunyi jadi terbaca.</p>
       <p class="case-sub">Banyak website memasang cookie dan tracker sebelum pengunjung menyetujui apa pun. Bagi orang biasa itu tidak terlihat, dan bagi tim pengelola sulit dibaca tanpa membuka devtools satu per satu.</p>
       <p class="case-role case-role-linked"><span class="note-mark">kontribusi saya</span> Mengembangkan <strong>bot analisis indikator terkait UU PDP</strong>. Scanner, dashboard, scoring, dan arsitektur keseluruhan adalah pekerjaan tim lima orang.</p>
-      <span class="cat-slot" data-slot="cookies" aria-hidden="true"></span>
+      <span class="cat-slot" data-cat-perch data-slot="cookies" aria-hidden="true"></span>
     </div>
 
     <div class="case-visual">
@@ -245,7 +250,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
       <p class="case-role"><span class="note-mark">inferensi lokal</span> Gambar kamera diproses untuk mengekstraksi titik sendi, lalu model menerima koordinatnya. Modelnya jadi lebih kecil dan seluruh inferensi berjalan di perangkat. Target pengembangan yang saya catat: macOS Apple Silicon.</p>
       <ul class="stack" aria-label="Teknologi"><li>Python</li><li>PyTorch</li><li>MediaPipe</li><li>PySide6</li></ul>
       <a class="link" href="https://github.com/CalvinWuz/BISINDO-Translator" target="_blank" rel="noopener" data-cat-action="project">Repository GitHub<span class="vh"> BISINDO Translator, terbuka di tab baru</span></a>
-      <span class="cat-slot" data-slot="bisindo" aria-hidden="true"></span>
+      <span class="cat-slot" data-cat-perch data-slot="bisindo" aria-hidden="true"></span>
     </div>
 
     <details class="study" id="studi-bisindo">
@@ -302,7 +307,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
         <button type="button" id="sketchClear" class="btn btn-ghost btn-sm">Hapus coretan</button>
         <span class="vh" aria-live="polite" id="sketchLive"></span>
       </div>
-      <span class="cat-slot" data-slot="papantulis" aria-hidden="true"></span>
+      <span class="cat-slot" data-cat-perch data-slot="papantulis" aria-hidden="true"></span>
     </div>
 
     <div class="case-foot">
@@ -354,7 +359,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
         <p>Mahasiswa Computer Science semester 5 di Bina Nusantara University. Peminatan cybersecurity saya mulai pada semester 4.</p>
         <p>Cara belajar saya praktik: membangun prototipe, memeriksa hasil, menerima masukan, lalu memperbaiki bagian yang belum tepat. Ketiga proyek di atas lahir dari cara itu.</p>
         <p class="about-note">Saya masih belajar, dan yang saya cari adalah tim yang lebih berpengalaman untuk tempat magang. Di bawah ini keputusan yang terlihat dari ketiga proyek itu.</p>
-        <span class="cat-slot" data-slot="tentang" aria-hidden="true"></span>
+        <span class="cat-slot" data-cat-perch data-slot="tentang" aria-hidden="true"></span>
       </div>
 
       <section class="notes" aria-labelledby="h-notes">
@@ -431,7 +436,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
         <li class="no-logo">Pengujian keamanan aplikasi mobile</li>
       </ul>
       <p class="tools-note">Logo berasal dari Simple Icons dengan lisensi CC0. <a href="img/tools/CREDITS.md">Kredit dan catatan aset</a>.</p>
-      <span class="cat-slot" data-slot="tools" aria-hidden="true"></span>
+      <span class="cat-slot" data-cat-perch data-slot="tools" aria-hidden="true"></span>
     </div>
   </section>
 
@@ -509,7 +514,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
         </div>
       </li>
     </ol>
-    <span class="cat-slot" data-slot="pengalaman" aria-hidden="true"></span>
+    <span class="cat-slot" data-cat-perch data-slot="pengalaman" aria-hidden="true"></span>
   </section>
 
   <!-- ═══════════ kontak: bidang ungu ═══════════ -->
@@ -537,7 +542,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
       <div><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/ida-bagus-gede-calvin-suta-subagia-manuaba-b1649a322" target="_blank" rel="noopener">Ida Bagus Gede Calvin Suta Subagia Manuaba</a></dd></div>
       <div><dt>Domisili</dt><dd>Jakarta, Indonesia</dd></div>
     </dl>
-    <span class="cat-slot" data-slot="kontak" aria-hidden="true"></span>
+    <span class="cat-slot" data-cat-perch data-slot="kontak" aria-hidden="true"></span>
   </section>
 </main>
 
@@ -559,7 +564,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
 <!-- ═══════════ maskot: lapisan sendiri, lepas dari footer ═══════════ -->
 <div class="companion" id="companion">
   <button type="button" class="cat-actor" aria-label="Sapa kucing">
-    <span class="cat-hop" aria-hidden="true"><span class="cat-puppet"><span class="cat-pose"><span class="cat-visual">
+    <span class="cat-hop" aria-hidden="true"><span class="cat-locomotion"><span class="cat-puppet"><span class="cat-pose"><span class="cat-gait"><span class="cat-visual">
       <span class="cat-sprite cat-foot-left"></span><span class="cat-sprite cat-foot-right"></span>
       <span class="cat-sprite cat-body"></span>
       <span class="cat-eyes-gaze">
@@ -571,12 +576,12 @@ catch(e){d.setAttribute('data-theme','light');}})();
       <span class="cat-sprite cat-mouth cat-mouth-sleep"></span>
       <span class="cat-mouth-yawn"></span>
       <span class="cat-sprite cat-glasses"></span>
-    </span></span><span class="cat-props">
+    </span></span></span><span class="cat-props">
       <span class="cat-prop cat-prop-thumb"></span>
       <span class="cat-prop cat-prop-flower"></span>
       <span class="cat-prop cat-prop-coffee"></span>
       <span class="cat-steam"><span></span><span></span></span>
-    </span><span class="cat-sleep-mark">z z</span></span></span>
+    </span><span class="cat-sleep-mark">z z</span></span></span></span>
   </button>
 </div>
 <span class="vh" aria-live="polite" id="cat-live"></span>

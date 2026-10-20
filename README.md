@@ -70,18 +70,32 @@ repository, dan CV sebelum menerbitkan.
 
 ## Perilaku baru di halaman
 
-- **Jalur maskot.** `--catlane` memesan satu pita di sisi kanan (76 px desktop,
-  66 px di bawah 981 px) lewat `padding-right` pada `.section`, `.field`, `.hero`
-  dan `.foot`. Hanya satu sisi yang dipesan, bukan dua.
-- **Dock per section.** Tiap bagian punya `<span class="cat-slot">` yang menentukan
-  *ketinggian* maskot; sisi horizontalnya selalu pita kanan tadi, jadi maskot tidak
-  pernah menyapu teks pada posisi scroll mana pun. Jalan kecil dibatasi lebar pita
-  yang benar-benar tersedia; kalau sempit maskot berdiri saja.
-- **Posisi stiker.** Default dihitung dari scene dan blok teks hero, bukan dari
-  posisi maskot. Dulu itulah sebabnya ketiga stiker menumpuk di kiri saat pembukaan.
-  Posisi maskot hanya dipakai sebagai batas tambahan setelah ia benar-benar
-  ditempatkan. Skema penyimpanan posisi stiker sekarang `v:3`; skema lama diabaikan
-  tanpa menyentuh preferensi tema atau gerakan.
+- **Gerak maskot (paket 06).** `js/motion.js` dan `js/route.js` adalah satu-satunya
+  pemilik posisi, rute, ritme kaki, dan ekspresi kucing. Dock lama, listener scroll
+  dock, observer pemilihan dock, dan loop gait CSS 340 ms sudah dihapus; tidak ada
+  dua pengendali transform pada node yang sama.
+  - Peran node dipisah: `#companion` memegang posisi (`--cat-x`/`--cat-y`),
+    `.cat-locomotion` lean, `.cat-puppet` arah hadap, `.cat-pose` ekspresi,
+    `.cat-gait` bob. Fase kaki dihitung dari jarak yang benar-benar ditempuh.
+  - Kecepatan nominal 90 px/detik di desktop dan 58 px/detik di ponsel, dengan
+    percepatan dan pengereman. Putaran arah memakai penyempitan bentuk ~300 ms.
+  - Rute dicari di antara penghalang dengan preferensi tepi. Jalur buntu ditolak
+    dan kucing menunggu di tempat aman; tidak ada teleport sebagai jalan biasa.
+  - **Penghalang dipasang pada blok materi, bukan wadahnya.** Daftar selektornya ada
+    di `main.js`. Menandai satu `section` utuh akan menelan seluruh ruang jelajah
+    setelah diperbesar radius kucing (62 px desktop, 46 px ponsel).
+  - `--catlane` memesan koridor kanan (120 px desktop, 96 px tablet, 66 px ponsel).
+    Hasil ukur di 1440: koridor bebas 136-140 px pada bagian tengah halaman.
+  - Batas atas diikat ke tinggi `.topbar` yang sebenarnya, bukan angka tetap.
+  - Batas bidang stiker **tidak** lagi membaca posisi kucing; kucinglah yang
+    menghindari stiker, jadi perjalanannya tidak menggeser bidang main.
+- **Tekstur tepi.** `.cm-edge-texture` menggeser dua strip tepi sangat pelan
+  (76 dan 91 detik; 102 detik di ponsel). Bidang teks di tengah tetap bersih.
+  Dikendalikan `html[data-motion=paused]`.
+- **Satu pemilik state gerak.** Effective pause = jeda manual (`calvin-motion`)
+  ATAU reduced motion ATAU tab tersembunyi. Preferensi OS dipegang state pusat di
+  `main.js`, lalu disiarkan ke kucing, deretan logo, dan tekstur tepi sekaligus.
+
 - **Kanvas coretan mini** di bagian PapanTulis. Satu sumber state mengatur mode,
   label, class, dan visibilitas tombol: pada mouse menggambar langsung aktif dan
   tombol aktivasi benar-benar tersembunyi; pada pointer kasar pengunjung menekan

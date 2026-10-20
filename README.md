@@ -68,6 +68,35 @@ repository, dan CV sebelum menerbitkan.
   `fonts/` agar tidak ada permintaan ke host font pihak ketiga.
 - Atlas maskot dibuat dari gambar referensi milik Calvin.
 
+## Perilaku baru di halaman
+
+- **Jalur maskot.** `--catlane` memesan satu pita di sisi kanan (76 px desktop,
+  66 px di bawah 981 px) lewat `padding-right` pada `.section`, `.field`, `.hero`
+  dan `.foot`. Hanya satu sisi yang dipesan, bukan dua.
+- **Dock per section.** Tiap bagian punya `<span class="cat-slot">` yang menentukan
+  *ketinggian* maskot; sisi horizontalnya selalu pita kanan tadi, jadi maskot tidak
+  pernah menyapu teks pada posisi scroll mana pun. Jalan kecil dibatasi lebar pita
+  yang benar-benar tersedia; kalau sempit maskot berdiri saja.
+- **Posisi stiker.** Default dihitung dari scene dan blok teks hero, bukan dari
+  posisi maskot. Dulu itulah sebabnya ketiga stiker menumpuk di kiri saat pembukaan.
+  Posisi maskot hanya dipakai sebagai batas tambahan setelah ia benar-benar
+  ditempatkan. Skema penyimpanan posisi stiker sekarang `v:3`; skema lama diabaikan
+  tanpa menyentuh preferensi tema atau gerakan.
+- **Kanvas coretan mini** di bagian PapanTulis. Pointer kasar (sentuh) harus menekan
+  "Mulai menggambar" dulu, jadi swipe tetap menggulir halaman; `touch-action` hanya
+  diubah pada kanvas saat mode aktif. Garis disimpan dalam koordinat CSS, jadi resize
+  dan device pixel ratio tidak menggeser hasilnya. Tanpa JavaScript, contoh garis
+  statis tetap tampil.
+- **Satu sumber state untuk marquee.** Jeda bila manual, reduced motion, tab
+  tersembunyi, di luar layar, atau pointer/fokus sedang di atasnya. Hover sementara
+  tidak pernah menulis preferensi manual yang tersimpan.
+- **Tombol jeda gerakan** di topbar mengendalikan maskot dan marquee sekaligus.
+
+## Kredit aset
+
+Logo tools berasal dari Simple Icons (CC0). Rincian per berkas, termasuk alasan
+Frida dan jadx tampil sebagai teks, ada di `img/tools/CREDITS.md`.
+
 ## Menerbitkan
 
 Deployment statis di Vercel. Framework preset: Other; tanpa build command; output

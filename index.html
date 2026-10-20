@@ -75,7 +75,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
 <main>
 
   <!-- ═══════════ hero ═══════════ -->
-  <section class="hero" id="hero" aria-labelledby="judul" data-dock="hero-right">
+  <section class="hero" id="hero" aria-labelledby="judul">
     <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Computer Science · Bina Nusantara University · Semester 5</p>
 
     <h1 id="judul">
@@ -84,7 +84,10 @@ catch(e){d.setAttribute('data-theme','light');}})();
     <p class="vh" id="name-hint">Huruf namanya bereaksi mengikuti kursor. Saat fokus, tombol panah kiri dan kanan melakukan hal yang sama.</p>
 
     <div class="hero-grid">
-      <p class="role">Saya membangun software sambil mendalami keamanan aplikasi.</p>
+      <div class="hero-lead">
+        <p class="role">Saya membangun software sambil mendalami keamanan aplikasi.</p>
+        <p class="motto" aria-hidden="true"><span>Membangun.</span> <span>Menguji.</span> <span>Memperbaiki.</span></p>
+      </div>
 
       <div class="hero-side">
         <p class="lede">Mencari <strong>magang 6 atau 12 bulan</strong> di Application Security, pentesting, atau Security Engineering. Terbuka juga untuk posisi Computer Science lain yang relevan.</p>
@@ -93,10 +96,10 @@ catch(e){d.setAttribute('data-theme','light');}})();
           <a class="btn btn-ghost" href="resume.pdf" target="_blank" rel="noopener" data-cat-action="cv">Lihat CV (PDF)</a>
         </p>
         <p class="hint">
-          <svg class="hint-arrow" viewBox="0 0 60 28" aria-hidden="true" focusable="false"><path d="M2 8c12 11 27 14 44 12M46 20c2-3 5-5 10-6-4-3-6-6-7-10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Stikernya bisa digeser. Fokuskan lalu pakai tombol panah.
           <button type="button" id="resetStickers" class="link-btn">Kembalikan posisi</button>
         </p>
+        <span class="cat-slot" data-slot="hero" aria-hidden="true"></span>
       </div>
     </div>
 
@@ -116,48 +119,70 @@ catch(e){d.setAttribute('data-theme','light');}})();
       </button>
     </div>
 
-    <svg class="scribble scribble-hero" viewBox="0 0 320 120" aria-hidden="true" focusable="false" preserveAspectRatio="none">
-      <path class="ink" d="M8 96C54 38 126 14 198 20c48 4 86 22 112 50" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+    <svg class="scribble scribble-hero" viewBox="0 0 340 130" aria-hidden="true" focusable="false" preserveAspectRatio="none">
+      <path class="ink" d="M10 104C58 40 134 14 210 20c50 4 90 24 118 56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
     </svg>
     <p class="vh" aria-live="polite" id="sceneLive"></p>
   </section>
 
-  <!-- ═══════════ pembuka proyek ═══════════ -->
+  <!-- ═══════════ pembuka proyek: bidang cyan ═══════════ -->
   <span id="work" class="anchor-alias" aria-hidden="true"></span>
-  <section class="section intro-work" id="proyek" aria-labelledby="h-proyek" data-dock="left-low">
-    <div class="intro-work-inner">
-      <h2 id="h-proyek">Tiga hal yang<br><span class="under">saya kerjakan</span></h2>
-      <p class="bridge">Saya tertarik melihat apa yang terjadi saat sebuah ide dipakai dalam kondisi nyata. Dua di bawah ini proyek pribadi, satu proyek kampus bersama tim. Ketiganya masih berjalan, dan tiap cerita menyebut batasnya.</p>
-      <svg class="scribble scribble-down" viewBox="0 0 40 90" aria-hidden="true" focusable="false">
-        <path class="ink" d="M20 4c-5 22 4 38 1 58M21 62c4-6 8-10 13-12-9-2-15-7-18-14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+  <section class="field field-cyan opener" id="proyek" aria-labelledby="h-proyek">
+    <div class="opener-grid">
+      <div>
+        <p class="chapter-kicker">Karya &amp; proyek</p>
+        <h2 id="h-proyek" class="display">Dari ide<br>ke percobaan.</h2>
+      </div>
+      <div class="opener-side">
+        <p class="bridge">Saya tertarik melihat apa yang terjadi saat sebuah ide dipakai dalam kondisi nyata. Dua proyek pribadi, satu proyek kampus bersama tim lima orang. Ketiganya masih berjalan, dan tiap cerita menyebut batasnya.</p>
+        <span class="cat-slot" data-slot="opener" aria-hidden="true"></span>
+      </div>
     </div>
+    <svg class="scribble scribble-down" viewBox="0 0 44 96" aria-hidden="true" focusable="false">
+      <path class="ink" d="M22 4c-5 24 4 40 1 62M23 66c4-6 9-11 14-13-10-2-16-7-19-15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
   </section>
 
   <!-- ─── proyek 1: Cookies Risk Analyzer ─── -->
-  <section class="section case case-cookies" id="p-cookies" aria-labelledby="p1" data-dock="right-mid">
+  <section class="section case case-cookies" id="p-cookies" aria-labelledby="p1">
     <div class="case-head">
       <p class="case-index" aria-hidden="true">01</p>
-      <p class="case-tag"><span class="tag tag-team">Proyek kampus · tim 5 orang</span></p>
+      <p class="case-tag"><span class="tag tag-team">Tim 5 · proyek kampus</span></p>
       <h3 id="p1">Cookies Risk Analyzer</h3>
-      <p class="case-lede">Banyak website memasang cookie dan tracker sebelum pengunjung menyetujui apa pun. Bagi orang biasa itu tidak terlihat.</p>
+      <p class="case-lede">Membuat sesuatu yang tersembunyi jadi terbaca.</p>
+      <p class="case-sub">Banyak website memasang cookie dan tracker sebelum pengunjung menyetujui apa pun. Bagi orang biasa itu tidak terlihat, dan bagi tim pengelola sulit dibaca tanpa membuka devtools satu per satu.</p>
+      <span class="cat-slot" data-slot="cookies" aria-hidden="true"></span>
     </div>
 
-    <figure class="case-media">
-      <img src="img/cookierisk.webp" width="1000" height="650" alt="Halaman depan Cookies Risk Analyzer dengan kolom alamat website dan pilihan kategori situs." loading="lazy" decoding="async">
-      <svg class="scribble scribble-circle" viewBox="0 0 220 110" aria-hidden="true" focusable="false">
-        <path class="ink" d="M112 10c58-4 98 16 100 42 2 28-44 50-104 52C48 106 10 86 8 58 6 32 46 14 104 10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-      </svg>
-      <figcaption>Kolom alamat dan kategori situs sebelum pemindaian dijalankan.</figcaption>
-    </figure>
+    <div class="case-visual">
+      <figure class="case-media">
+        <img src="img/cookierisk.webp" width="1000" height="650" alt="Halaman depan Cookies Risk Analyzer dengan kolom alamat website dan pilihan kategori situs." loading="lazy" decoding="async">
+        <figcaption>Tampilan utama sebelum pemindaian dijalankan.</figcaption>
+      </figure>
 
-    <ol class="beats">
-      <li><span class="beat-k">Masalah</span><p>Tim yang mengelola website sulit membaca apa saja yang benar-benar dimuat tanpa membuka devtools satu per satu.</p></li>
-      <li><span class="beat-k">Kontribusi saya</span><p>Saya mengembangkan <strong>bot analisis indikator terkait UU PDP</strong>. Scanner, dashboard, scoring, dan arsitektur keseluruhan adalah pekerjaan tim lima orang.</p></li>
-      <li><span class="beat-k">Pelajaran &amp; batas</span><p>Angka tanpa penjelasan membuat orang berhenti berpikir. Hasil otomatisnya pemeriksaan awal, bukan sertifikasi atau jaminan kepatuhan, dan tetap perlu tinjauan manusia.</p></li>
+      <figure class="case-crop">
+        <div class="crop-frame crop-cookies" role="img" aria-label="Perbesaran bagian bawah tampilan: kolom alamat situs dan deretan kategori."></div>
+        <svg class="scribble scribble-tag" viewBox="0 0 120 54" aria-hidden="true" focusable="false">
+          <path class="ink" d="M6 46c16-18 44-28 108-30M104 16c-5 4-7 9-7 15 7-5 13-7 19-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <figcaption><strong>Kategori situs dipilih dulu</strong>, karena cookie yang wajar untuk e-commerce belum tentu wajar untuk situs pemerintah.</figcaption>
+      </figure>
+    </div>
+
+    <ol class="flow" id="flow-cookies" aria-label="Alur pembacaan hasil">
+      <li class="flow-step"><button type="button" class="flow-btn" aria-expanded="false">
+        <span class="flow-n">1</span><span class="flow-k">Observasi</span></button>
+        <p class="flow-d">Cookie dan tracker yang benar-benar dimuat sebuah website dicatat apa adanya.</p></li>
+      <li class="flow-step"><button type="button" class="flow-btn" aria-expanded="false">
+        <span class="flow-n">2</span><span class="flow-k">Indikator</span></button>
+        <p class="flow-d">Heuristik menandai mana yang perlu ditinjau. Banner consent yang dibuat khusus bisa terlewat, jadi ini petunjuk, bukan vonis.</p></li>
+      <li class="flow-step"><button type="button" class="flow-btn" aria-expanded="false">
+        <span class="flow-n">3</span><span class="flow-k">Tinjauan manusia</span></button>
+        <p class="flow-d">Keputusan akhir tetap di tangan orang. Hasilnya bukan sertifikasi dan bukan jaminan kepatuhan UU PDP atau GDPR.</p></li>
     </ol>
 
     <div class="case-foot">
+      <p class="case-role"><span class="note-mark">kontribusi saya</span> Mengembangkan <strong>bot analisis indikator terkait UU PDP</strong>. Scanner, dashboard, scoring, dan arsitektur keseluruhan adalah pekerjaan tim lima orang.</p>
       <ul class="stack" aria-label="Teknologi proyek tim"><li>Node.js</li><li>React</li><li>Playwright</li><li>Docker</li></ul>
       <a class="link" href="https://github.com/CalvinWuz/CookiesAnalyzer-Website" target="_blank" rel="noopener" data-cat-action="project">Repository GitHub<span class="vh"> Cookies Risk Analyzer, terbuka di tab baru</span></a>
     </div>
@@ -177,38 +202,44 @@ catch(e){d.setAttribute('data-theme','light');}})();
           <li>Pemeriksaan otomatisnya terbatas dan tetap memerlukan tinjauan manual.</li>
           <li>Hasilnya bukan sertifikasi, bukan jaminan, dan bukan keputusan bahwa sebuah website sudah patuh UU PDP atau GDPR.</li>
         </ul>
+        <h4>Yang saya pelajari</h4>
+        <p>Mengubah sesuatu yang kualitatif seperti risiko privasi menjadi angka itu menggoda, tetapi angka tanpa penjelasan membuat orang berhenti berpikir. Lebih berguna menjelaskan kenapa sebuah cookie mencurigakan daripada sekadar menyebut skornya.</p>
         <p class="study-status">Status: dikerjakan sebagai tugas kampus. Rincian fitur mengikuti README dan source di repository.</p>
       </div>
     </details>
   </section>
 
   <!-- ─── proyek 2: BISINDO ─── -->
-  <section class="section case case-bisindo" id="p-bisindo" aria-labelledby="p2" data-dock="left-mid">
-    <div class="case-head">
-      <p class="case-index" aria-hidden="true">02</p>
-      <p class="case-tag"><span class="tag tag-solo">Proyek pribadi</span></p>
-      <h3 id="p2">BISINDO Translator</h3>
-      <p class="case-lede">Seberapa jauh isyarat tangan bisa dikenali tanpa mengirim gambar ke mana pun?</p>
-    </div>
-
+  <section class="section case case-bisindo" id="p-bisindo" aria-labelledby="p2">
     <figure class="case-media case-media-wide">
       <img src="img/bisindo.webp" width="1000" height="649" alt="Prototipe penerjemah BISINDO berjalan, dengan titik sendi tangan tergambar di atas tampilan kamera." loading="lazy" decoding="async">
-      <svg class="scribble scribble-landmark" viewBox="0 0 200 150" aria-hidden="true" focusable="false">
-        <path class="ink" d="M100 132 70 96 56 56M100 132 86 88 82 44M100 132l16-44 6-46M100 132l34-38 20-38M100 132 62 118 36 92" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-        <g class="nodes" fill="currentColor"><circle cx="56" cy="56" r="4"/><circle cx="82" cy="44" r="4"/><circle cx="122" cy="42" r="4"/><circle cx="154" cy="56" r="4"/><circle cx="36" cy="92" r="4"/><circle cx="100" cy="132" r="5.5"/></g>
-      </svg>
       <figcaption>Titik sendi yang dibaca dari kamera. Yang diproses adalah titiknya, bukan gambar wajah.</figcaption>
     </figure>
 
-    <ol class="beats">
-      <li><span class="beat-k">Masalah</span><p>BISINDO memakai dua tangan, jadi persoalannya bukan hanya mengenali bentuk, tetapi juga hubungan antar-tangan.</p></li>
-      <li><span class="beat-k">Keputusan</span><p>Gambar kamera diubah jadi titik sendi lebih dulu. Modelnya jadi lebih kecil, dan alasan privasinya mudah dijelaskan. Inferensi berjalan pada perangkat.</p></li>
-      <li><span class="beat-k">Pelajaran &amp; batas</span><p>Bagian tersulit bukan modelnya, melainkan jujur soal apa yang belum terbukti. Cakupannya <strong>26 huruf dan 32 isyarat kata terpisah</strong>, bukan percakapan berkelanjutan.</p></li>
-    </ol>
+    <div class="case-head">
+      <p class="case-index" aria-hidden="true">02</p>
+      <p class="case-tag"><span class="tag tag-solo">Pribadi · prototipe</span></p>
+      <h3 id="p2">BISINDO Translator</h3>
+      <p class="case-lede">Proses lokal yang bisa dimengerti.</p>
+      <p class="case-sub">Seberapa jauh isyarat tangan bisa dikenali tanpa mengirim gambar ke mana pun? BISINDO memakai dua tangan, jadi persoalannya bukan hanya bentuk, tetapi juga hubungan antar-tangan.</p>
+      <p class="case-fact"><strong>26 huruf</strong> dan <strong>32 isyarat kata</strong> terpisah. Bukan penerjemah percakapan.</p>
+    </div>
+
+    <figure class="pipeline" aria-labelledby="pipe-cap">
+      <ol class="pipe" id="pipe-bisindo">
+        <li><span class="pipe-n">1</span><span class="pipe-k">Kamera</span><span class="pipe-d">Gambar masuk dari webcam.</span></li>
+        <li><span class="pipe-n">2</span><span class="pipe-k">Titik sendi</span><span class="pipe-d">Gambar diubah jadi koordinat sendi tangan.</span></li>
+        <li><span class="pipe-n">3</span><span class="pipe-k">Model di perangkat</span><span class="pipe-d">Inferensi berjalan di komputer sendiri.</span></li>
+        <li><span class="pipe-n">4</span><span class="pipe-k">Huruf / kata</span><span class="pipe-d">Keluar sebagai huruf atau isyarat kata terpisah.</span></li>
+      </ol>
+      <figcaption id="pipe-cap">Ilustrasi alur, bukan tangkapan proses yang sedang berjalan.</figcaption>
+    </figure>
 
     <div class="case-foot">
+      <p class="case-role"><span class="note-mark">diproses di perangkat</span> Gambar kamera diubah jadi titik sendi lebih dulu, jadi modelnya lebih kecil dan alasan privasinya mudah dijelaskan. Target pengembangan yang saya catat: macOS Apple Silicon.</p>
       <ul class="stack" aria-label="Teknologi"><li>Python</li><li>PyTorch</li><li>MediaPipe</li><li>PySide6</li></ul>
       <a class="link" href="https://github.com/CalvinWuz/BISINDO-Translator" target="_blank" rel="noopener" data-cat-action="project">Repository GitHub<span class="vh"> BISINDO Translator, terbuka di tab baru</span></a>
+      <span class="cat-slot" data-slot="bisindo" aria-hidden="true"></span>
     </div>
 
     <details class="study" id="studi-bisindo">
@@ -225,33 +256,48 @@ catch(e){d.setAttribute('data-theme','light');}})();
           <li>Evaluasi pada penutur baru belum dibuktikan secara terpisah. Pembagian data yang memakai penutur yang sama pada data latih dan validasi tidak membuktikan hasilnya bertahan untuk semua penutur, jadi saya tidak memasang angka akurasi di halaman ini.</li>
           <li>Pengenalan kalimat berkelanjutan dan perapian bahasa masih bagian dari pengembangan.</li>
         </ul>
+        <h4>Yang saya pelajari</h4>
+        <p>Memisahkan titik sendi dari gambar mentah membuat modelnya lebih kecil sekaligus membuat alasan privasinya mudah dijelaskan. Bagian tersulit justru bukan modelnya, melainkan jujur soal apa yang belum terbukti.</p>
         <p class="study-status">Status: prototipe. UI/UX dan fitur masih dikembangkan.</p>
       </div>
     </details>
   </section>
 
   <!-- ─── proyek 3: PapanTulis ─── -->
-  <section class="section case case-papan" id="p-papantulis" aria-labelledby="p3" data-dock="right-low">
+  <section class="section case case-papan" id="p-papantulis" aria-labelledby="p3">
     <div class="case-head">
       <p class="case-index" aria-hidden="true">03</p>
-      <p class="case-tag"><span class="tag tag-solo">Proyek pribadi</span></p>
+      <p class="case-tag"><span class="tag tag-solo">Pribadi · prototipe</span></p>
       <h3 id="p3">PapanTulis <span class="alias">(Boardly)</span></h3>
-      <p class="case-lede">Papan tulis tanpa stylus dan tanpa tablet. Yang ada hanya webcam dan tangan.</p>
+      <p class="case-lede">Satu bagian kecil yang bisa dicoba.</p>
+      <p class="case-sub">Papan tulis tanpa stylus dan tanpa tablet. Yang ada hanya webcam dan tangan. Gerakan manusia tidak pernah rapi, jadi sebagian besar waktu habis untuk smoothing dan menentukan kapan sebuah gerakan dianggap sengaja.</p>
     </div>
 
     <figure class="case-media">
       <img src="img/boardly.webp" width="1000" height="625" alt="PapanTulis berjalan: coretan warna menggantung di udara sebuah ruangan, dengan satu tangan terlacak dan sendi jarinya diberi nama." loading="lazy" decoding="async">
-      <svg class="scribble scribble-stroke" viewBox="0 0 240 120" aria-hidden="true" focusable="false">
-        <path class="ink" d="M10 92c22-36 40-16 56-44 14-24 30 14 48-8 16-20 32 26 52 4 14-16 34-8 64-30" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-      </svg>
-      <figcaption>Coretan tetap menggantung di tempat kamu menggambarnya.</figcaption>
+      <figcaption>Tujuh kontrol gestur, rinciannya di README. Hasilnya dipengaruhi cahaya, latar, posisi tangan, dan resolusi pemrosesan.</figcaption>
     </figure>
 
-    <ol class="beats">
-      <li><span class="beat-k">Masalah</span><p>Gerakan manusia tidak pernah rapi. Agar bisa dipakai menggambar dan presentasi, gerakannya harus cukup dapat ditebak.</p></li>
-      <li><span class="beat-k">Keputusan</span><p>Sebagian besar waktu habis untuk smoothing dan menentukan kapan sebuah gerakan dianggap sengaja, bukan untuk pelacakannya sendiri. Ada tujuh kontrol gestur, rinciannya di README.</p></li>
-      <li><span class="beat-k">Pelajaran &amp; batas</span><p>Hasilnya dipengaruhi pencahayaan, latar, posisi tangan, smoothing, dan resolusi pemrosesan. Saya belum melakukan pengujian pengguna, jadi tidak ada angka di halaman ini.</p></li>
-    </ol>
+    <div class="sketch" id="sketch">
+      <div class="sketch-head">
+        <p class="sketch-title">Coba coretan kecil</p>
+        <p class="sketch-note">Ilustrasi interaksi di halaman ini memakai pointer atau sentuhan. Bukan PapanTulis yang sedang berjalan, dan tidak memakai kamera.</p>
+      </div>
+      <div class="sketch-stage">
+        <canvas id="sketchCanvas" width="900" height="360" aria-label="Area coretan. Pakai tombol Contoh garis untuk melihat contoh tanpa menggambar sendiri."></canvas>
+        <svg class="sketch-demo" viewBox="0 0 900 360" aria-hidden="true" focusable="false" preserveAspectRatio="none">
+          <path class="ink" d="M70 250c60-120 120 40 180-50 54-82 108 66 160-6 46-64 100 58 170-24 40-47 90-30 150-60"
+            fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="sketch-tools">
+        <button type="button" id="sketchDraw" class="btn btn-ghost btn-sm" hidden>Mulai menggambar</button>
+        <button type="button" id="sketchDemo" class="btn btn-ghost btn-sm">Contoh garis</button>
+        <button type="button" id="sketchClear" class="btn btn-ghost btn-sm">Hapus coretan</button>
+        <span class="vh" aria-live="polite" id="sketchLive"></span>
+      </div>
+      <span class="cat-slot" data-slot="papantulis" aria-hidden="true"></span>
+    </div>
 
     <div class="case-foot">
       <ul class="stack" aria-label="Teknologi"><li>Python</li><li>OpenCV</li><li>MediaPipe</li><li>NumPy</li></ul>
@@ -272,6 +318,8 @@ catch(e){d.setAttribute('data-theme','light');}})();
           <li>Hasilnya dipengaruhi pencahayaan, latar belakang, posisi tangan, smoothing, dan resolusi pemrosesan.</li>
           <li>Saya belum melakukan pengujian pengguna atau pengukuran performa yang bisa dipertanggungjawabkan, jadi tidak ada angka FPS atau klaim keberhasilan di halaman ini.</li>
         </ul>
+        <h4>Yang saya pelajari</h4>
+        <p>Sebagian besar waktu habis untuk smoothing dan menentukan kapan sebuah gerakan dianggap sengaja, bukan untuk pelacakannya sendiri.</p>
         <p class="study-status">Status: prototipe desktop. Fitur dan UI/UX masih dikembangkan.</p>
       </div>
     </details>
@@ -281,35 +329,43 @@ catch(e){d.setAttribute('data-theme','light');}})();
   <span id="about" class="anchor-alias" aria-hidden="true"></span>
   <span id="journey" class="anchor-alias" aria-hidden="true"></span>
   <span id="thoughts" class="anchor-alias" aria-hidden="true"></span>
-  <section class="section about" id="tentang" aria-labelledby="h-tentang" data-dock="left-low">
+  <section class="section about" id="tentang" aria-labelledby="h-tentang">
+    <p class="chapter-kicker">Tentang</p>
+    <h2 id="h-tentang" class="display traits-display">
+      <span>Teliti.</span> <span>Tuntas.</span> <span>Lintas&nbsp;bidang.</span>
+    </h2>
+
     <div class="about-grid">
       <figure class="portrait">
         <img src="img/me.webp" width="420" height="525" alt="Calvin." loading="lazy" decoding="async">
-        <svg class="scribble scribble-frame" viewBox="0 0 220 270" aria-hidden="true" focusable="false">
+        <svg class="scribble scribble-frame" viewBox="0 0 220 270" aria-hidden="true" focusable="false" preserveAspectRatio="none">
           <path class="ink" d="M12 14c66-7 138-6 196 2 6 70 7 166 1 244-68 7-134 7-196 1C8 184 7 86 12 14Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </figure>
 
       <div class="about-text">
-        <h2 id="h-tentang">Tentang saya</h2>
         <p class="pull">Saya tertarik memahami cara aplikasi bekerja, bagaimana kelemahannya muncul, dan bagaimana memperbaikinya.</p>
-        <p>Mahasiswa Computer Science semester 5 di Bina Nusantara University. Peminatan cybersecurity saya mulai pada semester 4, dan sejak itu sebagian besar waktu saya habis untuk membongkar lalu menyusun ulang.</p>
+        <p>Mahasiswa Computer Science semester 5 di Bina Nusantara University. Peminatan cybersecurity saya mulai pada semester 4.</p>
         <p>Cara belajar saya praktik: membangun prototipe, memeriksa hasil, menerima masukan, lalu memperbaiki bagian yang belum tepat. Ketiga proyek di atas lahir dari cara itu.</p>
         <p class="about-note">Saya masih di tahap belajar. Yang saya cari adalah tempat magang bersama orang yang lebih berpengalaman, supaya kebiasaan kerja saya terbentuk dengan benar sejak awal.</p>
+        <span class="cat-slot" data-slot="tentang" aria-hidden="true"></span>
       </div>
 
       <ul class="traits">
-        <li><span class="trait-k">Teliti</span> Saya suka memeriksa apa yang benar-benar terjadi, bukan apa yang seharusnya terjadi.</li>
+        <li><span class="trait-k">Teliti</span> Saya memeriksa apa yang benar-benar terjadi, bukan apa yang seharusnya terjadi.</li>
         <li><span class="trait-k">Tuntas</span> Saya berusaha membawa pekerjaan sampai benar-benar bisa dipakai, bukan berhenti saat demonya jalan.</li>
-        <li><span class="trait-k">Lintas bidang</span> Privasi web, computer vision, dan antarmuka desktop saya pelajari dalam satu tahun yang sama.</li>
+        <li><span class="trait-k">Lintas bidang</span> Privasi web, computer vision, dan antarmuka desktop saya pelajari berbarengan.</li>
       </ul>
     </div>
   </section>
 
   <!-- ═══════════ tools ═══════════ -->
-  <section class="section tools" id="tools" aria-labelledby="h-tools" data-dock="left-top">
+  <section class="section tools" id="tools" aria-labelledby="h-tools">
     <div class="section-head">
-      <h2 id="h-tools">Yang saya pakai</h2>
+      <div>
+        <p class="chapter-kicker">Perkakas</p>
+        <h2 id="h-tools" class="display">Yang saya pakai</h2>
+      </div>
       <p>Daftar ini memisahkan yang sudah saya pakai di proyek nyata dari yang masih saya pelajari. Tidak ada bar persentase, karena angkanya tidak punya dasar.</p>
     </div>
 
@@ -353,27 +409,36 @@ catch(e){d.setAttribute('data-theme','light');}})();
         <li class="no-logo">Application security</li>
         <li class="no-logo">Pengujian keamanan aplikasi mobile</li>
       </ul>
-      <p class="tools-note">PySide6 memakai logo Qt karena PySide6 adalah binding Python untuk Qt. Frida dan jadx tidak punya logo resmi dalam koleksi yang saya pakai, jadi keduanya tampil sebagai teks. Asal dan lisensi tiap logo dicatat di <code>img/tools/CREDITS.md</code>.</p>
+      <p class="tools-note">Logo berasal dari Simple Icons dengan lisensi CC0. <a href="img/tools/CREDITS.md">Kredit dan catatan aset</a>.</p>
+      <span class="cat-slot" data-slot="tools" aria-hidden="true"></span>
     </div>
   </section>
 
-  <!-- ═══════════ pengalaman ═══════════ -->
+  <!-- ═══════════ perjalanan ═══════════ -->
   <span id="experience" class="anchor-alias" aria-hidden="true"></span>
-  <section class="section experience" id="pengalaman" aria-labelledby="h-pengalaman" data-dock="right-mid">
+  <section class="section experience" id="pengalaman" aria-labelledby="h-pengalaman">
     <div class="section-head">
-      <h2 id="h-pengalaman">Perjalanan</h2>
-      <p>Kegiatan yang membentuk cara saya bekerja, dari ruang kelas sampai kepanitiaan.</p>
+      <div>
+        <p class="chapter-kicker">Perjalanan</p>
+        <h2 id="h-pengalaman" class="display">Dari ruang kelas<br>ke kepanitiaan</h2>
+      </div>
+      <p>Kegiatan yang membentuk cara saya bekerja. Pendidikan masih berjalan; sisanya sudah selesai pada tahunnya.</p>
     </div>
 
+    <h3 class="tl-group">Sedang berjalan</h3>
     <ol class="timeline">
       <li>
-        <p class="tl-year">2024 &ndash; sekarang</p>
+        <p class="tl-year">2024<span class="tl-now">kini</span></p>
         <div class="tl-body">
           <p class="tl-title">S1 Computer Science</p>
           <p class="tl-org">Bina Nusantara University, Jakarta</p>
           <p class="tl-desc">Semester 5. Peminatan cybersecurity sejak semester 4.</p>
         </div>
       </li>
+    </ol>
+
+    <h3 class="tl-group">Bertanggal</h3>
+    <ol class="timeline">
       <li>
         <p class="tl-year">2026</p>
         <div class="tl-body">
@@ -390,48 +455,68 @@ catch(e){d.setAttribute('data-theme','light');}})();
           <p class="tl-desc">Soal web, kriptografi, dan reverse engineering.</p>
         </div>
       </li>
+    </ol>
+
+    <h3 class="tl-group">Organisasi &amp; sekolah</h3>
+    <ol class="timeline timeline-plain">
       <li>
-        <p class="tl-year">Organisasi</p>
+        <p class="tl-year">BNCC</p>
         <div class="tl-body">
-          <p class="tl-title">Bina Nusantara Computer Club (BNCC)</p>
+          <p class="tl-title">Bina Nusantara Computer Club</p>
           <p class="tl-org">Anggota</p>
-          <p class="tl-desc">Juga anggota Google Developer Group on Campus, BINUS Malang, dan mengerjakan digital branding untuk Keluarga Mahasiswa Hindu.</p>
         </div>
       </li>
       <li>
-        <p class="tl-year">Sebelumnya</p>
+        <p class="tl-year">GDGoC</p>
+        <div class="tl-body">
+          <p class="tl-title">Google Developer Group on Campus</p>
+          <p class="tl-org">Anggota, BINUS Malang</p>
+        </div>
+      </li>
+      <li>
+        <p class="tl-year">KMH</p>
+        <div class="tl-body">
+          <p class="tl-title">Keluarga Mahasiswa Hindu</p>
+          <p class="tl-org">Digital branding</p>
+        </div>
+      </li>
+      <li>
+        <p class="tl-year">SMA</p>
         <div class="tl-body">
           <p class="tl-title">SMA Negeri 3 Denpasar</p>
           <p class="tl-org">Jurusan IPA</p>
         </div>
       </li>
     </ol>
+    <span class="cat-slot" data-slot="pengalaman" aria-hidden="true"></span>
   </section>
 
-  <!-- ═══════════ kontak ═══════════ -->
+  <!-- ═══════════ kontak: bidang ungu ═══════════ -->
   <span id="contact" class="anchor-alias" aria-hidden="true"></span>
-  <section class="section contact" id="kontak" aria-labelledby="h-kontak" data-dock="right-low" data-cat-contact>
-    <div class="contact-inner">
-      <h2 id="h-kontak">Mari bicara</h2>
-      <p class="contact-lede">Kalau ada kesempatan magang 6 atau 12 bulan di Application Security, pentesting, atau Security Engineering, saya senang mendengarnya. Email adalah cara tercepat.</p>
+  <section class="field field-violet closing" id="kontak" aria-labelledby="h-kontak" data-cat-contact>
+    <p class="chapter-kicker">Kontak</p>
+    <h2 id="h-kontak" class="display">Mari membangun<br>sesuatu.</h2>
 
-      <svg class="scribble scribble-point" viewBox="0 0 90 60" aria-hidden="true" focusable="false">
-        <path class="ink" d="M6 8c14 26 36 38 76 40M74 48c3-5 8-8 14-9-7-4-11-9-12-16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+    <p class="contact-lede">Kalau ada kesempatan <strong>magang 6 atau 12 bulan</strong> di Application Security, pentesting, atau Security Engineering, saya senang mendengarnya.</p>
 
-      <p class="contact-actions">
-        <a class="btn btn-primary" href="mailto:calvinguscalvin@gmail.com?subject=Kesempatan%20magang%20untuk%20Calvin" data-cat-action="contact">Kirim email</a>
-        <a class="btn btn-ghost" href="resume.pdf" target="_blank" rel="noopener" data-cat-action="cv">Lihat CV (PDF)</a>
-        <a class="btn btn-ghost" href="resume.pdf" download data-cat-action="cv">Unduh CV (PDF)</a>
-      </p>
+    <a class="mailto" href="mailto:calvinguscalvin@gmail.com?subject=Kesempatan%20magang%20untuk%20Calvin" data-cat-action="contact">calvinguscalvin@gmail.com</a>
 
-      <dl class="contact-list">
-        <div><dt>Email</dt><dd><a href="mailto:calvinguscalvin@gmail.com">calvinguscalvin@gmail.com</a></dd></div>
-        <div><dt>GitHub</dt><dd><a href="https://github.com/CalvinWuz" target="_blank" rel="noopener">github.com/CalvinWuz</a></dd></div>
-        <div><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/ida-bagus-gede-calvin-suta-subagia-manuaba-b1649a322" target="_blank" rel="noopener">Ida Bagus Gede Calvin Suta Subagia Manuaba</a></dd></div>
-        <div><dt>Domisili</dt><dd>Jakarta, Indonesia</dd></div>
-      </dl>
-    </div>
+    <svg class="scribble scribble-point" viewBox="0 0 110 64" aria-hidden="true" focusable="false">
+      <path class="ink" d="M8 10c16 30 44 42 94 44M90 52c4-6 10-9 16-10-8-5-13-10-14-18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+    <p class="contact-actions">
+      <a class="btn btn-primary" href="mailto:calvinguscalvin@gmail.com?subject=Kesempatan%20magang%20untuk%20Calvin" data-cat-action="contact">Kirim email</a>
+      <a class="btn btn-ghost" href="resume.pdf" target="_blank" rel="noopener" data-cat-action="cv">Lihat CV (PDF)</a>
+      <a class="btn btn-ghost" href="resume.pdf" download data-cat-action="cv">Unduh CV (PDF)</a>
+    </p>
+
+    <dl class="contact-list">
+      <div><dt>GitHub</dt><dd><a href="https://github.com/CalvinWuz" target="_blank" rel="noopener">github.com/CalvinWuz</a></dd></div>
+      <div><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/ida-bagus-gede-calvin-suta-subagia-manuaba-b1649a322" target="_blank" rel="noopener">Ida Bagus Gede Calvin Suta Subagia Manuaba</a></dd></div>
+      <div><dt>Domisili</dt><dd>Jakarta, Indonesia</dd></div>
+    </dl>
+    <span class="cat-slot" data-slot="kontak" aria-hidden="true"></span>
   </section>
 </main>
 
@@ -447,7 +532,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
       <a href="resume.pdf" target="_blank" rel="noopener" data-cat-action="cv">CV (PDF)</a>
     </nav>
   </div>
-  <p class="foot-note">&copy; <span id="year">2026</span> Calvin · Jakarta</p>
+  <p class="foot-note">&copy; <span id="year">2026</span> Calvin · Jakarta · <a href="img/tools/CREDITS.md">kredit aset</a></p>
 </footer>
 
 <!-- ═══════════ maskot: lapisan sendiri, lepas dari footer ═══════════ -->

@@ -140,8 +140,12 @@
             s.x = s.i === 0 ? 0.035 * f.w : side + [0, 0.52, 0.18][s.i] * span;
             s.y = s.i === 0 ? f.below + 0.06 * room : [0, 0.13, 0.47][s.i] * f.h;
           } else {
-            s.x = 14 + [0.00, 0.42, 0.52][s.i] * (f.w - 160);
-            s.y = f.below + [0.02, 0.00, 0.46][s.i] * room;
+            // Kolom sempit: dua di atas pada sisi berlawanan, satu di bawah tengah.
+            var pad = 10;
+            var w = s.el.offsetWidth || 120;
+            if (s.i === 0) { s.x = pad; s.y = f.below + 4; }
+            else if (s.i === 1) { s.x = Math.max(pad, f.w - w - pad); s.y = f.below + 10; }
+            else { s.x = Math.max(pad, (f.w - w) / 2); s.y = f.below + Math.max(118, 0.52 * room); }
           }
           s.angle = s.restAngle;
         } else if (lastWidth && lastWidth !== f.w) {

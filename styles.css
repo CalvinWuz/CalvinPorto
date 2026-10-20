@@ -75,6 +75,8 @@
 
 /* ═══════════ dasar ═══════════ */
 *,*::before,*::after{box-sizing:border-box}
+/* [hidden] harus menang atas display dari .btn dan kawan-kawannya */
+[hidden]{display:none !important}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{
   margin:0;background:var(--bg);color:var(--ink);
@@ -102,8 +104,8 @@ section[id],span.anchor-alias{scroll-margin-top:calc(var(--bar) + 20px)}
 /* tipografi bab: Barlow Condensed diteruskan dari hero ke tiap bab */
 .display{
   font-family:"Barlow Condensed",Impact,system-ui,sans-serif;
-  font-weight:900;letter-spacing:-.025em;line-height:.92;
-  font-size:clamp(2.5rem,1.1rem + 5.4vw,8rem);
+  font-weight:800;letter-spacing:-.012em;line-height:.98;
+  font-size:clamp(2.5rem,1.2rem + 4.6vw,6.25rem);
 }
 .chapter-kicker{
   font-family:"Barlow Condensed",Impact,sans-serif;font-weight:700;
@@ -125,11 +127,13 @@ section[id],span.anchor-alias{scroll-margin-top:calc(var(--bar) + 20px)}
   background:color-mix(in srgb,var(--bg) 86%,transparent);
   backdrop-filter:blur(12px);border-bottom:1px solid var(--line);
 }
-.brand{display:inline-flex;align-items:center;gap:9px;font-weight:800;text-decoration:none;letter-spacing:-.01em;margin-right:auto}
-.brand-mark{
-  display:grid;place-items:center;width:27px;height:27px;border-radius:8px;
-  background:linear-gradient(135deg,var(--blue),var(--purple));color:#101828;font-size:14px;font-weight:800;
+/* Logo C yang disetujui: tanpa kotak bergradasi, proporsi asli dipertahankan.
+   Berkasnya sudah dipangkas ke bentuknya, jadi 30 px di sini juga 30 px optis. */
+.brand{
+  display:inline-flex;align-items:center;gap:10px;min-height:44px;
+  font-weight:800;text-decoration:none;letter-spacing:-.01em;margin-right:auto;
 }
+.brand-mark{width:30px;height:30px;flex:0 0 30px}
 .nav{display:flex;align-items:center;gap:2px;flex-wrap:wrap}
 .nav a{
   display:inline-flex;align-items:center;min-height:44px;padding:0 11px;border-radius:9px;
@@ -185,8 +189,13 @@ section[id],span.anchor-alias{scroll-margin-top:calc(var(--bar) + 20px)}
 }
 
 /* bidang warna penuh lebar, dua momen yang disengaja */
-.field{position:relative;padding:clamp(56px,7vw,104px) calc(var(--pad) + var(--catlane)) clamp(56px,7vw,104px) var(--pad);overflow:hidden}
-.field > *:not(.cat-slot):not(.scribble){max-width:calc(var(--wrap) + var(--catlane));margin-inline:auto;position:relative;z-index:2}
+.field{position:relative;padding:clamp(56px,7vw,104px) 0;overflow:hidden}
+/* Bidang warna boleh full bleed, tetapi isinya memakai garis margin yang sama
+   dengan .section supaya judul dan paragraf tidak bergeser antarbagian. */
+.field > *:not(.cat-slot):not(.scribble):not(.mailto){
+  max-width:calc(var(--wrap) + var(--catlane));margin-inline:auto;position:relative;z-index:2;
+  padding-left:var(--pad);padding-right:calc(var(--pad) + var(--catlane));
+}
 .field-cyan{background:var(--field-cyan-bg);color:var(--field-cyan-ink)}
 .field-cyan .chapter-kicker,.field-cyan .bridge{color:var(--field-cyan-muted)}
 .field-cyan .scribble{color:var(--accent-text)}
@@ -246,7 +255,7 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
   cursor:pointer;text-decoration:underline;text-underline-offset:3px;
 }
 .link-btn:hover{color:var(--ink)}
-.scribble-hero{left:0;bottom:clamp(40px,7vh,96px);width:min(40%,400px);height:130px;z-index:1;opacity:.55}
+.scribble-hero{left:0;bottom:clamp(14px,2.5vh,36px);width:min(34%,330px);height:104px;z-index:1;opacity:.5}
 
 .btn{
   display:inline-flex;align-items:center;justify-content:center;min-height:50px;
@@ -323,7 +332,30 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
 
 /* ═══════════ proyek ═══════════
    Tiga treatment berbeda, bukan sekadar membalik gambar dan teks. */
-.case{padding-block:clamp(52px,6.5vw,92px)}
+.case{
+  padding-block:clamp(64px,7.5vw,108px);
+  display:grid;grid-template-columns:repeat(12,minmax(0,1fr));
+  column-gap:clamp(20px,3vw,48px);align-items:start;
+}
+.case > *{grid-column:1/-1}
+
+@media (min-width:981px){
+  /* Konteks dan bukti dalam satu komposisi, bukan kepala sempit lalu layar kosong. */
+  /* 01 — konteks + kontribusi di kiri, bukti dominan di kanan (≈40:60) */
+  .case-cookies .case-head{grid-column:1/6}
+  .case-cookies .case-visual{grid-column:6/13;margin-top:6px}
+  .case-cookies .flow{grid-column:1/13;margin-top:clamp(28px,3vw,44px)}
+
+  /* 02 — judul dan fakta cakupan di kiri, kamera di kanan */
+  .case-bisindo .case-head{grid-column:1/6}
+  .case-bisindo .case-media{grid-column:6/13;margin-top:6px}
+  .case-bisindo .pipeline{grid-column:1/13;margin-top:clamp(28px,3vw,44px)}
+
+  /* 03 — judul dan screenshot jadi pembuka utuh, demo menyusul */
+  .case-papan .case-head{grid-column:1/6}
+  .case-papan .case-media{grid-column:6/13;margin-top:6px}
+  .case-papan .sketch{grid-column:1/13;margin-top:clamp(28px,3vw,44px)}
+}
 .case-head{position:relative;max-width:46ch}
 .case-index{
   font-family:"Barlow Condensed",Impact,sans-serif;font-weight:900;font-size:4rem;
@@ -338,9 +370,11 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
 }
 .tag-solo{border-color:var(--purple);color:var(--accent-text-2)}
 .tag-team{border-color:var(--blue);color:var(--accent-text)}
+/* 900 hanya untuk nama dan aksen utama; judul kasus memakai 800 dengan
+   tracking lebih longgar supaya hurufnya tidak saling menempel. */
 .case h3{
-  margin-top:10px;font-family:"Barlow Condensed",Impact,sans-serif;font-weight:900;
-  font-size:clamp(2.5rem,1.4rem + 4vw,5rem);line-height:.94;letter-spacing:-.025em;
+  margin-top:10px;font-family:"Barlow Condensed",Impact,sans-serif;font-weight:800;
+  font-size:clamp(2.25rem,1.3rem + 2.8vw,3.75rem);line-height:1.02;letter-spacing:-.01em;
 }
 .alias{font-size:.42em;font-weight:700;color:var(--muted);letter-spacing:0}
 .case-lede{margin-top:14px;font-size:clamp(1.125rem,1rem + .55vw,1.5rem);font-weight:700;line-height:1.3;max-width:24ch}
@@ -348,7 +382,7 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
 .case-fact{margin-top:14px;font-size:1.0625rem}
 .case-fact strong{color:var(--accent-text)}
 
-.case-media{position:relative;margin:clamp(26px,3.5vw,44px) 0 0}
+.case-media{position:relative;margin:clamp(24px,2.6vw,34px) 0 0}
 .case-media img{width:100%;border-radius:var(--radius);border:1px solid var(--line);background:var(--chip)}
 /* Panel HUD di pojok kiri atas tangkapan PapanTulis memuat sisa render yang rusak,
    jadi framingnya dipotong lewat CSS, bukan dengan menyalin berkas baru. */
@@ -356,16 +390,16 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
 .case-media figcaption{margin-top:12px;font-size:.875rem;color:var(--muted);max-width:52ch}
 
 /* 01 — bukti utama + crop fokus dari gambar yang sama */
-.case-visual{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:clamp(20px,3vw,44px);align-items:start}
-.case-crop{position:relative;margin:clamp(26px,3.5vw,44px) 0 0}
+.case-visual{display:block}
+.case-crop{position:relative;margin:clamp(18px,2vw,26px) 0 0;max-width:min(100%,320px)}
 .crop-frame{
-  width:100%;aspect-ratio:16/9;border-radius:14px;border:1px solid var(--line);
+  width:100%;aspect-ratio:21/9;border-radius:14px;border:1px solid var(--line);
   background-image:url(img/cookierisk.webp);background-repeat:no-repeat;
   background-size:116%;background-position:50% 96%;
 }
 .case-crop figcaption{margin-top:12px;font-size:.9375rem;color:var(--muted)}
 .case-crop figcaption strong{color:var(--ink)}
-.scribble-tag{left:-10px;top:-30px;width:120px;height:54px;opacity:.85}
+.scribble-tag{left:-18px;top:-26px;width:104px;height:48px;opacity:.9}
 
 /* alur 3 tahap */
 .flow{
@@ -440,6 +474,13 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
   gap:14px 26px;margin-top:clamp(22px,2.6vw,34px);
 }
 .case-role{flex:1 1 32ch;color:var(--muted);min-width:min(100%,32ch)}
+.case-head .case-role{margin-top:20px;flex:none;min-width:0;max-width:46ch}
+.case-role-linked{position:relative}
+.case-role-linked::after{
+  content:"";position:absolute;left:18px;bottom:-26px;width:2px;height:20px;
+  background:linear-gradient(var(--accent-text),transparent);opacity:.7;
+}
+@media (max-width:980px){.case-role-linked::after{display:none}}
 .case-role strong{color:var(--ink)}
 .note-mark{
   display:inline-block;margin-right:8px;padding:2px 10px;border-radius:999px;
@@ -485,7 +526,7 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
 }
 .about-grid .portrait{grid-column:1;grid-row:1}
 .about-grid .about-text{grid-column:2;grid-row:1/span 2}
-.about-grid .traits{grid-column:1;grid-row:2}
+.about-grid .notes{grid-column:1/-1;grid-row:2}
 .portrait{position:relative;margin:0}
 .portrait img{width:100%;border-radius:4px;border:1px solid var(--line);background:var(--chip)}
 .scribble-frame{inset:-14px -12px -16px -14px;width:auto;height:auto;color:var(--purple);opacity:.65}
@@ -500,9 +541,28 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
   border-left:4px solid var(--purple);max-width:54ch;
 }
 .about-text .cat-slot{right:-28px;bottom:-30px}
-.traits{list-style:none;margin:0;padding:0;display:grid;gap:14px}
-.traits li{color:var(--muted);padding-left:16px;border-left:3px solid var(--line-strong)}
-.trait-k{display:block;font-weight:800;color:var(--ink);letter-spacing:-.01em}
+/* Catatan proses membentang seluruh lebar grid, bukan terjepit di kolom 320 px. */
+.notes{margin-top:clamp(10px,1.6vw,22px);padding-top:clamp(22px,2.6vw,34px);border-top:1px solid var(--line)}
+.notes-title{
+  font-family:"Barlow Condensed",Impact,sans-serif;font-weight:800;
+  font-size:1.375rem;letter-spacing:.02em;
+}
+.note-list{
+  list-style:none;margin:clamp(18px,2.2vw,28px) 0 0;padding:0;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,2.6vw,40px);
+}
+.note-list li{position:relative;padding-left:18px;border-left:3px solid var(--line-strong)}
+.note-list li:nth-child(1){border-left-color:var(--blue)}
+.note-list li:nth-child(2){border-left-color:var(--purple)}
+.note-list li:nth-child(3){border-left-color:var(--cyan)}
+.note-k{font-weight:800;color:var(--ink);letter-spacing:-.01em;margin-bottom:8px}
+.note-list p:not(.note-k){color:var(--muted);max-width:46ch}
+.note-link{
+  display:inline-flex;align-items:center;min-height:44px;margin-top:4px;
+  font-size:.875rem;font-weight:700;color:var(--accent-text);text-underline-offset:4px;
+}
+.note-link:hover{color:var(--ink)}
+@media (max-width:980px){.note-list{grid-template-columns:1fr;gap:22px}}
 
 /* ═══════════ tools ═══════════ */
 .marquee-label{
@@ -589,6 +649,9 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
   text-underline-offset:.12em;overflow-wrap:anywhere;
 }
 .mailto:hover{color:var(--accent-text-2)}
+/* Anak inline tidak boleh memakai padding bidang: area kliknya akan meluber
+   ke jalur maskot. Marginnya saja yang mengikuti garis isi. */
+.field > .mailto{padding:0;margin-left:var(--pad);max-width:calc(100% - var(--pad) - var(--pad) - var(--catlane))}
 .scribble-point{right:clamp(10px,6vw,90px);top:clamp(20px,6vw,80px);width:110px;height:64px;opacity:.85;z-index:3}
 .contact-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(22px,3vw,34px)}
 .contact-list{margin:clamp(30px,4vw,44px) 0 0;display:grid;gap:12px;max-width:62ch}
@@ -746,7 +809,7 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
   .scribble-point{right:clamp(4px,3vw,30px)}
 
   .hero-grid{grid-template-columns:1fr;gap:18px}
-  .case-visual{grid-template-columns:1fr;gap:18px}
+  .case-crop{display:none}
   .flow{grid-template-columns:1fr;gap:14px}
   .pipe{grid-template-columns:repeat(2,minmax(0,1fr))}
   .pipe li + li::before{display:none}
@@ -779,14 +842,15 @@ h1{margin-top:clamp(10px,1.6vw,20px);position:relative;z-index:3}
   .no-js .nav a{min-height:44px;padding:0 10px;font-size:.9375rem}
   .no-js .nav .nav-cv{margin:0 0 0 4px}
 
-  .hero{padding-bottom:clamp(120px,19vh,180px)}
+  /* ruang cukup untuk dua baris stiker tanpa menutup hint, CTA, atau dock kucing */
+  .hero{padding-bottom:clamp(236px,30vh,290px)}
 
   /* Tentang jadi satu kolom yang disengaja: foto, cerita, lalu sifat.
      Penempatan grid anak direset, kalau tidak kolom implisit sempit tetap muncul. */
   .about-grid{grid-template-columns:1fr;row-gap:24px}
   .about-grid .portrait,
   .about-grid .about-text,
-  .about-grid .traits{grid-column:1;grid-row:auto}
+  .about-grid .notes{grid-column:1;grid-row:auto}
   .portrait{max-width:280px}
   .about-text .cat-slot{right:0;bottom:-26px}
 

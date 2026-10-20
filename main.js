@@ -181,26 +181,41 @@
           if (s.i === 1) return { x: Math.max(8, f.max - w - 0.02 * f.max), y: f.below - 2 };
           return { x: 0.47 * f.max, y: f.below + 0.42 * room };
         }
+        // Sempit: dua di baris atas pada sisi berlawanan, satu di baris bawah.
+        // Baris kedua dihitung dari tinggi baris pertama yang sebenarnya,
+        // bukan angka tetap, supaya tidak pernah terclamp menimpa baris atas.
         var pad = 10;
+        var h0 = stickers[0].el.offsetHeight || 94;
+        var h1 = stickers[1].el.offsetHeight || 76;
+        var h2 = s.el.offsetHeight || 100;
+        var rowTop = Math.max(h0 + 4, h1 + 12);
+        var secondY = f.below + Math.min(rowTop + 14, Math.max(0, f.h - f.below - h2 - 8));
         if (s.i === 0) return { x: pad, y: f.below + 4 };
         if (s.i === 1) return { x: Math.max(pad, f.max - w - pad), y: f.below + 12 };
-        return { x: Math.max(pad, (f.max - w) / 2), y: f.below + Math.max(110, 0.5 * room) };
+        return { x: Math.max(pad, (f.max - w) / 2), y: secondY };
       });
     }
+    var lastWide = null;
     function place(force) {
       var f = field();
       if (!f.w || !stickers[0].el.offsetWidth) return;   // tunggu sampai ukurannya nyata
+      var wide = f.w >= 900;
+      // Komposisi default disusun ulang untuk ukuran baru selama pengguna belum
+      // memindahkan stiker. Posisi yang benar-benar dipilih pengguna dipertahankan
+      // dan hanya di-clamp ke bidang baru.
+      var relayout = force || !placed || (lastWide !== null && lastWide !== wide && !touched);
       var d = defaults(f);
       stickers.forEach(function (s, i) {
-        if (force || !placed) {
-          var prior = (!force && saved) ? saved[s.i] : null;
+        if (relayout) {
+          var prior = (!force && !placed && saved) ? saved[s.i] : null;
           if (prior && isFinite(prior.x) && isFinite(prior.y)) { s.x = prior.x; s.y = prior.y; }
           else { s.x = d[i].x; s.y = d[i].y; }
           s.angle = s.restAngle;
         }
-        draw(s);   // posisi pengguna tetap dihormati, hanya di-clamp ke bidang baru
+        draw(s);
       });
       placed = true;
+      lastWide = wide;
     }
     function remember() {
       touched = true;
@@ -339,10 +354,12 @@
     var flow = document.getElementById('flow-cookies');
     if (!flow) return;
     var steps = Array.prototype.slice.call(flow.querySelectorAll('.flow-step'));
+    // Tombolnya hanya memilih penekanan; seluruh paragraf tetap terlihat,
+    // jadi aria-pressed, bukan disclosure palsu dengan aria-expanded.
     function activate(i) {
       steps.forEach(function (s, n) {
         s.classList.toggle('is-on', n === i);
-        s.querySelector('.flow-btn').setAttribute('aria-expanded', n === i ? 'true' : 'false');
+        s.querySelector('.flow-btn').setAttribute('aria-pressed', n === i ? 'true' : 'false');
       });
     }
     steps.forEach(function (s, i) {
@@ -365,19 +382,34 @@
     var demoBtn = document.getElementById('sketchDemo');
     var clearBtn = document.getElementById('sketchClear');
 
-    // Sentuh perlu diaktifkan dulu supaya swipe tetap menggulir halaman.
-    var coarse = window.matchMedia('(any-pointer: coarse)').matches;
-    var armed = !coarse;
-    var strokes = [];       // disimpan dalam koordinat CSS, jadi resize tidak menggeser garis
+    /* Satu sumber state.
+       needsArming: sentuh harus menekan tombol dulu supaya swipe tetap menggulir.
+       Pada mouse tombolnya benar-benar disembunyikan dan menggambar langsung aktif. */
+    var needsArming = window.matchMedia('(any-pointer: coarse)').matches;
+    var armed = !needsArming;
+    // Geometri disimpan ternormalisasi (0..1), jadi resize, orientasi, dan
+    // pergantian tema tidak pernah memotong atau menggeser coretan.
+    var strokes = [];
     var current = null;
     var pointerId = null;
+    var cssW = 0, cssH = 0;
 
+    function syncControls() {
+      if (drawBtn) {
+        drawBtn.hidden = !needsArming;
+        drawBtn.textContent = armed ? 'Selesai' : 'Mulai menggambar';
+        drawBtn.setAttribute('aria-pressed', armed ? 'true' : 'false');
+      }
+      box.classList.toggle('is-drawing', armed);
+    }
     function sizeCanvas() {
-      var r = canvas.getBoundingClientRect();
-      if (!r.width) return;
+      // Ukuran diambil dari offsetWidth: tidak terpengaruh transform reveal.
+      var w = canvas.offsetWidth, h = canvas.offsetHeight;
+      if (!w || !h || (w === cssW && h === cssH)) { repaint(); return; }
+      cssW = w; cssH = h;
       var dpr = clamp(window.devicePixelRatio || 1, 1, 2);   // backing store dibatasi
-      canvas.width = Math.round(r.width * dpr);
-      canvas.height = Math.round(r.height * dpr);
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       repaint();
     }
@@ -385,34 +417,39 @@
       return getComputedStyle(document.documentElement).getPropertyValue('--accent-text-2').trim() || '#8b7cff';
     }
     function repaint() {
-      var r = canvas.getBoundingClientRect();
-      ctx.clearRect(0, 0, r.width, r.height);
+      if (!cssW) return;
+      ctx.clearRect(0, 0, cssW, cssH);
       ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      ctx.strokeStyle = colour(); ctx.lineWidth = 6;
+      ctx.strokeStyle = colour();
+      ctx.lineWidth = clamp(cssW / 150, 3, 7);
       strokes.forEach(function (s) {
         if (s.length < 2) return;
         ctx.beginPath();
-        ctx.moveTo(s[0].x, s[0].y);
-        for (var i = 1; i < s.length; i++) ctx.lineTo(s[i].x, s[i].y);
+        ctx.moveTo(s[0].x * cssW, s[0].y * cssH);
+        for (var i = 1; i < s.length; i++) ctx.lineTo(s[i].x * cssW, s[i].y * cssH);
         ctx.stroke();
       });
     }
     function at(e) {
       var r = canvas.getBoundingClientRect();
-      return { x: e.clientX - r.left, y: e.clientY - r.top };
+      return {
+        x: clamp((e.clientX - r.left) / Math.max(1, r.width), 0, 1),
+        y: clamp((e.clientY - r.top) / Math.max(1, r.height), 0, 1)
+      };
     }
     function setArmed(v) {
       armed = Boolean(v);
-      box.classList.toggle('is-drawing', armed);
-      if (drawBtn) drawBtn.textContent = armed ? 'Selesai' : 'Mulai menggambar';
-      if (live) live.textContent = armed ? 'Mode menggambar aktif.' : 'Mode menggambar selesai. Halaman bisa digulir seperti biasa.';
+      syncControls();
+      if (live) live.textContent = armed
+        ? 'Mode menggambar aktif.'
+        : 'Mode menggambar selesai. Halaman bisa digulir seperti biasa.';
     }
     function stop() {
       if (pointerId !== null) { try { canvas.releasePointerCapture(pointerId); } catch (e) {} }
       pointerId = null; current = null;
     }
 
-    if (coarse && drawBtn) { drawBtn.hidden = false; setArmed(false); }
+    syncControls();
     if (drawBtn) drawBtn.addEventListener('click', function () { setArmed(!armed); stop(); });
 
     canvas.addEventListener('pointerdown', function (e) {
@@ -450,7 +487,10 @@
 
     sizeCanvas();
     onLayout(sizeCanvas);
+    // ResizeObserver hanya memicu announceLayout, dan sizeCanvas berhenti lebih awal
+    // ketika ukurannya tidak berubah, jadi tidak ada loop observer.
     if ('ResizeObserver' in window) new ResizeObserver(announceLayout).observe(canvas);
+    window.addEventListener('orientationchange', function () { setTimeout(sizeCanvas, 180); });
     // Warna garis mengikuti tema.
     new MutationObserver(repaint).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   });

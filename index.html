@@ -24,7 +24,9 @@
 <meta name="twitter:description" content="Mahasiswa Computer Science semester 5 di BINUS. Mencari magang 6 atau 12 bulan di Application Security, pentesting, atau Security Engineering.">
 <meta name="twitter:image" content="https://portofolio-calvin-ruby.vercel.app/img/og-image.png">
 
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235b8cff'/%3E%3Ctext x='32' y='45' font-family='Helvetica,Arial,sans-serif' font-weight='bold' font-size='38' text-anchor='middle' fill='%23ffffff'%3EC%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="img/brand/favicon-32.png">
+<link rel="icon" type="image/png" sizes="256x256" href="img/brand/logo-c.png">
+<link rel="apple-touch-icon" href="img/brand/apple-touch-icon.png">
 
 <script>
 /* Tema ditetapkan sebelum paint pertama supaya tidak ada kedipan warna. */
@@ -44,7 +46,10 @@ catch(e){d.setAttribute('data-theme','light');}})();
 <a class="skip" href="#proyek">Lewati ke proyek</a>
 
 <header class="topbar">
-  <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">C</span> <span class="brand-name">Calvin</span></a>
+  <a class="brand" href="#top" aria-label="Calvin — kembali ke awal">
+    <img class="brand-mark" src="img/brand/logo-c.png" width="256" height="256" alt="" decoding="async">
+    <span class="brand-name" aria-hidden="true">Calvin</span>
+  </a>
 
   <nav class="nav" id="menu" aria-label="Navigasi utama">
     <a href="#proyek">Proyek</a>
@@ -85,12 +90,12 @@ catch(e){d.setAttribute('data-theme','light');}})();
 
     <div class="hero-grid">
       <div class="hero-lead">
-        <p class="role">Saya membangun software sambil mendalami keamanan aplikasi.</p>
+        <p class="role">Membangun software.<br>Mendalami keamanan aplikasi.</p>
         <p class="motto" aria-hidden="true"><span>Membangun.</span> <span>Menguji.</span> <span>Memperbaiki.</span></p>
       </div>
 
       <div class="hero-side">
-        <p class="lede">Mencari <strong>magang 6 atau 12 bulan</strong> di Application Security, pentesting, atau Security Engineering. Terbuka juga untuk posisi Computer Science lain yang relevan.</p>
+        <p class="lede">Mencari <strong>magang 6 atau 12 bulan</strong> di Application Security, Pentesting, atau Security Engineering.</p>
         <p class="cta">
           <a class="btn btn-primary" href="#proyek" data-cat-action="project">Lihat proyek</a>
           <a class="btn btn-ghost" href="resume.pdf" target="_blank" rel="noopener" data-cat-action="cv">Lihat CV (PDF)</a>
@@ -151,6 +156,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
       <h3 id="p1">Cookies Risk Analyzer</h3>
       <p class="case-lede">Membuat sesuatu yang tersembunyi jadi terbaca.</p>
       <p class="case-sub">Banyak website memasang cookie dan tracker sebelum pengunjung menyetujui apa pun. Bagi orang biasa itu tidak terlihat, dan bagi tim pengelola sulit dibaca tanpa membuka devtools satu per satu.</p>
+      <p class="case-role case-role-linked"><span class="note-mark">kontribusi saya</span> Mengembangkan <strong>bot analisis indikator terkait UU PDP</strong>. Scanner, dashboard, scoring, dan arsitektur keseluruhan adalah pekerjaan tim lima orang.</p>
       <span class="cat-slot" data-slot="cookies" aria-hidden="true"></span>
     </div>
 
@@ -165,24 +171,23 @@ catch(e){d.setAttribute('data-theme','light');}})();
         <svg class="scribble scribble-tag" viewBox="0 0 120 54" aria-hidden="true" focusable="false">
           <path class="ink" d="M6 46c16-18 44-28 108-30M104 16c-5 4-7 9-7 15 7-5 13-7 19-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <figcaption><strong>Kategori situs dipilih dulu</strong>, karena cookie yang wajar untuk e-commerce belum tentu wajar untuk situs pemerintah.</figcaption>
+        <figcaption><strong>Kategori situs dipilih dulu.</strong> Kategori menjadi salah satu masukan dalam asumsi dampak pada metode penilaian risiko proyek ini.</figcaption>
       </figure>
     </div>
 
     <ol class="flow" id="flow-cookies" aria-label="Alur pembacaan hasil">
-      <li class="flow-step"><button type="button" class="flow-btn" aria-expanded="false">
+      <li class="flow-step"><button type="button" class="flow-btn" aria-pressed="false">
         <span class="flow-n">1</span><span class="flow-k">Observasi</span></button>
         <p class="flow-d">Cookie dan tracker yang benar-benar dimuat sebuah website dicatat apa adanya.</p></li>
-      <li class="flow-step"><button type="button" class="flow-btn" aria-expanded="false">
+      <li class="flow-step"><button type="button" class="flow-btn" aria-pressed="false">
         <span class="flow-n">2</span><span class="flow-k">Indikator</span></button>
         <p class="flow-d">Heuristik menandai mana yang perlu ditinjau. Banner consent yang dibuat khusus bisa terlewat, jadi ini petunjuk, bukan vonis.</p></li>
-      <li class="flow-step"><button type="button" class="flow-btn" aria-expanded="false">
+      <li class="flow-step"><button type="button" class="flow-btn" aria-pressed="false">
         <span class="flow-n">3</span><span class="flow-k">Tinjauan manusia</span></button>
         <p class="flow-d">Keputusan akhir tetap di tangan orang. Hasilnya bukan sertifikasi dan bukan jaminan kepatuhan UU PDP atau GDPR.</p></li>
     </ol>
 
     <div class="case-foot">
-      <p class="case-role"><span class="note-mark">kontribusi saya</span> Mengembangkan <strong>bot analisis indikator terkait UU PDP</strong>. Scanner, dashboard, scoring, dan arsitektur keseluruhan adalah pekerjaan tim lima orang.</p>
       <ul class="stack" aria-label="Teknologi proyek tim"><li>Node.js</li><li>React</li><li>Playwright</li><li>Docker</li></ul>
       <a class="link" href="https://github.com/CalvinWuz/CookiesAnalyzer-Website" target="_blank" rel="noopener" data-cat-action="project">Repository GitHub<span class="vh"> Cookies Risk Analyzer, terbuka di tab baru</span></a>
     </div>
@@ -211,11 +216,6 @@ catch(e){d.setAttribute('data-theme','light');}})();
 
   <!-- ─── proyek 2: BISINDO ─── -->
   <section class="section case case-bisindo" id="p-bisindo" aria-labelledby="p2">
-    <figure class="case-media case-media-wide">
-      <img src="img/bisindo.webp" width="1000" height="649" alt="Prototipe penerjemah BISINDO berjalan, dengan titik sendi tangan tergambar di atas tampilan kamera." loading="lazy" decoding="async">
-      <figcaption>Titik sendi yang dibaca dari kamera. Yang diproses adalah titiknya, bukan gambar wajah.</figcaption>
-    </figure>
-
     <div class="case-head">
       <p class="case-index" aria-hidden="true">02</p>
       <p class="case-tag"><span class="tag tag-solo">Pribadi · prototipe</span></p>
@@ -224,6 +224,12 @@ catch(e){d.setAttribute('data-theme','light');}})();
       <p class="case-sub">Seberapa jauh isyarat tangan bisa dikenali tanpa mengirim gambar ke mana pun? BISINDO memakai dua tangan, jadi persoalannya bukan hanya bentuk, tetapi juga hubungan antar-tangan.</p>
       <p class="case-fact"><strong>26 huruf</strong> dan <strong>32 isyarat kata</strong> terpisah. Bukan penerjemah percakapan.</p>
     </div>
+
+    <figure class="case-media">
+      <img src="img/bisindo.webp" width="1000" height="649" alt="Prototipe penerjemah BISINDO berjalan, dengan titik sendi tangan tergambar di atas tampilan kamera." loading="lazy" decoding="async">
+      <figcaption>Gambar kamera diproses untuk mengekstraksi titik sendi; koordinat itulah yang diterima model.</figcaption>
+    </figure>
+
 
     <figure class="pipeline" aria-labelledby="pipe-cap">
       <ol class="pipe" id="pipe-bisindo">
@@ -236,7 +242,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
     </figure>
 
     <div class="case-foot">
-      <p class="case-role"><span class="note-mark">diproses di perangkat</span> Gambar kamera diubah jadi titik sendi lebih dulu, jadi modelnya lebih kecil dan alasan privasinya mudah dijelaskan. Target pengembangan yang saya catat: macOS Apple Silicon.</p>
+      <p class="case-role"><span class="note-mark">inferensi lokal</span> Gambar kamera diproses untuk mengekstraksi titik sendi, lalu model menerima koordinatnya. Modelnya jadi lebih kecil dan seluruh inferensi berjalan di perangkat. Target pengembangan yang saya catat: macOS Apple Silicon.</p>
       <ul class="stack" aria-label="Teknologi"><li>Python</li><li>PyTorch</li><li>MediaPipe</li><li>PySide6</li></ul>
       <a class="link" href="https://github.com/CalvinWuz/BISINDO-Translator" target="_blank" rel="noopener" data-cat-action="project">Repository GitHub<span class="vh"> BISINDO Translator, terbuka di tab baru</span></a>
       <span class="cat-slot" data-slot="bisindo" aria-hidden="true"></span>
@@ -270,7 +276,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
       <p class="case-tag"><span class="tag tag-solo">Pribadi · prototipe</span></p>
       <h3 id="p3">PapanTulis <span class="alias">(Boardly)</span></h3>
       <p class="case-lede">Satu bagian kecil yang bisa dicoba.</p>
-      <p class="case-sub">Papan tulis tanpa stylus dan tanpa tablet. Yang ada hanya webcam dan tangan. Gerakan manusia tidak pernah rapi, jadi sebagian besar waktu habis untuk smoothing dan menentukan kapan sebuah gerakan dianggap sengaja.</p>
+      <p class="case-sub">Papan tulis tanpa stylus dan tanpa tablet. Yang ada hanya webcam dan tangan. Gerakan tangan perlu di-smoothing dan dibedakan antara gerakan sengaja dan tidak, sebelum bisa dipakai menggambar atau presentasi.</p>
     </div>
 
     <figure class="case-media">
@@ -319,7 +325,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
           <li>Saya belum melakukan pengujian pengguna atau pengukuran performa yang bisa dipertanggungjawabkan, jadi tidak ada angka FPS atau klaim keberhasilan di halaman ini.</li>
         </ul>
         <h4>Yang saya pelajari</h4>
-        <p>Sebagian besar waktu habis untuk smoothing dan menentukan kapan sebuah gerakan dianggap sengaja, bukan untuk pelacakannya sendiri.</p>
+        <p>Pelacakan tangan hanya separuh persoalan. Bagian yang menentukan adalah smoothing dan ambang yang memutuskan kapan sebuah gerakan dihitung sebagai perintah.</p>
         <p class="study-status">Status: prototipe desktop. Fitur dan UI/UX masih dikembangkan.</p>
       </div>
     </details>
@@ -347,15 +353,30 @@ catch(e){d.setAttribute('data-theme','light');}})();
         <p class="pull">Saya tertarik memahami cara aplikasi bekerja, bagaimana kelemahannya muncul, dan bagaimana memperbaikinya.</p>
         <p>Mahasiswa Computer Science semester 5 di Bina Nusantara University. Peminatan cybersecurity saya mulai pada semester 4.</p>
         <p>Cara belajar saya praktik: membangun prototipe, memeriksa hasil, menerima masukan, lalu memperbaiki bagian yang belum tepat. Ketiga proyek di atas lahir dari cara itu.</p>
-        <p class="about-note">Saya masih di tahap belajar. Yang saya cari adalah tempat magang bersama orang yang lebih berpengalaman, supaya kebiasaan kerja saya terbentuk dengan benar sejak awal.</p>
+        <p class="about-note">Saya masih belajar, dan yang saya cari adalah tim yang lebih berpengalaman untuk tempat magang. Di bawah ini keputusan yang terlihat dari ketiga proyek itu.</p>
         <span class="cat-slot" data-slot="tentang" aria-hidden="true"></span>
       </div>
 
-      <ul class="traits">
-        <li><span class="trait-k">Teliti</span> Saya memeriksa apa yang benar-benar terjadi, bukan apa yang seharusnya terjadi.</li>
-        <li><span class="trait-k">Tuntas</span> Saya berusaha membawa pekerjaan sampai benar-benar bisa dipakai, bukan berhenti saat demonya jalan.</li>
-        <li><span class="trait-k">Lintas bidang</span> Privasi web, computer vision, dan antarmuka desktop saya pelajari berbarengan.</li>
-      </ul>
+      <section class="notes" aria-labelledby="h-notes">
+        <h3 id="h-notes" class="notes-title">Catatan dari prosesnya</h3>
+        <ol class="note-list">
+          <li>
+            <p class="note-k">Pisahkan observasi dari kesimpulan</p>
+            <p>Bot yang saya kerjakan membantu membaca indikator terkait UU PDP. Cookie yang teramati, indikator otomatis, dan tinjauan manusia punya fungsi berbeda, jadi ketiganya saya tampilkan terpisah.</p>
+            <a class="note-link" href="#studi-cookies">Studi kasus Cookies Risk Analyzer</a>
+          </li>
+          <li>
+            <p class="note-k">Tentukan apa yang masuk ke model</p>
+            <p>Gambar kamera diproses menjadi landmark, lalu model mengenali huruf atau isyarat kata dari koordinat tersebut. Inferensi lokal dan cakupan kosakata perlu dijelaskan bersama, bukan salah satunya saja.</p>
+            <a class="note-link" href="#studi-bisindo">Studi kasus BISINDO Translator</a>
+          </li>
+          <li>
+            <p class="note-k">Periksa kondisi penggunaan</p>
+            <p>Pencahayaan, posisi tangan, smoothing, dan resolusi pemrosesan memengaruhi pengenalan gestur. Perilaku prototipe perlu dibaca bersama kondisi penggunaannya.</p>
+            <a class="note-link" href="#studi-papantulis">Studi kasus PapanTulis</a>
+          </li>
+        </ol>
+      </section>
     </div>
   </section>
 
@@ -422,7 +443,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
         <p class="chapter-kicker">Perjalanan</p>
         <h2 id="h-pengalaman" class="display">Dari ruang kelas<br>ke kepanitiaan</h2>
       </div>
-      <p>Kegiatan yang membentuk cara saya bekerja. Pendidikan masih berjalan; sisanya sudah selesai pada tahunnya.</p>
+      <p>Pendidikan, kepanitiaan, dan kegiatan yang membentuk cara saya bekerja.</p>
     </div>
 
     <h3 class="tl-group">Sedang berjalan</h3>
@@ -497,7 +518,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
     <p class="chapter-kicker">Kontak</p>
     <h2 id="h-kontak" class="display">Mari membangun<br>sesuatu.</h2>
 
-    <p class="contact-lede">Kalau ada kesempatan <strong>magang 6 atau 12 bulan</strong> di Application Security, pentesting, atau Security Engineering, saya senang mendengarnya.</p>
+    <p class="contact-lede">Kalau ada kesempatan <strong>magang 6 atau 12 bulan</strong> di Application Security, Pentesting, atau Security Engineering, saya senang mendengarnya. Saya juga terbuka untuk posisi Computer Science lain yang relevan.</p>
 
     <a class="mailto" href="mailto:calvinguscalvin@gmail.com?subject=Kesempatan%20magang%20untuk%20Calvin" data-cat-action="contact">calvinguscalvin@gmail.com</a>
 

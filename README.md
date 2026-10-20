@@ -82,15 +82,31 @@ repository, dan CV sebelum menerbitkan.
   Posisi maskot hanya dipakai sebagai batas tambahan setelah ia benar-benar
   ditempatkan. Skema penyimpanan posisi stiker sekarang `v:3`; skema lama diabaikan
   tanpa menyentuh preferensi tema atau gerakan.
-- **Kanvas coretan mini** di bagian PapanTulis. Pointer kasar (sentuh) harus menekan
-  "Mulai menggambar" dulu, jadi swipe tetap menggulir halaman; `touch-action` hanya
-  diubah pada kanvas saat mode aktif. Garis disimpan dalam koordinat CSS, jadi resize
-  dan device pixel ratio tidak menggeser hasilnya. Tanpa JavaScript, contoh garis
-  statis tetap tampil.
+- **Kanvas coretan mini** di bagian PapanTulis. Satu sumber state mengatur mode,
+  label, class, dan visibilitas tombol: pada mouse menggambar langsung aktif dan
+  tombol aktivasi benar-benar tersembunyi; pada pointer kasar pengunjung menekan
+  "Mulai menggambar" dulu sehingga swipe tetap menggulir halaman. `touch-action`
+  hanya diubah pada kanvas saat mode aktif.
+- **Koordinat kanvas ternormalisasi (0..1), bukan piksel CSS absolut.** Titik
+  dipetakan ke ukuran kanvas saat digambar ulang, jadi coretan di kiri, tengah, dan
+  kanan tetap utuh setelah desktop → mobile → desktop, pergantian orientasi, dan
+  pergantian tema. Ukuran backing store mengikuti `offsetWidth` dan dibatasi 2x DPR,
+  sehingga transform dari animasi reveal tidak memengaruhinya.
+- **Posisi stiker disusun ulang saat ruang berubah** selama pengguna belum
+  memindahkannya; posisi hasil drag atau keyboard dipertahankan dan hanya di-clamp
+  ke bidang baru.
 - **Satu sumber state untuk marquee.** Jeda bila manual, reduced motion, tab
   tersembunyi, di luar layar, atau pointer/fokus sedang di atasnya. Hover sementara
   tidak pernah menulis preferensi manual yang tersimpan.
 - **Tombol jeda gerakan** di topbar mengendalikan maskot dan marquee sekaligus.
+
+## Logo
+
+Logo C yang disetujui ada di `img/brand/`. Berkasnya **PNG**, bukan SVG: tidak ada
+master vektor untuk aset ini. `logo-c.png` sudah dipangkas ke bentuknya (padding
+transparan asli sekitar 14 persen dibuang), jadi ukuran CSS 30 px juga 30 px optis.
+Logo dipakai apa adanya tanpa kotak bergradasi. Favicon dan apple-touch-icon berasal
+dari bentuk yang sama.
 
 ## Kredit aset
 

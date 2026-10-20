@@ -1,69 +1,81 @@
-# Calvin Portfolio
+# Portofolio Calvin
 
-A static site: HTML, CSS and vanilla JavaScript, no build step and no dependencies.
-Everything it needs is in this folder, including the fonts, so the page makes no
-third-party request at all. That is not incidental tidiness: the page's own live
-check reports it, so the claim has to stay true.
+Situs statis: HTML, CSS, dan JavaScript biasa. Tidak ada build step dan tidak ada
+dependency. Semua yang dibutuhkan ada di folder ini, termasuk fontnya, jadi halaman
+ini tidak memanggil host pihak ketiga sama sekali.
 
 ```text
 portfolio/
-├── index.html      all content, readable with JavaScript off
-├── styles.css      tokens, layout, the one media query set
-├── main.js         enhancements only, each wrapped in feature()
-├── vercel.json     security headers and cache rules
+├── index.html      seluruh konten, tetap terbaca tanpa JavaScript
+├── styles.css      token warna, layout, dan kedua tema
+├── main.js         hanya tambahan; setiap bagian dibungkus feature()
+├── vercel.json     header keamanan dan aturan cache
+├── robots.txt, sitemap.xml
 ├── resume.pdf
-├── fonts/          self-hosted woff2, latin subset (see fonts/LICENSE.md)
+├── fonts/          Barlow Condensed (woff2, subset latin) — lihat catatan lisensi di bawah
 └── img/
-    ├── me.jpg, bisindo.jpg, boardly.jpg, cookierisk.jpg, og-image.png
-    └── detail/     crops used in the page and the case studies
+    ├── me.webp, bisindo.webp, cookierisk.webp, boardly.webp, og-image.png
+    ├── *.jpg       sumber asli, tidak ditampilkan
+    └── cat/        puppet.webp dan accessories.webp untuk maskot
 ```
 
-## Local preview
+## Pratinjau lokal
 
 ```bash
 python3 -m http.server 8765 --bind 127.0.0.1 --directory .
 ```
 
-Open http://127.0.0.1:8765. Check both themes, the three case studies, the
-repository links and the résumé before publishing.
+Buka http://127.0.0.1:8765. Periksa kedua tema, ketiga studi kasus, tautan
+repository, dan CV sebelum menerbitkan.
 
-## How it is put together
+## Cara halaman ini disusun
 
-- **Content first.** Every section, including the project summaries and the whole
-  record, is written in `index.html`. With JavaScript off the page still reads
-  completely; nothing is hidden by a class that only script can remove.
-- **`main.js` only adds.** Theme toggle, the live page check, the hero crossfade,
-  the work preview and its case-study dialog, entrance reveals. Each sits inside
-  `feature()`, so one failure cannot take the page down.
-- **The live check** reads `document.cookie`, the Resource Timing API and
-  `localStorage` in the visitor's own browser and reports what it finds. Nothing is
-  sent anywhere. If a third-party script, font or embed is ever added, that panel
-  will say so on the home page, which is the point.
-- **Type and colour are tokens** in `:root`, redefined under `html[data-theme=dark]`.
-  Five type sizes, three greys, one accent. Adding a sixth size is usually a mistake.
+- **Konten lebih dulu.** Seluruh bagian, termasuk isi studi kasus, ditulis di
+  `index.html`. Tanpa JavaScript halaman tetap terbaca lengkap; tidak ada konten
+  yang disembunyikan oleh kelas yang hanya bisa dilepas oleh script.
+- **`main.js` hanya menambah.** Menu ponsel, tombol tema, stiker yang bisa digeser,
+  huruf nama yang merespons, tautan studi kasus, penanda bagian aktif, dan maskot.
+  Masing-masing ada di dalam `feature()`, jadi satu kegagalan tidak menjatuhkan
+  halaman.
+- **Studi kasus memakai `<details>` dengan `id`.** Membukanya menulis hash ke alamat
+  lewat `replaceState`, jadi tautannya bisa dibagikan tanpa membuat tombol Back
+  membingungkan. Tanpa JavaScript `<details>` tetap bisa dibuka sendiri.
+- **Token warna** ada di `:root`, ditulis ulang pada `html[data-theme=dark]` dan pada
+  `@media (prefers-color-scheme: dark)` untuk kondisi tanpa JavaScript. Warna merek
+  biru, ungu, dan cyan dipakai untuk bidang; untuk teks dipakai turunannya yang
+  sedikit lebih pekat agar kontrasnya memenuhi WCAG AA pada kedua tema.
+- **Maskot** adalah satu tubuh dengan layer ekspresi dari `img/cat/puppet.webp`, bukan
+  dua belas karakter berbeda. Mesin state-nya memakai waktu logis sendiri, jadi tidak
+  ada pose yang kedaluwarsa saat tab disembunyikan, saat dijeda, atau saat maskot di
+  luar area tampilan. Kecepatan 90 px/detik dan jeda 7 detik.
 
-## Content maintenance
+## Perawatan konten
 
-- Project rows and their notes live in the `ol#ledger` in `index.html`; the long
-  case studies live in the `studies` object in `main.js`. Keep the two in step.
-- Cookies Risk Analyzer is a team project; Calvin's role is developer, and the page
-  says so. Its score is an aggregate and its checks are heuristic indicators that
-  still need a human read.
-- BISINDO covers 32 isolated signs. Its documented evaluation does not establish
-  performance on unseen signers, so the page does not claim accuracy figures.
-- Boardly downloads its hand-landmarker model on first run if it is not cached.
-- Keep the site, the résumé and the repository documentation consistent. Add a
-  performance claim only with a documented test setup behind it.
-- Availability is February 2027; change the résumé and the page together.
+- Isi proyek dan studi kasusnya ada langsung di `index.html`.
+- Cookies Risk Analyzer adalah proyek kampus tim lima orang; peran Calvin adalah
+  pengembang bot analisis indikator terkait UU PDP. Jangan menulisnya sebagai
+  sertifikasi, jaminan, atau keputusan kepatuhan.
+- BISINDO mencakup 26 huruf dan 32 isyarat kata terpisah. Evaluasi pada penutur baru
+  belum dibuktikan, jadi jangan memasang angka akurasi tanpa metode dan batasnya.
+- PapanTulis adalah proyek pribadi, bukan proyek tim. Jangan mengarang angka FPS atau
+  hasil pengujian.
+- Tulis "sertifikasi" hanya jika memang ada sertifikasi bernama yang dimiliki.
+- Jaga agar situs, CV, dan dokumentasi repository tetap konsisten.
 
-## Publishing
+## Aset dan lisensi
 
-Static deployment on Vercel. Framework preset: Other; no build command; output
+- Font Barlow Condensed berada di bawah SIL Open Font License 1.1, disalin ke
+  `fonts/` agar tidak ada permintaan ke host font pihak ketiga.
+- Atlas maskot dibuat dari gambar referensi milik Calvin.
+
+## Menerbitkan
+
+Deployment statis di Vercel. Framework preset: Other; tanpa build command; output
 directory: root.
 
 ```bash
 npx vercel --prod --yes --scope calvinwuzs-projects
 ```
 
-`vercel.json` sets the security headers, a strict CSP with no external origins, and
-a one-year immutable cache on `fonts/`.
+`vercel.json` memuat header keamanan, CSP tanpa origin eksternal, serta cache satu
+tahun untuk `fonts/` dan satu minggu untuk `img/`.

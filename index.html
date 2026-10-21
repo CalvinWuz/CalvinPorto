@@ -39,14 +39,13 @@ catch(e){d.setAttribute('data-theme','light');}})();
 
 <!-- Font dan aset di-host sendiri, jadi halaman ini tidak memanggil host pihak ketiga. -->
 <link rel="preload" href="fonts/barlow-condensed-900.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="img/cat/puppet.webp" as="image" type="image/webp">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="polish-07.css">
+<link rel="stylesheet" href="page-polish.css">
+<link rel="stylesheet" href="companion-08.css">
 </head>
 <body id="top">
-<div class="cm-edge-texture" aria-hidden="true">
-  <div class="cm-edge cm-edge-left"></div>
-  <div class="cm-edge cm-edge-right"></div>
-</div>
+<div class="ambient-edges" aria-hidden="true"><span></span><span></span></div>
 
 <a class="skip" href="#proyek">Lewati ke proyek</a>
 
@@ -145,6 +144,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
       </div>
       <div class="opener-side">
         <p class="bridge">Saya tertarik melihat apa yang terjadi saat sebuah ide dipakai dalam kondisi nyata. Dua proyek pribadi, satu proyek kampus bersama tim lima orang. Ketiganya masih berjalan, dan tiap cerita menyebut batasnya.</p>
+        <img class="decor-07" src="img/decor/doodle-curiosity.webp" width="560" height="560" alt="" aria-hidden="true" loading="lazy">
         <span class="cat-slot" data-cat-perch data-slot="opener" aria-hidden="true"></span>
       </div>
     </div>
@@ -280,7 +280,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
       <p class="case-index" aria-hidden="true">03</p>
       <p class="case-tag"><span class="tag tag-solo">Pribadi · prototipe</span></p>
       <h3 id="p3">PapanTulis <span class="alias">(Boardly)</span></h3>
-      <p class="case-lede">Satu bagian kecil yang bisa dicoba.</p>
+      <p class="case-lede">Dari gerakan tangan ke perintah.</p>
       <p class="case-sub">Papan tulis tanpa stylus dan tanpa tablet. Yang ada hanya webcam dan tangan. Gerakan tangan perlu di-smoothing dan dibedakan antara gerakan sengaja dan tidak, sebelum bisa dipakai menggambar atau presentasi.</p>
     </div>
 
@@ -288,27 +288,6 @@ catch(e){d.setAttribute('data-theme','light');}})();
       <img src="img/boardly.webp" width="1000" height="625" alt="PapanTulis berjalan: coretan warna menggantung di udara sebuah ruangan, dengan satu tangan terlacak dan sendi jarinya diberi nama." loading="lazy" decoding="async">
       <figcaption>Tujuh kontrol gestur, rinciannya di README. Hasilnya dipengaruhi cahaya, latar, posisi tangan, dan resolusi pemrosesan.</figcaption>
     </figure>
-
-    <div class="sketch" id="sketch">
-      <div class="sketch-head">
-        <p class="sketch-title">Coba coretan kecil</p>
-        <p class="sketch-note">Ilustrasi interaksi di halaman ini memakai pointer atau sentuhan. Bukan PapanTulis yang sedang berjalan, dan tidak memakai kamera.</p>
-      </div>
-      <div class="sketch-stage">
-        <canvas id="sketchCanvas" width="900" height="360" aria-label="Area coretan. Pakai tombol Contoh garis untuk melihat contoh tanpa menggambar sendiri."></canvas>
-        <svg class="sketch-demo" viewBox="0 0 900 360" aria-hidden="true" focusable="false" preserveAspectRatio="none">
-          <path class="ink" d="M70 250c60-120 120 40 180-50 54-82 108 66 160-6 46-64 100 58 170-24 40-47 90-30 150-60"
-            fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="sketch-tools">
-        <button type="button" id="sketchDraw" class="btn btn-ghost btn-sm" hidden>Mulai menggambar</button>
-        <button type="button" id="sketchDemo" class="btn btn-ghost btn-sm">Contoh garis</button>
-        <button type="button" id="sketchClear" class="btn btn-ghost btn-sm">Hapus coretan</button>
-        <span class="vh" aria-live="polite" id="sketchLive"></span>
-      </div>
-      <span class="cat-slot" data-cat-perch data-slot="papantulis" aria-hidden="true"></span>
-    </div>
 
     <div class="case-foot">
       <ul class="stack" aria-label="Teknologi"><li>Python</li><li>OpenCV</li><li>MediaPipe</li><li>NumPy</li></ul>
@@ -340,49 +319,187 @@ catch(e){d.setAttribute('data-theme','light');}})();
   <span id="about" class="anchor-alias" aria-hidden="true"></span>
   <span id="journey" class="anchor-alias" aria-hidden="true"></span>
   <span id="thoughts" class="anchor-alias" aria-hidden="true"></span>
-  <section class="section about" id="tentang" aria-labelledby="h-tentang">
-    <p class="chapter-kicker">Tentang</p>
-    <h2 id="h-tentang" class="display traits-display">
-      <span>Teliti.</span> <span>Tuntas.</span> <span>Lintas&nbsp;bidang.</span>
-    </h2>
+  <!-- Ringkasan fakta tetap terlihat; tombol hanya membuka lapisan ceritanya. -->
+  <section class="section px-explorer" id="bedah-proyek" aria-labelledby="h-bedah-proyek">
+    <header class="px-heading">
+      <div>
+        <p class="chapter-kicker">Buka catatan proyek</p>
+        <h2 class="display" id="h-bedah-proyek">Ada alasan<br>di baliknya.</h2>
+      </div>
+      <p>Tiga proyek, tiga persoalan berbeda. Buka masalahnya, lihat keputusan teknisnya, lalu bedakan kontribusi saya dari bukti yang sudah tersedia.</p>
+    </header>
 
-    <div class="about-grid">
-      <figure class="portrait">
-        <img src="img/me.webp" width="420" height="525" alt="Calvin." loading="lazy" decoding="async">
-        <svg class="scribble scribble-frame" viewBox="0 0 220 270" aria-hidden="true" focusable="false" preserveAspectRatio="none">
-          <path class="ink" d="M12 14c66-7 138-6 196 2 6 70 7 166 1 244-68 7-134 7-196 1C8 184 7 86 12 14Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+    <div class="px-notebook" data-project-explorer>
+      <nav class="px-project-tabs" aria-label="Pilih proyek untuk dibedah" hidden>
+        <button class="px-project-tab" type="button" data-px-select="cookies" aria-pressed="true"><span class="px-tab-number" aria-hidden="true">01</span><span>Cookies Risk Analyzer<small>Tim 5 · proyek kampus</small></span></button>
+        <button class="px-project-tab" type="button" data-px-select="bisindo" aria-pressed="false"><span class="px-tab-number" aria-hidden="true">02</span><span>BISINDO Translator<small>Pribadi · prototipe</small></span></button>
+        <button class="px-project-tab" type="button" data-px-select="papantulis" aria-pressed="false"><span class="px-tab-number" aria-hidden="true">03</span><span>PapanTulis<small>Pribadi · prototipe desktop</small></span></button>
+      </nav>
+
+      <div class="px-controls" aria-label="Pilih bagian cerita" hidden>
+        <span class="px-controls-label" aria-hidden="true">Buka halaman</span>
+        <div class="px-chapter-buttons">
+          <button type="button" data-px-chapter="masalah" aria-pressed="true"><span aria-hidden="true">1.</span> Masalah</button>
+          <button type="button" data-px-chapter="keputusan" aria-pressed="false"><span aria-hidden="true">2.</span> Keputusan</button>
+          <button type="button" data-px-chapter="kontribusi" aria-pressed="false"><span aria-hidden="true">3.</span> Kontribusiku</button>
+          <button type="button" data-px-chapter="bukti" aria-pressed="false"><span aria-hidden="true">4.</span> Bukti &amp; batas</button>
+        </div>
+      </div>
+
+      <article class="px-project" data-px-project="cookies" aria-labelledby="px-title-cookies">
+        <header class="px-summary">
+          <p class="px-folio">Catatan proyek / 01</p>
+          <h3 id="px-title-cookies">Cookies Risk Analyzer</h3>
+          <p class="px-status">Tim 5 orang<br>Proyek kampus</p>
+          <p class="px-contribution"><span>Bagian saya</span><strong>Bot analisis indikator terkait UU PDP.</strong></p>
+          <a class="link" href="#p-cookies">Ke cerita proyek <span aria-hidden="true">↗</span></a>
+        </header>
+        <div class="px-pages">
+          <section class="px-chapter" data-px-page="masalah" id="px-cookies-masalah" aria-labelledby="px-cookies-h-masalah">
+            <p class="px-page-number" aria-hidden="true">01 / Masalah</p>
+            <h4 id="px-cookies-h-masalah">Yang dimuat website<br>sering tidak terlihat.</h4>
+            <p>Cookie dan tracker bisa terpasang sebelum pengunjung menyetujui apa pun. Membacanya satu per satu lewat devtools juga memakan langkah bagi pengelola situs.</p>
+            <p class="px-pencil-note">Pertanyaannya: apa yang benar-benar teramati, dan bagian mana yang masih perlu ditinjau?</p>
+          </section>
+          <section class="px-chapter" data-px-page="keputusan" id="px-cookies-keputusan" aria-labelledby="px-cookies-h-keputusan">
+            <p class="px-page-number" aria-hidden="true">02 / Keputusan teknis</p>
+            <h4 id="px-cookies-h-keputusan">Pisahkan temuan<br>dari kesimpulan.</h4>
+            <p>Alur proyek membedakan observasi cookie dan tracker, heuristik consent, skor risiko, serta interpretasi manusia. Banner khusus bisa terlewat oleh heuristik.</p>
+            <p class="px-pencil-note">Kategori situs ikut menjadi masukan asumsi dampak metode proyek. Metode dan arsitektur keseluruhan merupakan pekerjaan tim.</p>
+          </section>
+          <section class="px-chapter" data-px-page="kontribusi" id="px-cookies-kontribusi" aria-labelledby="px-cookies-h-kontribusi">
+            <p class="px-page-number" aria-hidden="true">03 / Kontribusiku</p>
+            <h4 id="px-cookies-h-kontribusi">Membaca indikator<br>terkait UU PDP.</h4>
+            <p>Saya mengembangkan bot analisis indikator terkait UU PDP dalam tim lima orang. Scanner, dashboard, scoring, dan arsitektur keseluruhan adalah hasil pekerjaan tim.</p>
+            <p class="px-pencil-note">Bagi saya, penjelasan tentang indikator perlu dibaca bersama hasil observasi dan tinjauan manusia.</p>
+          </section>
+          <section class="px-chapter" data-px-page="bukti" id="px-cookies-bukti" aria-labelledby="px-cookies-h-bukti">
+            <p class="px-page-number" aria-hidden="true">04 / Bukti &amp; batas</p>
+            <h4 id="px-cookies-h-bukti">Yang bisa dilihat<br>saat ini.</h4>
+            <figure class="px-evidence"><a href="img/cookierisk.webp" target="_blank" rel="noopener" aria-label="Buka tangkapan layar Cookies Risk Analyzer di tab baru"><img src="img/cookierisk.webp" width="1000" height="650" loading="lazy" decoding="async" alt="Tampilan awal Cookies Risk Analyzer: kolom alamat website dan pilihan kategori, sebelum pemindaian."></a><figcaption>Tangkapan layar halaman awal, bukan hasil pemindaian atau keluaran bot.</figcaption></figure>
+            <p>Pemeriksaan otomatis tetap memerlukan tinjauan manual. Hasilnya bukan sertifikasi atau jaminan kepatuhan UU PDP maupun GDPR.</p>
+            <div class="px-evidence-links"><a class="link" href="https://github.com/CalvinWuz/CookiesAnalyzer-Website" target="_blank" rel="noopener">Periksa repository <span aria-hidden="true">↗</span><span class="vh"> Cookies Risk Analyzer, tab baru</span></a><a class="link" href="#studi-cookies">Baca batas lengkap</a></div>
+          </section>
+        </div>
+      </article>
+
+      <article class="px-project" data-px-project="bisindo" aria-labelledby="px-title-bisindo">
+        <header class="px-summary">
+          <p class="px-folio">Catatan proyek / 02</p>
+          <h3 id="px-title-bisindo">BISINDO Translator</h3>
+          <p class="px-status">Proyek pribadi<br>Masih berupa prototipe</p>
+          <p class="px-contribution"><span>Bagian saya</span><strong>Mengembangkan prototipe pengenal isyarat dengan inferensi lokal.</strong></p>
+          <a class="link" href="#p-bisindo">Ke cerita proyek <span aria-hidden="true">↗</span></a>
+        </header>
+        <div class="px-pages">
+          <section class="px-chapter" data-px-page="masalah" id="px-bisindo-masalah" aria-labelledby="px-bisindo-h-masalah">
+            <p class="px-page-number" aria-hidden="true">01 / Masalah</p>
+            <h4 id="px-bisindo-h-masalah">Dua tangan,<br>lebih dari satu bentuk.</h4>
+            <p>Isyarat BISINDO melibatkan hubungan antar-tangan. Saya ingin mengeksplorasi pengenalannya melalui webcam, dengan inferensi yang berjalan di komputer sendiri.</p>
+            <p class="px-pencil-note">Cakupan prototipe: 26 huruf statis dan 32 isyarat kata terpisah. Belum menerjemahkan percakapan.</p>
+          </section>
+          <section class="px-chapter" data-px-page="keputusan" id="px-bisindo-keputusan" aria-labelledby="px-bisindo-h-keputusan">
+            <p class="px-page-number" aria-hidden="true">02 / Keputusan teknis</p>
+            <h4 id="px-bisindo-h-keputusan">Titik sendi masuk.<br>Prediksi keluar.</h4>
+            <p>Gambar kamera diproses untuk mengekstraksi landmark tangan. Model menerima koordinatnya, lalu mengenali huruf atau isyarat kata terpisah. Seluruh inferensi berjalan di perangkat.</p>
+            <p class="px-pencil-note">Memisahkan koordinat dari gambar mentah membantu mengecilkan model. Target pengembangan yang saya catat: macOS Apple Silicon.</p>
+          </section>
+          <section class="px-chapter" data-px-page="kontribusi" id="px-bisindo-kontribusi" aria-labelledby="px-bisindo-h-kontribusi">
+            <p class="px-page-number" aria-hidden="true">03 / Kontribusiku</p>
+            <h4 id="px-bisindo-h-kontribusi">Menghubungkan kamera,<br>model, dan antarmuka.</h4>
+            <p>Ini proyek pribadi yang saya kembangkan dengan Python, PyTorch, MediaPipe, dan PySide6. Saya masih mengembangkan fitur serta merapikan UI/UX-nya.</p>
+            <p class="px-pencil-note">Membangun prototipe juga berarti menyebutkan bagian yang belum terbukti, termasuk hasil pada penutur baru.</p>
+          </section>
+          <section class="px-chapter" data-px-page="bukti" id="px-bisindo-bukti" aria-labelledby="px-bisindo-h-bukti">
+            <p class="px-page-number" aria-hidden="true">04 / Bukti &amp; batas</p>
+            <h4 id="px-bisindo-h-bukti">Prototipenya terlihat.<br>Evaluasinya masih terbatas.</h4>
+            <figure class="px-evidence"><a href="img/bisindo.webp" target="_blank" rel="noopener" aria-label="Buka tangkapan layar BISINDO Translator di tab baru"><img src="img/bisindo.webp" width="1000" height="649" loading="lazy" decoding="async" alt="Antarmuka prototipe BISINDO dengan kamera, landmark dua tangan, dan prediksi yang ditampilkan."></a><figcaption>Tangkapan layar prototipe. Nilai dalam satu frame bukan pengukuran akurasi atau performa.</figcaption></figure>
+            <p>Evaluasi pada penutur baru belum dibuktikan secara terpisah. Pengenalan kalimat berkelanjutan dan perapian bahasa masih dikembangkan.</p>
+            <div class="px-evidence-links"><a class="link" href="https://github.com/CalvinWuz/BISINDO-Translator" target="_blank" rel="noopener">Periksa repository <span aria-hidden="true">↗</span><span class="vh"> BISINDO Translator, tab baru</span></a><a class="link" href="#studi-bisindo">Baca batas lengkap</a></div>
+          </section>
+        </div>
+      </article>
+
+      <article class="px-project" data-px-project="papantulis" aria-labelledby="px-title-papantulis">
+        <header class="px-summary">
+          <p class="px-folio">Catatan proyek / 03</p>
+          <h3 id="px-title-papantulis">PapanTulis <small>(Boardly)</small></h3>
+          <p class="px-status">Proyek pribadi<br>Prototipe desktop</p>
+          <p class="px-contribution"><span>Bagian saya</span><strong>Mengembangkan papan tulis berbasis webcam dan kontrol gestur.</strong></p>
+          <a class="link" href="#p-papantulis">Ke cerita proyek <span aria-hidden="true">↗</span></a>
+        </header>
+        <div class="px-pages">
+          <section class="px-chapter" data-px-page="masalah" id="px-papantulis-masalah" aria-labelledby="px-papantulis-h-masalah">
+            <p class="px-page-number" aria-hidden="true">01 / Masalah</p>
+            <h4 id="px-papantulis-h-masalah">Bagaimana kalau<br>tangan jadi alat tulis?</h4>
+            <p>Saya mencoba membuat papan tulis untuk menggambar dan presentasi tanpa stylus atau tablet. Masukannya cukup webcam dan gerakan tangan.</p>
+            <p class="px-pencil-note">Tantangannya bukan hanya melacak tangan, tetapi membedakan gerakan biasa dari perintah yang disengaja.</p>
+          </section>
+          <section class="px-chapter" data-px-page="keputusan" id="px-papantulis-keputusan" aria-labelledby="px-papantulis-h-keputusan">
+            <p class="px-page-number" aria-hidden="true">02 / Keputusan teknis</p>
+            <h4 id="px-papantulis-h-keputusan">Gerakan perlu<br>diterjemahkan dulu.</h4>
+            <p>Pelacakan tangan menjadi masukan untuk kontrol gestur. Smoothing dan ambang membantu menentukan kapan gerakan dihitung sebagai perintah menggambar atau presentasi.</p>
+            <p class="px-pencil-note">Cahaya, latar, posisi tangan, serta resolusi pemrosesan ikut memengaruhi hasilnya.</p>
+          </section>
+          <section class="px-chapter" data-px-page="kontribusi" id="px-papantulis-kontribusi" aria-labelledby="px-papantulis-h-kontribusi">
+            <p class="px-page-number" aria-hidden="true">03 / Kontribusiku</p>
+            <h4 id="px-papantulis-h-kontribusi">Dari input kamera<br>ke coretan di layar.</h4>
+            <p>Ini proyek pribadi yang saya kembangkan memakai Python, OpenCV, MediaPipe, dan NumPy. Prototipe memiliki tujuh kontrol gestur serta perapian bentuk sederhana.</p>
+            <p class="px-pencil-note">Fitur dan UI/UX masih saya kembangkan agar penggunaannya lebih nyaman.</p>
+          </section>
+          <section class="px-chapter" data-px-page="bukti" id="px-papantulis-bukti" aria-labelledby="px-papantulis-h-bukti">
+            <p class="px-page-number" aria-hidden="true">04 / Bukti &amp; batas</p>
+            <h4 id="px-papantulis-h-bukti">Ada coretan nyata.<br>Masih perlu diuji.</h4>
+            <figure class="px-evidence"><a href="img/boardly.webp" target="_blank" rel="noopener" aria-label="Buka tangkapan layar PapanTulis di tab baru"><img src="img/boardly.webp" width="1000" height="625" loading="lazy" decoding="async" alt="PapanTulis dengan pelacakan tangan dan coretan berwarna di atas gambar webcam."></a><figcaption>Tangkapan layar prototipe; bukan demonstrasi interaktif yang berjalan di halaman ini.</figcaption></figure>
+            <p>Saya belum melakukan pengujian pengguna atau pengukuran performa yang dapat dipertanggungjawabkan. Rincian ketujuh kontrol gestur tersedia di README.</p>
+            <div class="px-evidence-links"><a class="link" href="https://github.com/CalvinWuz/PapanTulis" target="_blank" rel="noopener">Periksa repository <span aria-hidden="true">↗</span><span class="vh"> PapanTulis, tab baru</span></a><a class="link" href="#studi-papantulis">Baca batas lengkap</a></div>
+          </section>
+        </div>
+      </article>
+      <p class="vh" aria-live="polite" aria-atomic="true" data-px-live></p>
+      <footer class="px-book-footer"><span class="px-stamp">Masih belajar, terus diperbaiki.</span><span>Screenshot dan repository adalah bahan yang tersedia saat ini.</span></footer>
+    </div>
+  </section>
+
+  <section class="section notebook-about" id="tentang" aria-labelledby="h-tentang">
+    <header class="notebook-about__heading">
+      <p class="chapter-kicker">Sedikit tentang saya</p>
+      <h2 class="display" id="h-tentang">Di balik<br>proyeknya.</h2>
+      <p class="notebook-about__margin-note">Catatan yang belum selesai.<br>Seperti proses belajarnya.</p>
+    </header>
+
+    <div class="notebook-about__spread">
+      <figure class="notebook-about__portrait">
+        <div class="notebook-about__photo"><img src="img/me.webp" width="420" height="525" alt="Calvin." loading="lazy" decoding="async"></div>
+        <figcaption><span>Calvin</span>Computer Science · BINUS</figcaption>
+        <span class="notebook-about__paperclip" aria-hidden="true"></span>
       </figure>
-
-      <div class="about-text">
-        <p class="pull">Saya tertarik memahami cara aplikasi bekerja, bagaimana kelemahannya muncul, dan bagaimana memperbaikinya.</p>
-        <p>Mahasiswa Computer Science semester 5 di Bina Nusantara University. Peminatan cybersecurity saya mulai pada semester 4.</p>
-        <p>Cara belajar saya praktik: membangun prototipe, memeriksa hasil, menerima masukan, lalu memperbaiki bagian yang belum tepat. Ketiga proyek di atas lahir dari cara itu.</p>
-        <p class="about-note">Saya masih belajar, dan yang saya cari adalah tim yang lebih berpengalaman untuk tempat magang. Di bawah ini keputusan yang terlihat dari ketiga proyek itu.</p>
+      <div class="notebook-about__story">
+        <p class="notebook-about__pull">Saya suka memahami cara aplikasi bekerja, bagaimana kelemahannya muncul, dan bagaimana memperbaikinya.</p>
+        <p>Saya mahasiswa Computer Science semester 5 di Bina Nusantara University. Peminatan cybersecurity saya mulai pada semester 4; sekarang saya mencari kesempatan magang, terutama di AppSec dan pentest.</p>
+        <p>Cara belajar saya banyak lewat praktik: membangun prototipe, memeriksa hasil, menerima masukan, lalu memperbaiki bagian yang belum tepat. Tiga proyek di atas tumbuh dari proses itu.</p>
+        <p class="notebook-about__open-note">Masih banyak yang perlu saya pelajari. Saya ingin melanjutkannya bersama tim yang lebih berpengalaman.</p>
         <span class="cat-slot" data-cat-perch data-slot="tentang" aria-hidden="true"></span>
       </div>
 
-      <section class="notes" aria-labelledby="h-notes">
-        <h3 id="h-notes" class="notes-title">Catatan dari prosesnya</h3>
-        <ol class="note-list">
-          <li>
-            <p class="note-k">Pisahkan observasi dari kesimpulan</p>
-            <p>Bot yang saya kerjakan membantu membaca indikator terkait UU PDP. Cookie yang teramati, indikator otomatis, dan tinjauan manusia punya fungsi berbeda, jadi ketiganya saya tampilkan terpisah.</p>
-            <a class="note-link" href="#studi-cookies">Studi kasus Cookies Risk Analyzer</a>
-          </li>
-          <li>
-            <p class="note-k">Tentukan apa yang masuk ke model</p>
-            <p>Gambar kamera diproses menjadi landmark, lalu model mengenali huruf atau isyarat kata dari koordinat tersebut. Inferensi lokal dan cakupan kosakata perlu dijelaskan bersama, bukan salah satunya saja.</p>
-            <a class="note-link" href="#studi-bisindo">Studi kasus BISINDO Translator</a>
-          </li>
-          <li>
-            <p class="note-k">Periksa kondisi penggunaan</p>
-            <p>Pencahayaan, posisi tangan, smoothing, dan resolusi pemrosesan memengaruhi pengenalan gestur. Perilaku prototipe perlu dibaca bersama kondisi penggunaannya.</p>
-            <a class="note-link" href="#studi-papantulis">Studi kasus PapanTulis</a>
-          </li>
+      <div class="notebook-about__traits" aria-label="Cara saya ingin bekerja">
+        <p class="notebook-about__traits-label">Pegangan saya<br><span>ketika mengerjakan sesuatu</span></p>
+        <ol>
+          <li><span class="notebook-about__trait-n" aria-hidden="true">01</span><div><h3>Teliti.</h3><p>Memeriksa hasil dengan kondisi dan data nyata, lalu menyebutkan batasnya.</p></div></li>
+          <li><span class="notebook-about__trait-n" aria-hidden="true">02</span><div><h3>Sampai tuntas.</h3><p>Ingin membawa pekerjaan sampai siap dipakai. Prototipe saya masih menuju ke sana.</p></div></li>
+          <li><span class="notebook-about__trait-n" aria-hidden="true">03</span><div><h3>Lintas bidang.</h3><p>Senang masuk ke persoalan baru, dari privasi web sampai interaksi lewat gerakan tangan.</p></div></li>
         </ol>
-      </section>
+      </div>
     </div>
+
+    <section class="notebook-about__notes" aria-labelledby="h-notes">
+      <header><p class="chapter-kicker">Dari halaman sebelumnya</p><h3 id="h-notes">Catatan dari prosesnya</h3><span class="notebook-about__coffee" aria-hidden="true"></span></header>
+      <ol class="notebook-about__note-list">
+        <li><span class="notebook-about__project-name">Cookies Risk Analyzer</span><div><h4>Pisahkan observasi dari kesimpulan.</h4><p>Bot yang saya kerjakan membantu membaca indikator terkait UU PDP. Cookie yang teramati, indikator otomatis, dan tinjauan manusia punya fungsi berbeda; ketiganya perlu dibaca terpisah.</p><a class="link" href="#studi-cookies">Ke catatan proyek <span aria-hidden="true">↗</span><span class="vh"> Cookies Risk Analyzer</span></a></div></li>
+        <li><span class="notebook-about__project-name">BISINDO Translator</span><div><h4>Tentukan apa yang masuk ke model.</h4><p>Model menerima koordinat sendi dari gambar kamera. Inferensi lokal dan cakupan kosakata perlu dijelaskan bersama batas evaluasinya.</p><a class="link" href="#studi-bisindo">Ke catatan proyek <span aria-hidden="true">↗</span><span class="vh"> BISINDO Translator</span></a></div></li>
+        <li><span class="notebook-about__project-name">PapanTulis</span><div><h4>Periksa kondisi penggunaan.</h4><p>Cahaya, posisi tangan, smoothing, dan resolusi pemrosesan memengaruhi pengenalan gestur. Perilaku prototipe perlu dibaca bersama kondisi penggunaannya.</p><a class="link" href="#studi-papantulis">Ke catatan proyek <span aria-hidden="true">↗</span><span class="vh"> PapanTulis</span></a></div></li>
+      </ol>
+    </section>
   </section>
 
   <!-- ═══════════ tools ═══════════ -->
@@ -514,12 +631,15 @@ catch(e){d.setAttribute('data-theme','light');}})();
         </div>
       </li>
     </ol>
+    <img class="decor-07" src="img/decor/doodle-build.webp" width="560" height="560" alt="" aria-hidden="true" loading="lazy">
+    <span class="decor-07 decor-code-07" aria-hidden="true"></span>
     <span class="cat-slot" data-cat-perch data-slot="pengalaman" aria-hidden="true"></span>
   </section>
 
   <!-- ═══════════ kontak: bidang ungu ═══════════ -->
   <span id="contact" class="anchor-alias" aria-hidden="true"></span>
   <section class="field field-violet closing" id="kontak" aria-labelledby="h-kontak" data-cat-contact>
+    <img class="decor-07" src="img/decor/doodle-hello.webp" width="560" height="560" alt="" aria-hidden="true" loading="lazy">
     <p class="chapter-kicker">Kontak</p>
     <h2 id="h-kontak" class="display">Mari membangun<br>sesuatu.</h2>
 
@@ -561,29 +681,89 @@ catch(e){d.setAttribute('data-theme','light');}})();
   <p class="foot-note">&copy; <span id="year">2026</span> Calvin · Jakarta · <a href="img/tools/CREDITS.md">kredit aset</a></p>
 </footer>
 
-<!-- ═══════════ maskot: lapisan sendiri, lepas dari footer ═══════════ -->
-<div class="companion" id="companion">
-  <button type="button" class="cat-actor" aria-label="Sapa kucing">
-    <span class="cat-hop" aria-hidden="true"><span class="cat-locomotion"><span class="cat-puppet"><span class="cat-pose"><span class="cat-gait"><span class="cat-visual">
-      <span class="cat-sprite cat-foot-left"></span><span class="cat-sprite cat-foot-right"></span>
-      <span class="cat-sprite cat-body"></span>
-      <span class="cat-eyes-gaze">
-        <span class="cat-eye-cover left"></span><span class="cat-eye-cover right"></span>
-        <span class="cat-sprite cat-eyes-closed"></span>
-      </span>
-      <span class="cat-sprite cat-mouth cat-mouth-calm"></span>
-      <span class="cat-sprite cat-mouth cat-mouth-grin"></span>
-      <span class="cat-sprite cat-mouth cat-mouth-sleep"></span>
-      <span class="cat-mouth-yawn"></span>
-      <span class="cat-sprite cat-glasses"></span>
-    </span></span></span><span class="cat-props">
-      <span class="cat-prop cat-prop-thumb"></span>
-      <span class="cat-prop cat-prop-flower"></span>
-      <span class="cat-prop cat-prop-coffee"></span>
-      <span class="cat-steam"><span></span><span></span></span>
-    </span><span class="cat-sleep-mark">z z</span></span></span></span>
-  </button>
+<div class="companion-v8" id="companion" data-mode="rest" data-expression="idle">
+ <span class="pet-shadow" aria-hidden="true"></span>
+ <button class="pet-actor" type="button" aria-label="Sapa kucing dan mulai tur singkat" aria-describedby="pet-help" title="Seret aku, atau klik untuk tur singkat">
+  <span class="pet-physical" aria-hidden="true"><span class="pet-skin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none" class="pet-rig" aria-hidden="true">
+ <g class="pet-burst-fx" opacity="0" stroke="#d77264" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+  <g class="pet-puff pet-puff-left"><path d="M30 79c-12 1-19-8-13-15-9-8-1-19 8-15 0-12 15-14 18-3 12-2 16 12 7 18 3 10-10 18-20 15Z" fill="#fff8f3"/><path d="M25 67q-5-5 1-9"/></g>
+  <g class="pet-puff pet-puff-right"><path d="M173 75c12 3 21-5 16-13 10-6 4-19-6-17 2-12-12-17-17-6-12-4-19 9-11 16-5 10 7 19 18 20Z" fill="#fff8f3"/><path d="M177 61q6-4 1-9"/></g>
+  <g class="pet-pop-lines"><path d="m12 101 9-2M181 99l9 3M31 31l6 8m128-16-5 10M85 14l2 8m35-11-1 9"/></g>
+ </g>
+ <g class="pet-anatomy" stroke="#171717" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Closed limbs extend well underneath the torso; each rotates at its root. -->
+  <g class="pet-leg pet-leg-left"><path d="M69 147c-3 10-4 27 1 35 4 7 10 7 14-1l9-22-3-12Z" fill="#fff"/></g>
+  <g class="pet-leg pet-leg-right"><path d="m112 148 2 20 7 15c4 7 11 5 14-1 4-8 2-26-1-35Z" fill="#fff"/></g>
+  <g class="pet-arm pet-arm-left"><path d="M82 132C70 133 54 131 47 138c-9 8-4 18 6 18 10 0 20-6 29-9Z" fill="#fff"/><path class="pet-knuckles" d="m48 141 1 5m5-7 1 5" stroke-width="2.1"/></g>
+  <g class="pet-arm pet-arm-right"><path d="M119 132c12 1 28-1 36 6 9 8 4 18-6 18-10 0-21-6-30-9Z" fill="#fff"/><path class="pet-knuckles" d="m153 141-1 5m-5-7-1 5" stroke-width="2.1"/></g>
+  <path class="pet-torso" stroke="none" d="M72 109c-12 4-13 20-11 35l1 13c2 10 15 12 37 11l25 0c11-1 15-5 16-15l1-17c1-17-3-25-14-28Z" fill="#fff"/>
+  <path d="M72 109c-12 4-13 20-11 35l1 13q1 7 7 10m58-59c11 2 15 11 14 28l-1 17q-1 9-6 13M88 168q12 2 26 0"/>
+  <path d="m96 149 8 8m0-8-8 8" stroke="#c4c4c4" stroke-width="4.3"/>
+  <!-- Ears, outline, forehead, cheeks, face and whiskers share one head frame. -->
+  <g class="pet-head">
+   <path class="pet-head-fill" stroke="none" d="M42 76c2-18 9-39 18-45 6-5 17 10 25 20 10-3 23-3 33-1 9-10 19-23 25-20 11 4 18 28 20 45 7 10 9 25 5 36-5 16-21 21-36 23-20 4-42 4-61-1-17-2-33-10-37-24-4-12-1-24 8-33Z" fill="#fff"/>
+   <path class="pet-head-outline" d="M71 133c-17-2-33-10-37-24-4-12-1-24 8-33 2-18 9-39 18-45 6-5 17 10 25 20 10-3 23-3 33-1 9-10 19-23 25-20 11 4 18 28 20 45 7 10 9 25 5 36-5 16-21 21-36 23"/>
+   <g class="pet-forehead" stroke="#c6c6c6" stroke-width="7"><path d="m84 57-2 14m17-15-1 16m16-15 1 14"/></g>
+   <g class="pet-whiskers" stroke-width="4.6"><path d="m31 88-15-5m14 17-17 0m158-12 15-5m-14 17 16 0"/></g>
+   <g class="pet-blush" fill="#f2a1bb" stroke="none"><ellipse cx="47" cy="103" rx="8" ry="4.3"/><ellipse cx="154" cy="103" rx="8" ry="4.3"/></g>
+   <g class="pet-red" opacity="0" fill="#f27164" stroke="none"><ellipse cx="49" cy="103" rx="13" ry="9"/><ellipse cx="152" cy="103" rx="13" ry="9"/></g>
+   <g class="pet-expression pet-face-idle">
+    <g class="pet-dot-eyes" fill="#171717" stroke="none"><ellipse cx="64" cy="84" rx="4.3" ry="4.7"/><ellipse cx="138" cy="84" rx="4.3" ry="4.7"/></g>
+    <path d="M62 94c20 6 55 6 77-1 10 13-7 29-38 29-31 1-49-13-39-28Z" fill="#fff"/>
+    <path d="m76 98-1 17m18-15 0 19m19-19 1 18m18-21 0 16" stroke-width="3.5"/>
+   </g>
+   <g class="pet-expression pet-face-greet" display="none">
+    <path d="M56 85q8-13 16 0m58 0q8-13 16 0"/>
+    <path d="M62 94c20 6 55 6 77-1 10 13-7 29-38 29-31 1-49-13-39-28Z" fill="#fff"/>
+    <path d="m76 98-1 17m18-15 0 19m19-19 1 18m18-21 0 16" stroke-width="3.5"/>
+   </g>
+   <g class="pet-expression pet-face-held" display="none">
+    <ellipse cx="64" cy="84" rx="8.5" ry="9" fill="#fff"/><ellipse cx="138" cy="84" rx="8.5" ry="9" fill="#fff"/>
+    <g fill="#171717" stroke="none"><circle cx="65" cy="85" r="2.5"/><circle cx="137" cy="85" r="2.5"/></g>
+    <path d="m56 69 12-2m64 0 13 2" stroke-width="3.3"/><path d="M93 112c0-13 15-14 15 0 0 8-15 8-15 0Z" fill="#f7aec6" stroke-width="3.9"/>
+   </g>
+   <g class="pet-expression pet-face-wind" display="none"><path d="m56 79 15 6-15 6m89-12-15 6 15 6M87 110q4-6 8 0 5 5 9-1 5-5 10 1" stroke-width="4"/></g>
+   <g class="pet-expression pet-face-dizzy" display="none">
+    <path d="M64 84c8-8 11 4 2 7-13 4-17-16-3-17 16-1 16 20 2 22m73-12c8-8 11 4 2 7-13 4-17-16-3-17 16-1 16 20 2 22M90 112q5-7 10 0 6-7 11 0" stroke-width="3.6"/>
+   </g>
+   <g class="pet-expression pet-face-build" display="none">
+    <g class="pet-build-eyes"><path d="m54 74 19 8m73-8-19 8" stroke-width="5.2"/><path d="m57 87 14 2m61 0 14-2" stroke-width="4.6"/></g>
+    <path d="M86 106q15-6 29 0l-1 11q-14 5-28-1Z" fill="#fff" stroke-width="3.8"/><path d="m96 107 0 9m10-9 0 9" stroke-width="2.5"/>
+   </g>
+   <g class="pet-expression pet-face-burst" display="none">
+    <path d="m53 72 20 10m74-10-20 10m-68 5 13 3m59 0 13-3" stroke-width="5.5"/>
+    <path d="M82 108q18-21 36 0l-2 12q-16 16-32 0Z" fill="#171717" stroke-width="3.8"/>
+    <path d="M88 106q12-8 24 0l-1 5q-11-4-22 0Z" fill="#fff" stroke="none"/>
+    <path d="M90 122q11-10 21 0-11 8-21 0" fill="#ef9db8" stroke="none"/>
+   </g>
+   <g class="pet-expression pet-face-angry" display="none">
+    <path d="m53 73 21 9m73-9-21 9" stroke-width="5.4"/><path d="m57 87 14 3m60 0 14-3" stroke-width="4.6"/>
+    <path d="M82 107q18-6 36 0l-3 13q-14-5-30 0Z" fill="#fff" stroke-width="4"/><path d="m94 108 0 8m11-8 0 8" stroke-width="2.6"/>
+   </g>
+   <g class="pet-expression pet-face-sulk" display="none"><path d="m55 83 18 0m55 0 18 0m-89-10 13-2m61 0 13 3m-50 39q5-6 11 0" stroke-width="3.8"/></g>
+   <g class="pet-expression pet-face-sleep" display="none"><path d="M55 83q9 9 18 0m55 0q9 9 18 0m-51 29q6 5 12-1" stroke-width="3.8"/></g>
+   <path class="pet-rage-mark" opacity="0" d="m144 57-1 6-6-1m14 1 1-6m-1 14-1-5-6 1" stroke="#d86458" stroke-width="3.1"/>
+   <g class="pet-glasses" opacity="0" stroke-width="4"><path d="m51 78 5 17q11 7 24-2l5-16m31 0 5 16q13 9 25-2l4-14M83 81h34" fill="#20232a"/><path d="m60 82 7 0m59 0h7" stroke="#fff" stroke-width="2.5"/></g>
+  </g>
+  <g class="pet-raised-paws" opacity="0">
+   <g class="pet-arm pet-arm-left"><path d="M50 137c-7-3-13 2-13 9-1 7 7 13 13 10 7-3 10-14 0-19Z" fill="#fff"/><path d="m42 141 1 5m5-5 1 5" stroke-width="2.2"/></g>
+   <g class="pet-arm pet-arm-right"><path d="M151 137c7-3 13 2 13 9 1 7-7 13-13 10-7-3-10-14 0-19Z" fill="#fff"/><path d="m159 141-1 5m-5-5-1 5" stroke-width="2.2"/></g>
+  </g>
+  <g class="pet-flower" opacity="0" stroke="#d45c9b" stroke-width="3"><path d="m156 151-1-39" stroke="#76a645"/><path d="M155 112c-16 5-22-10-10-16-9-13 6-23 14-10 13-8 24 6 11 14 9 10-4 19-15 12Z" fill="#f5b5d8"/><circle cx="157" cy="101" r="6" fill="#ffe37c" stroke="#e6c35b"/></g>
+  <g class="pet-coffee" opacity="0" stroke-width="3.5"><path d="M135 131h27v26q-14 7-26-1Z" fill="#fff"/><path d="M164 136q14-1 10 12l-11 3"/><path d="M139 135h19" stroke="#ad7955" stroke-width="4"/></g>
+ </g>
+ <g class="pet-angry-huff" opacity="0" stroke="#d56d60" stroke-width="3.2" stroke-linecap="round"><path d="M31 62q-8-5-4-12m145 11q9-6 4-13"/></g>
+ <g class="pet-dizzy-stars" opacity="0" fill="#e2d8ff" stroke="#8b77e8" stroke-width="2.8" stroke-linejoin="round"><path d="m35 41 3 7 8 1-6 5 1 8-7-4-7 3 2-8-5-6 8 0ZM166 24l3 6 7 1-5 5 1 7-6-4-7 3 2-7-5-5 7 0Z"/></g>
+</svg>
+
+
+
+</span></span>
+ </button>
+ <span class="pet-caption" aria-hidden="true">geser / sapa</span>
+ <div class="pet-bubble" hidden></div>
 </div>
+<p class="vh" id="pet-help">Seret kucing untuk mengangkatnya. Klik atau tekan Enter untuk tur. Saat fokus, tombol panah memindahkan kucing dan Escape mengembalikannya ke tepi.</p>
 <span class="vh" aria-live="polite" id="cat-live"></span>
 
 <script src="main.js" defer></script>

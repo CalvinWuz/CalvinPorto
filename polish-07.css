@@ -1,0 +1,50 @@
+/* 07: one balanced content frame. The companion never owns layout space. */
+.section{max-width:var(--wrap);padding-inline:var(--pad)}
+.hero{padding-right:var(--pad);padding-bottom:190px}
+.field > *:not(.cat-slot):not(.scribble):not(.mailto):not(.decor-07){max-width:var(--wrap);padding-inline:var(--pad)}
+.field > .mailto{margin-left:calc(max(0px,(100% - var(--wrap))/2) + var(--pad));max-width:calc(min(100%,var(--wrap)) - 2*var(--pad));overflow-wrap:anywhere}
+
+/* Quiet dots travel along the outer margins, above full-bleed field colours. */
+.ambient-edges{position:fixed;inset:var(--bar) 0 0;z-index:4;pointer-events:none;overflow:hidden;color:var(--accent-text-2);opacity:.38;transition:opacity .7s ease}
+.ambient-edges span{position:absolute;top:-280px;bottom:-280px;width:clamp(18px,7vw,112px);background:currentColor;mask:url(assets/edge-dots.svg) 50% 0/96px 280px repeat-y;-webkit-mask:url(assets/edge-dots.svg) 50% 0/96px 280px repeat-y;animation:edge-float-07 20s linear infinite;will-change:transform}
+.ambient-edges span:first-child{left:0}
+.ambient-edges span:last-child{right:0;animation-direction:reverse;animation-duration:26s;mask-position:50% 130px;-webkit-mask-position:50% 130px}
+html[data-scene=quiet] .ambient-edges{opacity:.16}
+@keyframes edge-float-07{from{transform:translateY(0)}to{transform:translateY(280px)}}
+html[data-motion=paused] .ambient-edges span{animation-play-state:paused}
+.no-js .ambient-edges span,.no-js .decor-07{animation:none!important}
+
+/* Supplied 05 drawings: curiosity, work, contact. No illustrations over body copy. */
+.decor-07{pointer-events:none;user-select:none;display:block;height:auto}
+.opener-side .decor-07{width:clamp(135px,15vw,190px);margin:20px 8px 0 auto;transform:rotate(5deg)}
+.experience{isolation:isolate}
+.experience > .decor-07{position:absolute;width:250px;right:var(--pad);bottom:145px;opacity:.85;transform:rotate(4deg);z-index:-1}
+.experience > .decor-code-07{width:70px;height:60px;right:calc(var(--pad) + 50px);bottom:445px;opacity:.7;background:var(--ink-scribble);mask:url(img/decor/code-braces.svg) center/contain no-repeat;-webkit-mask:url(img/decor/code-braces.svg) center/contain no-repeat;transform:rotate(-8deg)}
+.closing > .decor-07{position:absolute;right:max(18px,calc((100% - var(--wrap))/2 + var(--pad)));top:56px;width:clamp(140px,19vw,230px);padding:0;margin:0;max-width:none;transform:rotate(-5deg)}
+.closing .scribble-point{display:none}
+.closing .contact-lede{padding-right:calc(var(--pad) + 120px)}
+.closing .display{padding-right:220px}
+.case-cookies .case-tag::after{content:"";display:inline-block;width:30px;height:24px;margin-left:15px;vertical-align:middle;background:var(--ink-scribble);opacity:.65;rotate:8deg;mask:url(img/decor/tiny-bug.svg) center/contain no-repeat;-webkit-mask:url(img/decor/tiny-bug.svg) center/contain no-repeat}
+.learning .marquee-label::after{content:"";display:inline-block;width:26px;height:30px;vertical-align:-9px;margin-left:12px;background:var(--ink-scribble);opacity:.75;mask:url(img/decor/sprout.svg) center/contain no-repeat;-webkit-mask:url(img/decor/sprout.svg) center/contain no-repeat}
+.notebook-about__pull{position:relative}
+.notebook-about__pull::after{content:"";position:absolute;left:0;bottom:-12px;width:120px;height:10px;background:var(--ink-scribble);opacity:.65;mask:url(img/decor/pencil-underline.svg) center/100% 100% no-repeat;-webkit-mask:url(img/decor/pencil-underline.svg) center/100% 100% no-repeat}
+.px-notebook{position:relative}
+.px-notebook::after{content:"";position:absolute;right:-18px;top:-14px;width:48px;height:48px;background:var(--ink-scribble);opacity:.6;mask:url(img/decor/corner-bracket.svg) center/contain no-repeat;-webkit-mask:url(img/decor/corner-bracket.svg) center/contain no-repeat;pointer-events:none}
+.opener-side .decor-07,.closing > .decor-07{animation:paper-idle-07 8s ease-in-out infinite}
+.closing > .decor-07{animation-delay:-3s}
+@keyframes paper-idle-07{0%,100%{translate:0 0;rotate:0deg}50%{translate:0 -5px;rotate:1.5deg}}
+html[data-motion=paused] .decor-07{animation-play-state:paused}
+@media(max-width:1179px){.experience > .decor-07{display:none}}
+@media(max-width:720px){
+ .px-notebook::after{display:none}
+ .hero{padding-bottom:270px}
+ .ambient-edges{opacity:.3}.ambient-edges span{width:19px;mask-position:45% 0;-webkit-mask-position:45% 0}
+ .opener-side .decor-07{width:140px;margin-top:10px}
+ .closing{padding-bottom:165px}
+ .closing > .decor-07{width:140px;top:auto;bottom:10px;right:25px}
+ .closing .display,.closing .contact-lede{padding-right:var(--pad)}
+}
+@media(prefers-reduced-motion:reduce){
+ .ambient-edges,.decor-07{transition:none}
+ .ambient-edges span,.opener-side .decor-07,.closing > .decor-07{animation:none;will-change:auto}
+}

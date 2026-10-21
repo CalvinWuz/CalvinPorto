@@ -39,6 +39,11 @@
   broadcastMotion();
 
   /* Perubahan layout disiarkan sekali, bukan diukur ulang tiap frame. */
+  var geometryPending = 0;
+  function notifyPetGeometry() {
+    if (geometryPending) return;
+    geometryPending = requestAnimationFrame(function () { geometryPending = 0; window.dispatchEvent(new Event('calvin:geometry')); });
+  }
   var layoutListeners = [];
   var layoutPending = 0;
   function onLayout(fn) { layoutListeners.push(fn); }
@@ -136,7 +141,7 @@
     var nodes = scene.querySelectorAll('.sticker');
     if (!nodes.length) return;
 
-    var CAT_LANE = 96;       // pita kanan hero yang disediakan untuk maskot
+    var CAT_LANE = 12;       // jarak aman tepi stiker; tidak menyediakan lajur maskot
     var restAngles = [-9, 7, -12];
     var stickers = Array.prototype.map.call(nodes, function (el, i) {
       return { el: el, i: i, x: 0, y: 0, angle: restAngles[i], vx: 0, vy: 0, held: false, restAngle: restAngles[i] };
@@ -160,7 +165,7 @@
         var b = grid.getBoundingClientRect();
         below = Math.max(0, b.bottom - a.top + 16);
       }
-      var lane = w >= 721 ? CAT_LANE : 64;
+      var lane = CAT_LANE;
       // Batas stiker stabil dan tidak membaca posisi maskot. Kucinglah yang
       // menghindari stiker, jadi perjalanannya tidak menggeser bidang main.
       var max = w - lane;
@@ -176,6 +181,7 @@
       s.y = clamp(s.y, 8, Math.max(8, f.h - s.el.offsetHeight - 6));
       s.el.style.transform = 'translate(' + s.x.toFixed(1) + 'px,' + s.y.toFixed(1) + 'px) rotate('
         + s.angle.toFixed(2) + 'deg) scale(' + (s.held ? 1.055 : 1) + ')';
+      notifyPetGeometry();
     }
     /* Komposisi default: tiga bentuk tersebar, bukan satu koordinat yang sama. */
     function defaults(f) {
@@ -378,130 +384,6 @@
     activate(0);
   });
 
-  /* ── kanvas coretan mini (PapanTulis) ─────────────────── */
-  feature(function () {
-    var box = document.getElementById('sketch');
-    var canvas = document.getElementById('sketchCanvas');
-    if (!box || !canvas || !canvas.getContext) return;
-    var ctx = canvas.getContext('2d');
-    var live = document.getElementById('sketchLive');
-    var drawBtn = document.getElementById('sketchDraw');
-    var demoBtn = document.getElementById('sketchDemo');
-    var clearBtn = document.getElementById('sketchClear');
-
-    /* Satu sumber state.
-       needsArming: sentuh harus menekan tombol dulu supaya swipe tetap menggulir.
-       Pada mouse tombolnya benar-benar disembunyikan dan menggambar langsung aktif. */
-    var needsArming = window.matchMedia('(any-pointer: coarse)').matches;
-    var armed = !needsArming;
-    // Geometri disimpan ternormalisasi (0..1), jadi resize, orientasi, dan
-    // pergantian tema tidak pernah memotong atau menggeser coretan.
-    var strokes = [];
-    var current = null;
-    var pointerId = null;
-    var cssW = 0, cssH = 0;
-
-    function syncControls() {
-      if (drawBtn) {
-        drawBtn.hidden = !needsArming;
-        drawBtn.textContent = armed ? 'Selesai' : 'Mulai menggambar';
-        drawBtn.setAttribute('aria-pressed', armed ? 'true' : 'false');
-      }
-      box.classList.toggle('is-drawing', armed);
-    }
-    function sizeCanvas() {
-      // Ukuran diambil dari offsetWidth: tidak terpengaruh transform reveal.
-      var w = canvas.offsetWidth, h = canvas.offsetHeight;
-      if (!w || !h || (w === cssW && h === cssH)) { repaint(); return; }
-      cssW = w; cssH = h;
-      var dpr = clamp(window.devicePixelRatio || 1, 1, 2);   // backing store dibatasi
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      repaint();
-    }
-    function colour() {
-      return getComputedStyle(document.documentElement).getPropertyValue('--accent-text-2').trim() || '#8b7cff';
-    }
-    function repaint() {
-      if (!cssW) return;
-      ctx.clearRect(0, 0, cssW, cssH);
-      ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      ctx.strokeStyle = colour();
-      ctx.lineWidth = clamp(cssW / 150, 3, 7);
-      strokes.forEach(function (s) {
-        if (s.length < 2) return;
-        ctx.beginPath();
-        ctx.moveTo(s[0].x * cssW, s[0].y * cssH);
-        for (var i = 1; i < s.length; i++) ctx.lineTo(s[i].x * cssW, s[i].y * cssH);
-        ctx.stroke();
-      });
-    }
-    function at(e) {
-      var r = canvas.getBoundingClientRect();
-      return {
-        x: clamp((e.clientX - r.left) / Math.max(1, r.width), 0, 1),
-        y: clamp((e.clientY - r.top) / Math.max(1, r.height), 0, 1)
-      };
-    }
-    function setArmed(v) {
-      armed = Boolean(v);
-      syncControls();
-      if (live) live.textContent = armed
-        ? 'Mode menggambar aktif.'
-        : 'Mode menggambar selesai. Halaman bisa digulir seperti biasa.';
-    }
-    function stop() {
-      if (pointerId !== null) { try { canvas.releasePointerCapture(pointerId); } catch (e) {} }
-      pointerId = null; current = null;
-    }
-
-    syncControls();
-    if (drawBtn) drawBtn.addEventListener('click', function () { setArmed(!armed); stop(); });
-
-    canvas.addEventListener('pointerdown', function (e) {
-      if (!armed) return;                       // sentuh sebelum diaktifkan: scroll normal
-      if (e.pointerType === 'mouse' && e.button !== 0) return;
-      e.preventDefault();
-      pointerId = e.pointerId;
-      try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
-      current = [at(e)];
-      strokes.push(current);
-      box.classList.remove('show-demo');
-      window.dispatchEvent(new CustomEvent('calvin:companion', { detail: { action: 'sketch' } }));
-    });
-    canvas.addEventListener('pointermove', function (e) {
-      if (!current || e.pointerId !== pointerId) return;
-      current.push(at(e));
-      repaint();
-    });
-    ['pointerup', 'pointercancel', 'lostpointercapture', 'pointerleave'].forEach(function (type) {
-      canvas.addEventListener(type, function () {
-        if (current && current.length < 2) strokes.pop();
-        stop(); repaint();
-      });
-    });
-
-    if (clearBtn) clearBtn.addEventListener('click', function () {
-      strokes = []; stop(); repaint();
-      box.classList.remove('show-demo');
-      if (live) live.textContent = 'Coretan dihapus.';
-    });
-    if (demoBtn) demoBtn.addEventListener('click', function () {
-      box.classList.toggle('show-demo');
-      if (live) live.textContent = box.classList.contains('show-demo') ? 'Contoh garis ditampilkan.' : 'Contoh garis disembunyikan.';
-    });
-
-    sizeCanvas();
-    onLayout(sizeCanvas);
-    // ResizeObserver hanya memicu announceLayout, dan sizeCanvas berhenti lebih awal
-    // ketika ukurannya tidak berubah, jadi tidak ada loop observer.
-    if ('ResizeObserver' in window) new ResizeObserver(announceLayout).observe(canvas);
-    window.addEventListener('orientationchange', function () { setTimeout(sizeCanvas, 180); });
-    // Warna garis mengikuti tema.
-    new MutationObserver(repaint).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-  });
-
   /* ── studi kasus: tautan yang bisa dibagikan ─────────── */
   feature(function () {
     var studies = document.querySelectorAll('details.study');
@@ -563,13 +445,13 @@
       ['.hero .eyebrow', 'reveal-up'], ['.hero-lead', 'reveal-up'], ['.hero-side', 'reveal-up'],
       ['.opener-grid > *', 'reveal-up'],
       ['.case-head', 'reveal-up'], ['.case-media', 'reveal-rise'], ['.case-crop', 'reveal-rise'],
-      ['.flow-step', 'reveal-up'], ['.pipe li', 'reveal-up'], ['.sketch', 'reveal-rise'],
+      ['.flow-step', 'reveal-up'], ['.pipe li', 'reveal-up'],
       ['.case-foot', 'reveal-up'],
       ['.traits-display', 'reveal-up'], ['.portrait', 'reveal-left'], ['.about-text', 'reveal-up'],
       ['.traits li', 'reveal-up'],
       ['.tools .section-head', 'reveal-up'], ['.marquee', 'reveal-up'], ['.learning', 'reveal-up'],
       ['.experience .section-head', 'reveal-up'], ['.tl-group', 'reveal-up'], ['.timeline li', 'reveal-left'],
-      ['.closing > *', 'reveal-up']
+      ['.closing > *:not(.decor-07)', 'reveal-up']
     ];
     var targets = [];
     plan.forEach(function (pair) {
@@ -626,8 +508,8 @@
       tracks.forEach(function (t) { t.style.animationPlayState = run ? 'running' : 'paused'; });
     }
     apply();
+    // Visibilitas tab sudah dihitung state pusat; marquee cukup ikut siarannya.
     onMotionChange(apply);
-    document.addEventListener('visibilitychange', apply);
     view.addEventListener('pointerenter', function () { hovered = true; apply(); });
     view.addEventListener('pointerleave', function () { hovered = false; apply(); });
     view.addEventListener('focusin', function () { hovered = true; apply(); });
@@ -657,71 +539,50 @@
     }, true);
   });
 
-  /* ── maskot kucing ───────────────────────────────────────
-     Controller gerak (paket 06) memiliki satu-satunya kendali posisi, rute,
-     ritme kaki, dan ekspresi. Tidak ada dock lama, listener scroll dock,
-     observer pemilihan dock, atau loop gait CSS yang berjalan berdampingan. */
+  /* Maskot 07: satu actor, posisi viewport dan kontrol gerak terpisah. */
   feature(function () {
     var root = document.getElementById('companion');
-    if (!root || !root.querySelector('.cat-actor')) return;
-
-    import('./js/motion.js').then(function (mod) {
-      var cat = new mod.CalvinCompanion({
+    if (!root) return;
+    import('./js/companion.js').then(function (mod) {
+      var cat = new mod.Companion({
         root: root,
-        // Penghalang dipasang pada blok materi, bukan wadahnya: menandai section
-        // utuh akan menelan seluruh ruang jelajah setelah diperbesar radius kucing.
-        obstacles: [
-          '.topbar', '.sticker',
-          '.eyebrow', '.name', '.role', '.motto', '.lede', '.cta', '.hint',
-          '.chapter-kicker', '.display', '.bridge',
-          '.case-tag', '.case h3', '.case-lede', '.case-sub', '.case-fact', '.case-role',
-          '.case-media img', '.case-media figcaption', '.crop-frame', '.case-crop figcaption',
-          '.flow-step', '.pipe li', '.pipeline figcaption', '.sketch',
-          '.stack', '.link', 'details.study',
-          '.portrait', '.pull', '.about-text p', '.note-list li', '.notes-title',
-          '.marquee-label', '.marquee-view', '.learn-list', '.tools-note',
-          '.tl-group', '.timeline li',
-          '.mailto', '.contact-lede', '.contact-actions', '.contact-list',
-          '.foot-top', '.foot-note'
-        ].join(','),
-        perches: '[data-cat-perch]'
+        actor: root.querySelector('.pet-actor'),
+        bubble: root.querySelector('.pet-bubble'),
+        obstacles: '.topbar,.nav.is-open,.sticker,.eyebrow,.name,.role,.motto,.lede,.cta,.hint,.chapter-kicker,.display,.bridge,.case-tag,.case h3,.case-lede,.case-sub,.case-fact,.case-role,.flow-step,.pipe li,.pipeline figcaption,.stack,.link,details.study,.notebook-about p,.notebook-about h3,.notebook-about a,.px-notebook,.case-media,.case-visual,.notebook-about__portrait,.marquee-label,.marquee-view,.learn-list,.tools-note,.tl-group,.timeline li,.mailto,.contact-lede,.contact-actions,.contact-list,.foot-top,.foot-note',
+        sections: [
+          {id:'p-cookies',title:'Cookies Risk Analyzer',text:'Di proyek tim lima orang ini, bagianku mengembangkan bot analisis indikator terkait UU PDP.'},
+          {id:'p-bisindo',title:'BISINDO Translator',text:'Prototipe pribadiku untuk mengenali huruf dan isyarat kata melalui koordinat tangan, dengan inferensi lokal.'},
+          {id:'p-papantulis',title:'PapanTulis',text:'Eksperimen pribadiku mengubah gerakan tangan menjadi kontrol menggambar dan presentasi.'},
+          {id:'tentang',title:'Sedikit tentang Calvin',text:'Teliti, tuntas, dan lintas bidang. Ini cara belajarku lewat proyek yang masih terus diperbaiki.'},
+          {id:'kontak',title:'Mari terhubung',text:'Aku mencari magang 6 atau 12 bulan di bidang keamanan aplikasi atau posisi Computer Science yang relevan.'}
+        ]
       }).start();
-
-      // Satu pemilik state: jeda manual ATAU reduced motion ATAU tab tersembunyi.
-      cat.setPaused(motionPaused);
-      onMotionChange(function (v) { cat.setPaused(v); });
+      // Manual dan preferensi OS tetap dibedakan oleh mesin karakter.
+      cat.setPaused(manualPaused);
+      cat.setReduced(reduced);
+      onMotionChange(function () { cat.setPaused(manualPaused); cat.setReduced(reduced); });
       onLayout(function () { cat.invalidate(); });
-
-      // Stiker yang digeser mengubah geometri; kabari dengan frekuensi terbatas.
-      var nudge = 0;
-      document.addEventListener('pointerup', function (e) {
-        if (!e.target || !e.target.closest || !e.target.closest('.sticker')) return;
-        clearTimeout(nudge);
-        nudge = setTimeout(function () { cat.invalidate(); }, 140);
-      }, true);
-
-      // Pemicu kontekstual: bunga saat bagian kontak benar-benar masuk.
-      // Dulu ini berada di blok controller yang diganti.
+      window.addEventListener('calvin:geometry', function () { cat.invalidate(); });
+      // Maskot menyapa sekali ketika bagian kontak benar-benar terbaca.
       if (hasIO) {
         var contact = document.querySelector('[data-cat-contact]');
-        if (contact) {
-          var wasIn = false;
-          new IntersectionObserver(function (entries) {
-            entries.forEach(function (en) {
-              var isIn = en.isIntersecting && en.intersectionRatio >= 0.35;
-              if (isIn && !wasIn) {
-                window.dispatchEvent(new CustomEvent('calvin:companion', { detail: { action: 'contact' } }));
-              }
-              wasIn = isIn;
-            });
-          }, { threshold: 0.35 }).observe(contact);
-        }
+        var contactInside = false;
+        if (contact) new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            var inside = en.isIntersecting && en.intersectionRatio >= .35;
+            if (inside && !contactInside) window.dispatchEvent(new CustomEvent('calvin:companion', {detail:{action:'contact'}}));
+            contactInside = inside;
+          });
+        }, {threshold:.35}).observe(contact);
       }
-    }).catch(function (e) {
-      // Tanpa controller, maskot tetap terlihat diam di tempat aman.
-      try { console.error('[portofolio] motion', e); } catch (_) {}
-      root.classList.add('is-paused');
-    });
+    }).catch(function (e) { console.error('[portofolio] companion', e); });
   });
 
+  feature(function () {
+    import('./js/explorer.js').then(function (mod) {
+      mod.initProjectExplorer({onLayout: announceLayout});
+    }).catch(function (e) { console.error('[portofolio] explorer', e); });
+  });
 })();
+
+import('./js/ambient.js').then(function(m){m.initAmbient()}).catch(function(e){console.error('Ambient:',e)});

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none" class="pet-rig" aria-hidden="true">
+ <g class="pet-burst-fx" opacity="0" stroke="#d77264" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+  <g class="pet-puff pet-puff-left"><path d="M30 79c-12 1-19-8-13-15-9-8-1-19 8-15 0-12 15-14 18-3 12-2 16 12 7 18 3 10-10 18-20 15Z" fill="#fff8f3"/><path d="M25 67q-5-5 1-9"/></g>
+  <g class="pet-puff pet-puff-right"><path d="M173 75c12 3 21-5 16-13 10-6 4-19-6-17 2-12-12-17-17-6-12-4-19 9-11 16-5 10 7 19 18 20Z" fill="#fff8f3"/><path d="M177 61q6-4 1-9"/></g>
+  <g class="pet-pop-lines"><path d="m12 101 9-2M181 99l9 3M31 31l6 8m128-16-5 10M85 14l2 8m35-11-1 9"/></g>
+ </g>
+ <g class="pet-anatomy" stroke="#171717" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Closed limbs extend well underneath the torso; each rotates at its root. -->
+  <g class="pet-leg pet-leg-left"><path d="M69 147c-3 10-4 27 1 35 4 7 10 7 14-1l9-22-3-12Z" fill="#fff"/></g>
+  <g class="pet-leg pet-leg-right"><path d="m112 148 2 20 7 15c4 7 11 5 14-1 4-8 2-26-1-35Z" fill="#fff"/></g>
+  <g class="pet-arm pet-arm-left"><path d="M82 132C70 133 54 131 47 138c-9 8-4 18 6 18 10 0 20-6 29-9Z" fill="#fff"/><path class="pet-knuckles" d="m48 141 1 5m5-7 1 5" stroke-width="2.1"/></g>
+  <g class="pet-arm pet-arm-right"><path d="M119 132c12 1 28-1 36 6 9 8 4 18-6 18-10 0-21-6-30-9Z" fill="#fff"/><path class="pet-knuckles" d="m153 141-1 5m-5-7-1 5" stroke-width="2.1"/></g>
+  <path class="pet-torso" stroke="none" d="M72 109c-12 4-13 20-11 35l1 13c2 10 15 12 37 11l25 0c11-1 15-5 16-15l1-17c1-17-3-25-14-28Z" fill="#fff"/>
+  <path d="M72 109c-12 4-13 20-11 35l1 13q1 7 7 10m58-59c11 2 15 11 14 28l-1 17q-1 9-6 13M88 168q12 2 26 0"/>
+  <path d="m96 149 8 8m0-8-8 8" stroke="#c4c4c4" stroke-width="4.3"/>
+  <!-- Ears, outline, forehead, cheeks, face and whiskers share one head frame. -->
+  <g class="pet-head">
+   <path class="pet-head-fill" stroke="none" d="M42 76c2-18 9-39 18-45 6-5 17 10 25 20 10-3 23-3 33-1 9-10 19-23 25-20 11 4 18 28 20 45 7 10 9 25 5 36-5 16-21 21-36 23-20 4-42 4-61-1-17-2-33-10-37-24-4-12-1-24 8-33Z" fill="#fff"/>
+   <path class="pet-head-outline" d="M71 133c-17-2-33-10-37-24-4-12-1-24 8-33 2-18 9-39 18-45 6-5 17 10 25 20 10-3 23-3 33-1 9-10 19-23 25-20 11 4 18 28 20 45 7 10 9 25 5 36-5 16-21 21-36 23"/>
+   <g class="pet-forehead" stroke="#c6c6c6" stroke-width="7"><path d="m84 57-2 14m17-15-1 16m16-15 1 14"/></g>
+   <g class="pet-whiskers" stroke-width="4.6"><path d="m31 88-15-5m14 17-17 0m158-12 15-5m-14 17 16 0"/></g>
+   <g class="pet-blush" fill="#f2a1bb" stroke="none"><ellipse cx="47" cy="103" rx="8" ry="4.3"/><ellipse cx="154" cy="103" rx="8" ry="4.3"/></g>
+   <g class="pet-red" opacity="0" fill="#f27164" stroke="none"><ellipse cx="49" cy="103" rx="13" ry="9"/><ellipse cx="152" cy="103" rx="13" ry="9"/></g>
+   <g class="pet-expression pet-face-idle">
+    <g class="pet-dot-eyes" fill="#171717" stroke="none"><ellipse cx="64" cy="84" rx="4.3" ry="4.7"/><ellipse cx="138" cy="84" rx="4.3" ry="4.7"/></g>
+    <path d="M62 94c20 6 55 6 77-1 10 13-7 29-38 29-31 1-49-13-39-28Z" fill="#fff"/>
+    <path d="m76 98-1 17m18-15 0 19m19-19 1 18m18-21 0 16" stroke-width="3.5"/>
+   </g>
+   <g class="pet-expression pet-face-greet" display="none">
+    <path d="M56 85q8-13 16 0m58 0q8-13 16 0"/>
+    <path d="M62 94c20 6 55 6 77-1 10 13-7 29-38 29-31 1-49-13-39-28Z" fill="#fff"/>
+    <path d="m76 98-1 17m18-15 0 19m19-19 1 18m18-21 0 16" stroke-width="3.5"/>
+   </g>
+   <g class="pet-expression pet-face-held" display="none">
+    <ellipse cx="64" cy="84" rx="8.5" ry="9" fill="#fff"/><ellipse cx="138" cy="84" rx="8.5" ry="9" fill="#fff"/>
+    <g fill="#171717" stroke="none"><circle cx="65" cy="85" r="2.5"/><circle cx="137" cy="85" r="2.5"/></g>
+    <path d="m56 69 12-2m64 0 13 2" stroke-width="3.3"/><path d="M93 112c0-13 15-14 15 0 0 8-15 8-15 0Z" fill="#f7aec6" stroke-width="3.9"/>
+   </g>
+   <g class="pet-expression pet-face-wind" display="none"><path d="m56 79 15 6-15 6m89-12-15 6 15 6M87 110q4-6 8 0 5 5 9-1 5-5 10 1" stroke-width="4"/></g>
+   <g class="pet-expression pet-face-dizzy" display="none">
+    <path d="M64 84c8-8 11 4 2 7-13 4-17-16-3-17 16-1 16 20 2 22m73-12c8-8 11 4 2 7-13 4-17-16-3-17 16-1 16 20 2 22M90 112q5-7 10 0 6-7 11 0" stroke-width="3.6"/>
+   </g>
+   <g class="pet-expression pet-face-build" display="none">
+    <g class="pet-build-eyes"><path d="m54 74 19 8m73-8-19 8" stroke-width="5.2"/><path d="m57 87 14 2m61 0 14-2" stroke-width="4.6"/></g>
+    <path d="M86 106q15-6 29 0l-1 11q-14 5-28-1Z" fill="#fff" stroke-width="3.8"/><path d="m96 107 0 9m10-9 0 9" stroke-width="2.5"/>
+   </g>
+   <g class="pet-expression pet-face-burst" display="none">
+    <path d="m53 72 20 10m74-10-20 10m-68 5 13 3m59 0 13-3" stroke-width="5.5"/>
+    <path d="M82 108q18-21 36 0l-2 12q-16 16-32 0Z" fill="#171717" stroke-width="3.8"/>
+    <path d="M88 106q12-8 24 0l-1 5q-11-4-22 0Z" fill="#fff" stroke="none"/>
+    <path d="M90 122q11-10 21 0-11 8-21 0" fill="#ef9db8" stroke="none"/>
+   </g>
+   <g class="pet-expression pet-face-angry" display="none">
+    <path d="m53 73 21 9m73-9-21 9" stroke-width="5.4"/><path d="m57 87 14 3m60 0 14-3" stroke-width="4.6"/>
+    <path d="M82 107q18-6 36 0l-3 13q-14-5-30 0Z" fill="#fff" stroke-width="4"/><path d="m94 108 0 8m11-8 0 8" stroke-width="2.6"/>
+   </g>
+   <g class="pet-expression pet-face-sulk" display="none"><path d="m55 83 18 0m55 0 18 0m-89-10 13-2m61 0 13 3m-50 39q5-6 11 0" stroke-width="3.8"/></g>
+   <g class="pet-expression pet-face-sleep" display="none"><path d="M55 83q9 9 18 0m55 0q9 9 18 0m-51 29q6 5 12-1" stroke-width="3.8"/></g>
+   <path class="pet-rage-mark" opacity="0" d="m144 57-1 6-6-1m14 1 1-6m-1 14-1-5-6 1" stroke="#d86458" stroke-width="3.1"/>
+   <g class="pet-glasses" opacity="0" stroke-width="4"><path d="m51 78 5 17q11 7 24-2l5-16m31 0 5 16q13 9 25-2l4-14M83 81h34" fill="#20232a"/><path d="m60 82 7 0m59 0h7" stroke="#fff" stroke-width="2.5"/></g>
+  </g>
+  <g class="pet-raised-paws" opacity="0">
+   <g class="pet-arm pet-arm-left"><path d="M50 137c-7-3-13 2-13 9-1 7 7 13 13 10 7-3 10-14 0-19Z" fill="#fff"/><path d="m42 141 1 5m5-5 1 5" stroke-width="2.2"/></g>
+   <g class="pet-arm pet-arm-right"><path d="M151 137c7-3 13 2 13 9 1 7-7 13-13 10-7-3-10-14 0-19Z" fill="#fff"/><path d="m159 141-1 5m-5-5-1 5" stroke-width="2.2"/></g>
+  </g>
+  <g class="pet-flower" opacity="0" stroke="#d45c9b" stroke-width="3"><path d="m156 151-1-39" stroke="#76a645"/><path d="M155 112c-16 5-22-10-10-16-9-13 6-23 14-10 13-8 24 6 11 14 9 10-4 19-15 12Z" fill="#f5b5d8"/><circle cx="157" cy="101" r="6" fill="#ffe37c" stroke="#e6c35b"/></g>
+  <g class="pet-coffee" opacity="0" stroke-width="3.5"><path d="M135 131h27v26q-14 7-26-1Z" fill="#fff"/><path d="M164 136q14-1 10 12l-11 3"/><path d="M139 135h19" stroke="#ad7955" stroke-width="4"/></g>
+ </g>
+ <g class="pet-angry-huff" opacity="0" stroke="#d56d60" stroke-width="3.2" stroke-linecap="round"><path d="M31 62q-8-5-4-12m145 11q9-6 4-13"/></g>
+ <g class="pet-dizzy-stars" opacity="0" fill="#e2d8ff" stroke="#8b77e8" stroke-width="2.8" stroke-linejoin="round"><path d="m35 41 3 7 8 1-6 5 1 8-7-4-7 3 2-8-5-6 8 0ZM166 24l3 6 7 1-5 5 1 7-6-4-7 3 2-7-5-5 7 0Z"/></g>
+</svg>

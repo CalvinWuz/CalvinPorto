@@ -403,7 +403,11 @@
     window.addEventListener('hashchange', openFromHash);
     studies.forEach(function (d) {
       d.addEventListener('toggle', function () {
-        if (d.open) { if (history.replaceState) history.replaceState(null, '', '#' + d.id); }
+        if (d.open) {
+          if (history.replaceState) history.replaceState(null, '', '#' + d.id);
+          // Membuka rincian adalah menjelajah informasi; maskot ikut berpikir sebentar.
+          window.dispatchEvent(new CustomEvent('calvin:companion', {detail: {action: 'explore'}}));
+        }
         else if (location.hash === '#' + d.id) {
           if (history.replaceState) history.replaceState(null, '', location.pathname + location.search);
         }
@@ -548,7 +552,9 @@
         root: root,
         actor: root.querySelector('.pet-actor'),
         bubble: root.querySelector('.pet-bubble'),
-        obstacles: '.topbar,.nav.is-open,.sticker,.eyebrow,.name,.role,.motto,.lede,.cta,.hint,.chapter-kicker,.display,.bridge,.case-tag,.case h3,.case-lede,.case-sub,.case-fact,.case-role,.flow-step,.pipe li,.pipeline figcaption,.stack,.link,details.study,.notebook-about p,.notebook-about h3,.notebook-about a,.px-notebook,.case-media,.case-visual,.notebook-about__portrait,.marquee-label,.marquee-view,.learn-list,.tools-note,.tl-group,.timeline li,.mailto,.contact-lede,.contact-actions,.contact-list,.foot-top,.foot-note',
+        // Teks seluruh section dilindungi, bukan hanya judul dan tombolnya: paragraf
+        // penjelas di .section-head sempat tertutup kucing pada lebar ponsel.
+        obstacles: '.topbar,.nav.is-open,.sticker,.eyebrow,.name,.role,.motto,.lede,.cta,.hint,.chapter-kicker,.display,.bridge,.section-head p,.section-head h2,.case-tag,.case h3,.case-lede,.case-sub,.case-fact,.case-role,.flow-step,.pipe li,.pipeline figcaption,.stack,.link,details.study,.notebook-about p,.notebook-about h3,.notebook-about a,.px-notebook,.case-media,.case-visual,.notebook-about__portrait,.marquee-label,.marquee-view,.learn-list,.tools-note,.tl-group,.timeline li,.mailto,.contact-lede,.contact-actions,.contact-list,.cert-archive,.foot-top,.foot-note',
         sections: [
           {id:'p-cookies',title:'Cookies Risk Analyzer',text:'Di proyek tim lima orang ini, bagianku mengembangkan bot analisis indikator terkait UU PDP.'},
           {id:'p-bisindo',title:'BISINDO Translator',text:'Prototipe pribadiku untuk mengenali huruf dan isyarat kata melalui koordinat tangan, dengan inferensi lokal.'},
@@ -582,6 +588,12 @@
     import('./js/explorer.js').then(function (mod) {
       mod.initProjectExplorer({onLayout: announceLayout});
     }).catch(function (e) { console.error('[portofolio] explorer', e); });
+  });
+
+  feature(function () {
+    import('./js/archive.js').then(function (mod) {
+      mod.initCertificateArchive({onLayout: announceLayout});
+    }).catch(function (e) { console.error('[portofolio] arsip sertifikat', e); });
   });
 })();
 

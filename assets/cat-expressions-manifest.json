@@ -1,0 +1,169 @@
+{
+  "pack": "cat-expression-pack-10",
+  "version": 10,
+  "asset": "cat-rig-expressions.svg",
+  "format": "native SVG, viewBox 0 0 200 200",
+  "source": {
+    "rig": "Approved 08 cat-rig.svg from portfolio review c36bd04",
+    "sha256": "a3ab7641406551f3818133d4b79141af4aff9efd96dff4a91e23495728e0f572",
+    "outsideAddedFacesUnchanged": true
+  },
+  "anchors": {
+    "leftEye": [
+      64,
+      84
+    ],
+    "rightEye": [
+      138,
+      84
+    ],
+    "mouth": [
+      100,
+      110
+    ]
+  },
+  "rules": [
+    "All 16 extension groups are inside the existing .pet-head, before .pet-glasses.",
+    "Do not transform ears, forehead, outline or whiskers independently of the head.",
+    "Exactly one .pet-expression is visible at a time. Default standalone image remains idle.",
+    "No text, speech bubble, glyph, bitmap face or new disconnected limb.",
+    "The original rig geometry, existing expressions and props are byte-for-byte preserved."
+  ],
+  "expressions": [
+    {
+      "id": "curious",
+      "label": "Penasaran",
+      "selector": ".pet-face-curious",
+      "description": "Satu mata membesar, alis terangkat, mulut senyum kecil; kepala dapat miring tanpa mengubah telinga atau kumis.",
+      "standalone": "poses/curious.svg"
+    },
+    {
+      "id": "laugh",
+      "label": "Tertawa",
+      "selector": ".pet-face-laugh",
+      "description": "Mata terpejam membentuk sudut lembut, mulut tertawa terbuka, gigi atas dan lidah merah muda.",
+      "standalone": "poses/laugh.svg"
+    },
+    {
+      "id": "shy",
+      "label": "Malu",
+      "selector": ".pet-face-shy",
+      "description": "Mata menunduk sedikit, alis lunak dan arsiran pipi merah muda; senyum kecil.",
+      "standalone": "poses/shy.svg"
+    },
+    {
+      "id": "surprised",
+      "label": "Kaget",
+      "selector": ".pet-face-surprised",
+      "description": "Dua mata bulat dengan pupil kecil, alis tinggi dan mulut membulat.",
+      "standalone": "poses/surprised.svg"
+    },
+    {
+      "id": "thinking",
+      "label": "Berpikir",
+      "selector": ".pet-face-thinking",
+      "description": "Tatapan tenang ke atas dan mulut menyamping; dua goresan abu-abu kecil memberi aksen.",
+      "standalone": "poses/thinking.svg"
+    },
+    {
+      "id": "mischievous",
+      "label": "Usil",
+      "selector": ".pet-face-mischievous",
+      "description": "Mata menyipit, alis miring dan senyum bergigi yang lebar di satu sisi.",
+      "standalone": "poses/mischievous.svg"
+    },
+    {
+      "id": "proud",
+      "label": "Bangga",
+      "selector": ".pet-face-proud",
+      "description": "Mata melengkung gembira, senyum puas dan kilau kecil abu-abu di dekat pelipis.",
+      "standalone": "poses/proud.svg"
+    },
+    {
+      "id": "focused",
+      "label": "Fokus",
+      "selector": ".pet-face-focused",
+      "description": "Alis mendekat ke garis mata, pupil mantap dan mulut kecil mengerucut.",
+      "standalone": "poses/focused.svg"
+    },
+    {
+      "id": "bored",
+      "label": "Bosan",
+      "selector": ".pet-face-bored",
+      "description": "Kelopak setengah tertutup dan mulut datar kecil; tanpa ikon tulisan.",
+      "standalone": "poses/bored.svg"
+    },
+    {
+      "id": "puzzled",
+      "label": "Bingung",
+      "selector": ".pet-face-puzzled",
+      "description": "Dua alis tak simetris dengan mulut bergelombang; tanpa tanda tanya.",
+      "standalone": "poses/puzzled.svg"
+    },
+    {
+      "id": "sad",
+      "label": "Sedih",
+      "selector": ".pet-face-sad",
+      "description": "Alis menurun ke luar, mulut melengkung sedih dan satu air mata kecil abu-abu.",
+      "standalone": "poses/sad.svg"
+    },
+    {
+      "id": "love",
+      "label": "Sayang",
+      "selector": ".pet-face-love",
+      "description": "Dua mata hati merah muda di pusat mata yang sama, senyum kucing dan hati kecil di pipi.",
+      "standalone": "poses/love.svg"
+    },
+    {
+      "id": "wink",
+      "label": "Mengedip",
+      "selector": ".pet-face-wink",
+      "description": "Satu mata mengedip, satu mata titik dan senyum bergigi; menjaga pusat wajah.",
+      "standalone": "poses/wink.svg"
+    },
+    {
+      "id": "yawn",
+      "label": "Menguap",
+      "selector": ".pet-face-yawn",
+      "description": "Kelopak terpejam, mulut oval tinggi dan air mata kantuk kecil.",
+      "standalone": "poses/yawn.svg"
+    },
+    {
+      "id": "sneeze",
+      "label": "Bersin",
+      "selector": ".pet-face-sneeze",
+      "description": "Mata mengerut, mulut kecil mengatup dan tiga goresan napas abu-abu.",
+      "standalone": "poses/sneeze.svg"
+    },
+    {
+      "id": "determined",
+      "label": "Bertekad",
+      "selector": ".pet-face-determined",
+      "description": "Alis tegas, mata fokus dan senyum gigi mengatup; berbeda dari rangkaian marah.",
+      "standalone": "poses/determined.svg"
+    }
+  ],
+  "validation": {
+    "xmlValid": true,
+    "addedExpressions": 16,
+    "allNewFacesHiddenByDefault": true,
+    "originalContentPreservedExactly": true,
+    "standaloneSvgXmlValid": 16,
+    "standaloneOneFaceEach": true,
+    "standaloneGeometryUnchanged": true,
+    "contactSheetSvgXmlValid": true,
+    "contactSheetBytes": 219847
+  },
+  "exports": {
+    "standaloneDirectory": "poses/",
+    "count": 16,
+    "contactSheet": "expression-sheet.svg",
+    "contactSheetGrid": [
+      4,
+      4
+    ],
+    "format": "native SVG; no embedded raster images",
+    "selectedFacePerStandalone": 1,
+    "geometryUnchanged": true
+  }
+}

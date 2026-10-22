@@ -1,4 +1,15 @@
 import { pointFree, segmentClear, nearestFree, planRoute } from './route.js';
+import { CalvinCatExpressions } from './expressions.js';
+
+// Wajah paket 10 yang posenya diambil dari library; sisanya dihitung controller sendiri
+// karena terikat perjalanan, seretan, angin scroll, atau rangkaian marah.
+const LIBRARY_POSES = new Set([
+  'curious', 'laugh', 'shy', 'surprised', 'thinking', 'mischievous', 'proud', 'focused',
+  'bored', 'puzzled', 'sad', 'love', 'wink', 'yawn', 'sneeze', 'determined',
+  'greet', 'approve', 'cool', 'flower', 'coffee', 'sleep'
+]);
+const HEAD_TAPS = ['wink', 'shy', 'love'];
+const BODY_TAPS = ['laugh', 'mischievous', 'surprised'];
 
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -43,6 +54,12 @@ export class Companion {
     this.geometryRevision = 0; this.recoveries = 0; this.routePlans = 0;
     this.wrap = null; this.wrapCount = 0; this.nextWrap = 10500; this.wrapProxy = null;
     this.media = matchMedia('(prefers-reduced-motion: reduce)'); this.reduced = this.media.matches;
+    // Lapisan ilustrasi paket 10. Satu-satunya node yang menerima --cat10-*.
+    this.skin = root.querySelector('.calvin-cat10') || root.querySelector('.pet-skin');
+    this.headTapIndex = 0; this.bodyTapIndex = 0; this.lastTapAt = -Infinity;
+    this.holdTimer = 0; this.holdSatisfied = false;
+    this.tickle = { travel: 0, until: 0, cooldownUntil: 0 };
+    this.nextExploreReaction = 0; this.boredShown = false;
   }
 
   now() { return this.logical + (this.anchor === null ? 0 : performance.now() - this.anchor); }
@@ -76,10 +93,15 @@ export class Companion {
     this.listen(this.actor, 'pointercancel', e => this.pointerUp(e, true));
     this.listen(this.actor, 'lostpointercapture', e => { if (this.drag?.id === e.pointerId) this.pointerUp(e, true); });
     this.listen(this.actor, 'click', e => {
+      // Tap pointer sudah ditangani pointerup dan menekan click sintetis, jadi click yang
+      // lolos ke sini berasal dari Enter/Space atau teknologi bantu: aktivasi singkat yang sama.
       if (performance.now() < this.suppressClickUntil) { e.preventDefault(); return; }
-      this.openOffer();
+      this.shortActivation('head');
     });
     this.listen(this.actor, 'keydown', e => this.keyDown(e));
+    // Gelitik: hanya gerakan pointer di atas karakter, dengan ambang dan cooldown.
+    this.listen(this.actor, 'pointermove', e => { if (!this.drag) this.feelTickle(e); });
+    this.listen(this.actor, 'pointerleave', () => { this.tickle.travel = 0; });
     this.listen(this.actor, 'focus', () => {
       this.keyboardFocus = !this.pointerModality || this.actor.matches(':focus-visible');
       if (this.keyboardFocus) { this.stopRoute(); this.activity(); }
@@ -233,7 +255,7 @@ export class Companion {
   }
 
   activity() {
-    this.lastActivity = this.now(); this.nextStroll = this.now() + 9000;
+    this.lastActivity = this.now(); this.nextStroll = this.now() + 9000; this.boredShown = false;
     if (this.expression === 'sleep') { this.expression = 'greet'; this.transientUntil = this.now() + 900; }
     this.request();
   }
@@ -278,9 +300,45 @@ export class Companion {
     this.stopRoute(); this.sequence = null; this.stateUntil = Infinity; this.transientUntil = Infinity;
     this.windUntilReal = 0; this.interruptedMode = null; this.closeBubble(); this.mode = 'drag'; this.expression = 'held';
     const real = performance.now();
-    this.drag = { id: e.pointerId, offset: { x: e.clientX - this.p.x, y: e.clientY - this.p.y }, start: { x: e.clientX, y: e.clientY }, moved: false, samples: [{ x: e.clientX, y: e.clientY, t: real }], reversals: [], lastAxis: { x: 0, y: 0 }, axisTravel: { x: 0, y: 0 }, lastTurn: 0, shake: false, latest: { x: e.clientX, y: e.clientY } };
+    this.drag = { id: e.pointerId, offset: { x: e.clientX - this.p.x, y: e.clientY - this.p.y }, start: { x: e.clientX, y: e.clientY }, moved: false, samples: [{ x: e.clientX, y: e.clientY, t: real }], reversals: [], lastAxis: { x: 0, y: 0 }, axisTravel: { x: 0, y: 0 }, lastTurn: 0, shake: false, latest: { x: e.clientX, y: e.clientY }, zone: this.pointerZone(e) };
     try { this.actor.setPointerCapture(e.pointerId); } catch {}
+    // Tahan nyaman: hanya berlaku selama belum melewati ambang seret 6 px.
+    this.holdSatisfied = false;
+    clearTimeout(this.holdTimer);
+    this.holdTimer = setTimeout(() => {
+      this.holdTimer = 0;
+      if (!this.drag || this.drag.moved) return;
+      this.holdSatisfied = true; this.expression = 'love';
+      this.stateStarted = this.now(); this.stateDuration = 900;
+      this.paint(); this.request();
+    }, 350);
     this.activity(); this.paint();
+  }
+
+  /** Satu usapan panjang di atas karakter memicu satu tawa, bukan puluhan respons. */
+  feelTickle(e) {
+    const real = performance.now();
+    if (real < this.tickle.cooldownUntil || this.sequence || this.bubbleView === 'tour') return;
+    if (real > this.tickle.until) this.tickle.travel = 0;
+    this.tickle.until = real + 420;
+    const previous = this.tickle.at;
+    if (previous) this.tickle.travel += Math.hypot(e.clientX - previous.x, e.clientY - previous.y);
+    this.tickle.at = { x: e.clientX, y: e.clientY };
+    if (this.tickle.travel < 90) return;
+    this.tickle.travel = 0; this.tickle.cooldownUntil = real + 2600;
+    this.activity();
+    this.runSequence([
+      { mode: 'rest', expression: 'laugh', duration: 900 },
+      { mode: 'rest', expression: 'mischievous', duration: 700 }
+    ], { keepBubble: true });
+    this.paint(); this.request();
+  }
+
+  /** Kepala kira-kira 55 persen bagian atas kotak karakter. */
+  pointerZone(e) {
+    const r = this.actor.getBoundingClientRect();
+    if (!r.height) return 'body';
+    return (e.clientY - r.top) / r.height < .55 ? 'head' : 'body';
   }
 
   pointerMove(e) {
@@ -310,7 +368,10 @@ export class Companion {
     d.samples = d.samples.filter(p => real - p.t < 150);
     if (!d.samples.length) d.samples.push({ x: e.clientX, y: e.clientY, t: real });
     d.latest = { x: e.clientX, y: e.clientY };
-    if (dist(d.start, d.latest) > 6) d.moved = true;
+    if (dist(d.start, d.latest) > 6) {
+      if (!d.moved) { clearTimeout(this.holdTimer); this.holdTimer = 0; this.holdSatisfied = false; this.expression = 'held'; }
+      d.moved = true;
+    }
     if (d.moved) {
       this.p = { x: clamp(e.clientX - d.offset.x, this.bounds.left, this.bounds.right), y: clamp(e.clientY - d.offset.y, this.bounds.top, this.bounds.bottom) };
       const velocity = this.releaseVelocity(); this.v = velocity;
@@ -330,12 +391,25 @@ export class Companion {
   pointerUp(e, cancelled) {
     if (!this.drag || this.drag.id !== e.pointerId) return;
     const d = this.drag, velocity = this.releaseVelocity(); this.drag = null;
+    clearTimeout(this.holdTimer); this.holdTimer = 0;
     try { if (this.actor.hasPointerCapture(e.pointerId)) this.actor.releasePointerCapture(e.pointerId); } catch {}
     this.activity();
     if (!d.moved && !cancelled) {
-      this.mode = 'rest'; this.expression = 'greet'; this.transientUntil = this.now() + 900;
-      this.openOffer(); this.suppressClickUntil = performance.now() + 450; this.paint(); return;
+      this.mode = 'rest';
+      if (this.holdSatisfied) {
+        // Tahan pelan: nyaman, lalu malu dan mengedip. Tidak membuka tawaran tur.
+        this.holdSatisfied = false;
+        this.runSequence([
+          { mode: 'rest', expression: 'shy', duration: 820 },
+          { mode: 'rest', expression: 'wink', duration: 620 }
+        ]);
+        this.suppressClickUntil = performance.now() + 450; this.paint(); this.request(); return;
+      }
+      // Tap singkat: satu jalur aktivasi untuk ekspresi sekaligus tawaran tur.
+      this.shortActivation(d.zone === 'head' ? 'head' : 'body');
+      this.suppressClickUntil = performance.now() + 450; this.paint(); return;
     }
+    this.holdSatisfied = false;
     this.suppressClickUntil = performance.now() + 600;
     if (!this.canRun()) { this.staticReturn(); return; }
     const harsh = !cancelled && (Math.hypot(velocity.x, velocity.y) > 1000 || d.shake);
@@ -356,15 +430,32 @@ export class Companion {
 
   beginLanding(harsh) {
     this.v = { x: 0, y: 0 }; this.speed = 0; this.landAt = this.now();
-    this.sequence = harsh ? [
+    // Keduanya berakhir dengan mengedip sebelum kembali ke tepi aman; tidak ada teks.
+    this.runSequence(harsh ? [
       { mode: 'landing', expression: 'idle', duration: 180 },
       { mode: 'rest', expression: 'dizzy', duration: 900 },
       { mode: 'rest', expression: 'angry-build', duration: 780 },
       { mode: 'rest', expression: 'angry-burst', duration: 260 },
       { mode: 'rest', expression: 'angry', duration: 650 },
-      { mode: 'rest', expression: 'sulk', duration: 1000 }
-    ] : [{ mode: 'landing', expression: 'greet', duration: 400 }];
-    this.sequenceIndex = -1; this.advanceSequence();
+      { mode: 'rest', expression: 'sulk', duration: 1000 },
+      { mode: 'rest', expression: 'wink', duration: 600 }
+    ] : [
+      { mode: 'landing', expression: 'surprised', duration: 180 },
+      { mode: 'rest', expression: 'proud', duration: 800 },
+      { mode: 'rest', expression: 'wink', duration: 600 }
+    ], { walkBack: true, kind: 'landing' });
+  }
+
+  /** Rangkaian nonverbal di tempat. `walkBack` hanya untuk reaksi sesudah berpindah posisi. */
+  runSequence(parts, { walkBack = false, keepBubble = false, kind = 'reaction' } = {}) {
+    this.sequence = parts; this.sequenceWalksBack = walkBack; this.sequenceKeepsBubble = keepBubble;
+    this.sequenceKind = kind;
+    this.sequenceIndex = -1; this.transientUntil = Infinity; this.advanceSequence();
+  }
+
+  /** Prioritas: seret dan rangkaian pendaratan/marah tidak boleh dipotong intent kosmetik. */
+  reactionIsProtected() {
+    return Boolean(this.drag) || (Boolean(this.sequence) && this.sequenceKind === 'landing');
   }
 
   advanceSequence() {
@@ -372,8 +463,9 @@ export class Companion {
     this.sequenceIndex++;
     const part = this.sequence[this.sequenceIndex];
     if (!part) {
-      this.sequence = null; this.stateUntil = Infinity; this.expression = 'idle';
-      this.returnToEdge();
+      const walkBack = this.sequenceWalksBack !== false;
+      this.sequence = null; this.sequenceKeepsBubble = false; this.stateUntil = Infinity; this.expression = 'idle';
+      if (walkBack) this.returnToEdge();
       if (this.tour.active) this.renderTour();
       return;
     }
@@ -382,7 +474,24 @@ export class Companion {
     this.stateUntil = this.stateStarted + part.duration;
     // Anger is told entirely through face and body animation. The only speech
     // bubbles belong to an explicitly opened portfolio tour.
-    if (this.bubbleView) this.closeBubble();
+    if (this.bubbleView && !this.sequenceKeepsBubble) this.closeBubble();
+  }
+
+  /** Satu jalur aktivasi singkat: ekspresi, lalu tawaran tur bila belum terbuka. */
+  shortActivation(zone = 'head') {
+    const list = zone === 'head' ? HEAD_TAPS : BODY_TAPS;
+    const index = zone === 'head' ? this.headTapIndex++ : this.bodyTapIndex++;
+    const face = list[index % list.length];
+    const offerAlreadyOpen = this.bubbleView === 'offer' || this.bubbleView === 'tour';
+    const parts = [{ mode: 'rest', expression: face, duration: 900 }];
+    // Kejutan pada badan boleh berlanjut menjadi bingung lalu bersin kecil, sekali saja.
+    if (face === 'surprised') parts.push(
+      { mode: 'rest', expression: 'puzzled', duration: 620 },
+      { mode: 'rest', expression: 'sneeze', duration: 700 }
+    );
+    this.runSequence(parts, { keepBubble: true });
+    if (!offerAlreadyOpen) this.openOffer({ fromTap: true });
+    this.lastTapAt = performance.now();
   }
 
   returnToEdge(y = this.p.y) {
@@ -475,16 +584,50 @@ export class Companion {
     this.mode = 'rest'; this.expression = 'held'; this.activity(); this.paint();
   }
 
+  /**
+   * Intent kosmetik dari UI. Prioritas lebih rendah daripada seret dan rangkaian reaksi,
+   * jadi aksi arsip/explorer tetap jalan walaupun reaksinya diabaikan di sini.
+   */
   context(kind) {
-    if (this.drag || this.sequence) return;
-    const expressions = { greet: 'greet', project: 'approve', cv: 'approve', contact: 'flower', cool: 'cool', coffee: 'coffee' };
+    if (this.reactionIsProtected()) return;
+    // Buka map: penasaran sebentar, lalu bangga. Tutup: mengedip, lalu tenang.
+    if (kind === 'archive-open') {
+      this.activity();
+      this.runSequence([
+        { mode: 'rest', expression: 'curious', duration: 420 },
+        { mode: 'rest', expression: 'proud', duration: 900 }
+      ], { keepBubble: true });
+      this.paint(); this.request(); return;
+    }
+    if (kind === 'archive-close') {
+      this.activity();
+      this.runSequence([{ mode: 'rest', expression: 'wink', duration: 1050 }], { keepBubble: true });
+      this.paint(); this.request(); return;
+    }
+    // Menjelajah informasi: respons pendek, dengan cooldown agar tidak ramai saat membaca.
+    if (kind === 'explore' || kind === 'inspect') {
+      const real = performance.now();
+      if (real < this.nextExploreReaction) return;
+      this.nextExploreReaction = real + 4200;
+      this.activity();
+      this.expression = kind === 'inspect' ? 'focused' : 'thinking';
+      this.stateStarted = this.now(); this.stateDuration = 900;
+      this.transientUntil = this.now() + 900; this.paint(); this.request(); return;
+    }
+    const expressions = { greet: 'greet', project: 'approve', cv: 'approve', contact: 'flower', cool: 'cool', coffee: 'coffee', determined: 'determined' };
     if (!expressions[kind]) return;
-    this.activity(); this.expression = expressions[kind]; this.transientUntil = this.now() + 2000; this.paint(); this.request();
+    this.activity(); this.expression = expressions[kind];
+    this.stateStarted = this.now(); this.stateDuration = 2000;
+    this.transientUntil = this.now() + 2000; this.paint(); this.request();
   }
 
-  openOffer() {
-    if (this.drag || this.sequence || performance.now() < this.suppressClickUntil) return;
-    this.activity(); this.stopRoute(); this.mode = 'rest'; this.expression = 'greet';
+  /** `fromTap` berarti ekspresi sapaan sudah dipilih oleh aktivasi singkat. */
+  openOffer({ fromTap = false } = {}) {
+    if (this.drag) return;
+    if (!fromTap && (this.sequence || performance.now() < this.suppressClickUntil)) return;
+    if (this.bubbleView === 'offer' || this.bubbleView === 'tour') return;   // tidak membuka ulang
+    this.activity(); this.stopRoute(); this.mode = 'rest';
+    if (!fromTap) this.expression = 'greet';
     this.showBubble('offer', 'Mau aku tunjukkan isi portofolio Calvin? Kamu yang menentukan kapan lanjut.', [
       ['Mulai tur', () => this.startTour()], ['Main saja', () => { this.closeBubble(); this.context('greet'); }]
     ]);
@@ -492,6 +635,10 @@ export class Companion {
 
   showBubble(view, text, actions) {
     if (!this.bubble) return;
+    // Mengganti isi bubble menghapus tombol yang sedang difokus, jadi fokusnya dipulihkan
+    // ke kontrol baru di posisi yang sama setelah Mulai/Lanjut.
+    const hadFocus = Boolean(document.activeElement && this.bubble.contains(document.activeElement));
+    const focusedIndex = hadFocus ? [...this.bubble.querySelectorAll('button')].indexOf(document.activeElement) : -1;
     this.bubbleView = view; this.bubble.replaceChildren(); this.bubble.hidden = false;
     this.bubble.setAttribute('role', 'dialog');
     this.bubble.setAttribute('aria-label', 'Pemandu portofolio');
@@ -502,6 +649,11 @@ export class Companion {
       this.bubble.append(controls);
     }
     this.actor.setAttribute('aria-expanded', 'true'); this.paintBubble();
+    if (hadFocus) {
+      const buttons = [...this.bubble.querySelectorAll('button')];
+      const next = buttons[Math.max(0, Math.min(focusedIndex, buttons.length - 1))];
+      if (next) { try { next.focus({ preventScroll: true }); } catch { next.focus(); } }
+    }
   }
 
   closeBubble() {
@@ -517,7 +669,12 @@ export class Companion {
     if (viaPointer) { this.keyboardFocus = false; this.activity(); }
   }
 
-  startTour() { this.tour = { active: true, index: -1 }; this.continueTour(); }
+  startTour() {
+    this.tour = { active: true, index: -1 };
+    // Bertekad: hanya ketika pengunjung sendiri yang meminta tur.
+    this.expression = 'determined'; this.stateStarted = this.now(); this.stateDuration = 700;
+    this.continueTour();
+  }
   continueTour() {
     if (!this.tour.active) return;
     let next = this.tour.index + 1;
@@ -554,7 +711,8 @@ export class Companion {
     const dt = clamp(elapsed / 1000, .001, .035); this.previous = at;
     const geometryChanged = this.dirty;
     if (this.dirty) this.measure();
-    if (this.drag) { this.mode = 'drag'; this.expression = 'held'; this.paint(); this.request(); return; }
+    // Tahan nyaman mempertahankan wajahnya; begitu melewati ambang seret, wajah kembali held.
+    if (this.drag) { this.mode = 'drag'; if (!this.holdSatisfied) this.expression = 'held'; this.paint(); this.request(); return; }
     if (this.mode === 'wind' && real < this.windUntilReal) {
       this.expression = 'wind';
       if (this.sequence) { this.stateUntil += elapsed; this.stateStarted += elapsed; }
@@ -602,7 +760,19 @@ export class Companion {
         this.speed = approach(this.speed, 0, 420 * dt); this.stride = approach(this.stride, 0, dt * 8); this.lean = approach(this.lean, 0, dt * 18);
         if (!this.route.length) this.mode = 'rest';
       }
-      if (!heldByUI && !this.route.length && at - this.lastActivity >= 14000) { this.expression = 'sleep'; this.mode = 'sleep'; }
+      // Bosan sekali, menguap, lalu tidur sampai ada input yang relevan. Bosan dipasang
+      // sesudah jelajah terakhir selesai, bukan pada detik tertentu, supaya tidak terlewat.
+      if (!heldByUI && !this.route.length && at - this.lastActivity >= 11600) {
+        const idleFor = at - this.lastActivity;
+        if (idleFor >= 15200) { this.expression = 'sleep'; this.mode = 'sleep'; this.boredShown = false; }
+        else if (this.boredShown && idleFor >= 13400) {
+          if (this.expression !== 'yawn') { this.expression = 'yawn'; this.mode = 'rest'; this.stateStarted = at; this.stateDuration = 1800; }
+        }
+        else if (!this.boredShown) {
+          this.boredShown = true; this.expression = 'bored'; this.mode = 'rest';
+          this.stateStarted = at; this.stateDuration = 1400;
+        }
+      }
       else if (!heldByUI && !this.route.length && !this.mobile && at >= this.nextWrap && at - this.lastActivity < 14000) {
         this.requestWalkAcross();
       }
@@ -717,19 +887,35 @@ export class Companion {
       legL = stride * 13; legR = -stride * 13; armL = -stride * 5; armR = stride * 5;
       bob = -(1 - Math.cos(this.phase * 2)) * this.stride * .9;
     }
+    // Wajah paket 10 ditumpuk DI ATAS gait perjalanan, bukan menggantinya, supaya kaki tetap
+    // melangkah sesuai jarak tempuh ketika reaksi kecil terjadi sambil berjalan.
+    if (LIBRARY_POSES.has(this.expression)) {
+      const lib = CalvinCatExpressions.getPose(this.expression, progress, {
+        intensity: this.mobile ? .82 : 1,
+        gaze: this.facing === 'right' ? 1 : -1,
+        motion: this.canRun()
+      });
+      headTilt += lib.head; armL += lib.armL; armR += lib.armR; legL += lib.legL; legR += lib.legR;
+      squashX *= lib.sx; squashY *= lib.sy; lift += lib.lift; lean += lib.lean; shiftX += lib.shift;
+      if (lib.rage > rage) rage = lib.rage;
+    }
+    // Lapisan fisik (posisi, pantulan, skala saat diangkat) tetap milik berkas ini.
     style.setProperty('--pet-lean', `${lean.toFixed(2)}deg`); style.setProperty('--pet-lift', `${lift.toFixed(2)}px`);
     style.setProperty('--pet-scale', scale.toFixed(4)); style.setProperty('--pet-bob', `${bob.toFixed(2)}px`);
-    style.setProperty('--arm-left', `${armL.toFixed(2)}deg`); style.setProperty('--arm-right', `${armR.toFixed(2)}deg`);
-    style.setProperty('--leg-left', `${legL.toFixed(2)}deg`); style.setProperty('--leg-right', `${legR.toFixed(2)}deg`);
     style.setProperty('--ear-left', `${earL.toFixed(2)}deg`); style.setProperty('--ear-right', `${earR.toFixed(2)}deg`);
+    style.setProperty('--pet-shift-x', `${shiftX.toFixed(2)}px`);
+    style.setProperty('--pet-squash-x', squashX.toFixed(4));   // dipakai bayangan di bawah badan
     const walking = ['walk','recover','wrap'].includes(this.mode);
     const liftPhase = walking ? Math.sin(this.phase) * this.stride : 0;
     style.setProperty('--leg-scale-left', (1 - Math.max(0,liftPhase)*.10).toFixed(4));
     style.setProperty('--leg-scale-right', (1 - Math.max(0,-liftPhase)*.10).toFixed(4));
-    style.setProperty('--pet-gaze', `${this.facing === 'right' ? 1.8 : -1.8}px`);
-    style.setProperty('--rage-progress', rage.toFixed(4)); style.setProperty('--burst-progress', burst.toFixed(4));
-    style.setProperty('--pet-squash-x', squashX.toFixed(4)); style.setProperty('--pet-squash-y', squashY.toFixed(4));
-    style.setProperty('--head-tilt', `${headTilt.toFixed(2)}deg`); style.setProperty('--pet-shift-x', `${shiftX.toFixed(2)}px`);
+    // Lapisan ilustrasi ditulis satu kali lewat renderer pose; tidak ada pemilik kedua.
+    if (this.skin) CalvinCatExpressions.apply(this.skin, {
+      name: this.expression, head: headTilt, armL, armR, legL, legR,
+      sx: squashX, sy: squashY, lift: 0, lean: 0, shift: 0,
+      gaze: this.facing === 'right' ? 1.8 : -1.8, rage, burst,
+      raised: (this.expression === 'held' || this.expression.startsWith('angry')) ? 1 : 0
+    });
     if (this.wrapProxy) {
       this.wrapProxy.classList.toggle('is-paused', !this.canRun());
       const crossing = this.wrap?.phase === 'cross' && (this.p.x > innerWidth - this.size.width / 2 || this.p.x < this.size.width / 2);
@@ -740,6 +926,9 @@ export class Companion {
         this.wrapProxy.style.setProperty('--wrap-x', `${(this.p.x - this.size.width / 2 + (this.wrap.direction > 0 ? -innerWidth : innerWidth)).toFixed(2)}px`);
         this.wrapProxy.style.setProperty('--wrap-y', `${(this.p.y - this.size.height / 2).toFixed(2)}px`);
         this.wrapProxy.dataset.mode = this.mode; this.wrapProxy.dataset.expression = this.expression; this.wrapProxy.dataset.facing = this.facing;
+        // Proxy dekoratif ikut membawa pose ilustrasi; ia tetap tanpa tombol, fokus, atau state.
+        const proxySkin = this.wrapProxy.querySelector('.calvin-cat10');
+        if (proxySkin && this.skin) { proxySkin.style.cssText = this.skin.style.cssText; proxySkin.dataset.expression = this.expression; }
       }
     }
     this.paintBubble();

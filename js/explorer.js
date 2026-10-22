@@ -35,6 +35,8 @@ export function initProjectExplorer({ onLayout } = {}) {
     }
     if (typeof onLayout === 'function') onLayout();
     root.dispatchEvent(new CustomEvent('calvin:project-layout', { bubbles: true }));
+    // Memilih lembar proyek: maskot memperhatikan sebentar. Intent kosmetik, bukan syarat.
+    if (announce) window.dispatchEvent(new CustomEvent('calvin:companion', { detail: { action: 'inspect' } }));
   };
 
   projectButtons.forEach(button => button.addEventListener('click', () => {

@@ -6,29 +6,25 @@
 
 .pet-physical,.pet-skin{position:absolute;display:block;inset:0;pointer-events:none}
 .pet-physical{transform:translate(calc(var(--pet-shift-x,0px)),calc(var(--pet-lift,0px) + var(--pet-bob,0px))) rotate(var(--pet-lean,0deg));scale:var(--pet-scale,1);transform-origin:50% 74%;transition:scale .16s cubic-bezier(.2,.8,.3,1);will-change:transform}
-.pet-rig{display:block;width:100%;height:100%;overflow:visible}.pet-rig *{pointer-events:none}
-.pet-anatomy{transform-box:view-box;transform-origin:100px 164px;transform:scale(var(--pet-squash-x,1),var(--pet-squash-y,1))}
-.pet-head,.pet-arm,.pet-leg,.pet-dot-eyes,.pet-build-eyes,.pet-puff,.pet-pop-lines{transform-box:view-box}
-.pet-head{transform-origin:100px 120px;transform:rotate(calc(var(--head-tilt,0deg) + var(--ear-left,0deg)*.22)) scale(calc(1 + var(--rage-progress,0)*.025));will-change:transform}
-.pet-head-fill{fill:#fff;fill:color-mix(in srgb,#ff8d78 calc(var(--rage-progress,0)*52%),#fff)}
-.pet-arm-left{transform-origin:64px 139px;transform:rotate(var(--arm-left,0deg))}.pet-arm-right{transform-origin:137px 139px;transform:rotate(var(--arm-right,0deg))}
-.pet-leg-left{transform-origin:79px 157px;transform:rotate(var(--leg-left,0deg)) scaleY(var(--leg-scale-left,1))}.pet-leg-right{transform-origin:123px 157px;transform:rotate(var(--leg-right,0deg)) scaleY(var(--leg-scale-right,1))}
-.pet-raised-paws{opacity:0}.companion-v8:is([data-expression=held],[data-expression^=angry]) .pet-raised-paws{opacity:1}
-.pet-red{opacity:calc(var(--rage-progress,0)*.7)}.pet-rage-mark{opacity:var(--rage-progress,0)}
-.pet-expression{display:none}.pet-face-idle{display:block}
-.companion-v8:is([data-expression=greet],[data-expression=approve]) .pet-face-idle,.companion-v8:is([data-expression=held],[data-expression=wind],[data-expression=dizzy],[data-expression=angry-build],[data-expression=angry-burst],[data-expression=angry],[data-expression=sulk],[data-expression=sleep]) .pet-face-idle{display:none}
-.companion-v8:is([data-expression=greet],[data-expression=approve]) .pet-face-greet,.companion-v8[data-expression=held] .pet-face-held,.companion-v8[data-expression=wind] .pet-face-wind,.companion-v8[data-expression=dizzy] .pet-face-dizzy,.companion-v8[data-expression=angry-build] .pet-face-build,.companion-v8[data-expression=angry-burst] .pet-face-burst,.companion-v8[data-expression=angry] .pet-face-angry,.companion-v8[data-expression=sulk] .pet-face-sulk,.companion-v8[data-expression=sleep] .pet-face-sleep{display:block}
-.pet-dot-eyes{transform-origin:100px 84px;transform:translateX(var(--pet-gaze,0px));animation:pet-blink-08 6.4s infinite}
+/* Lapisan ilustrasi (anatomi, wajah, sendi) dimiliki expressions-10.css lewat --cat10-*.
+   Berkas ini hanya menyimpan lapisan fisik, efek, dan lima override yang memang perlu
+   mengomposisikan nilai tambahan di atas pose: telinga, skala kaki, kedipan, dan pop-lines. */
+.pet-build-eyes,.pet-pop-lines{transform-box:view-box}
+/* Pose menaruh lift/lean/shift pada .pet-physical, jadi di sini anatomi hanya menerima squash. */
+.calvin-cat10 .pet-anatomy{transform:scale(var(--cat10-sx,1),var(--cat10-sy,1))}
+/* Kepala ikut terpengaruh telinga dan pembesaran saat marah. */
+.calvin-cat10 .pet-head{transform:rotate(calc(var(--cat10-head,0deg) + var(--ear-left,0deg)*.22)) scale(calc(1 + var(--cat10-rage,0)*.025));will-change:transform}
+/* Kaki perlu scaleY saat melangkah, di atas rotasi dari pose. */
+.calvin-cat10 .pet-leg-left{transform:rotate(var(--cat10-leg-l,0deg)) scaleY(var(--leg-scale-left,1))}
+.calvin-cat10 .pet-leg-right{transform:rotate(var(--cat10-leg-r,0deg)) scaleY(var(--leg-scale-right,1))}
+/* Kedipan memakai properti scale terpisah agar tidak bertabrakan dengan transform gaze. */
+.calvin-cat10 .pet-dot-eyes{transform:translateX(var(--cat10-gaze,0px));animation:pet-blink-08 6.4s infinite}
 .companion-v8[data-mode=wrap] .pet-dot-eyes{animation:none}
-.pet-build-eyes{transform-origin:100px 84px;transform:scaleY(calc(1 - var(--rage-progress,0)*.28))}
-.pet-glasses,.pet-flower,.pet-coffee,.pet-dizzy-stars,.pet-burst-fx,.pet-angry-huff{opacity:0}
+.pet-build-eyes{transform-origin:100px 84px;transform:scaleY(calc(1 - var(--cat10-rage,0)*.28))}
 .companion-v8[data-expression=angry] .pet-angry-huff{opacity:.8;animation:pet-huff-08 .7s ease-out both}
-.companion-v8[data-expression=cool] .pet-glasses,.companion-v8[data-expression=flower] .pet-flower,.companion-v8[data-expression=coffee] .pet-coffee{opacity:1}
-.companion-v8[data-expression=dizzy] .pet-dizzy-stars{opacity:1;animation:pet-stars-08 .65s ease-in-out infinite alternate;transform-origin:100px 90px}
-.companion-v8[data-expression=angry-burst] .pet-burst-fx{opacity:calc(1 - var(--burst-progress,0))}
-.pet-puff-left{transform-origin:40px 76px;transform:translate(calc(var(--burst-progress,0)*-10px),calc(var(--burst-progress,0)*-8px)) scale(calc(.65 + var(--burst-progress,0)*.6))}
-.pet-puff-right{transform-origin:161px 76px;transform:translate(calc(var(--burst-progress,0)*10px),calc(var(--burst-progress,0)*-8px)) scale(calc(.65 + var(--burst-progress,0)*.6))}
-.pet-pop-lines{transform-origin:100px 100px;transform:scale(calc(.92 + var(--burst-progress,0)*.15))}
+.companion-v8[data-expression=dizzy] .pet-dizzy-stars{animation:pet-stars-08 .65s ease-in-out infinite alternate;transform-origin:100px 90px}
+.pet-pop-lines{transform-origin:100px 100px;transform:scale(calc(.92 + var(--cat10-burst,0)*.15))}
+/* Bayangan adalah saudara .pet-skin, jadi ia memakai salinan squash di root, bukan --cat10-*. */
 .pet-shadow{position:absolute;left:30%;bottom:6%;width:40%;height:3.5%;background:#26314a;border-radius:50%;opacity:.13;transform:scaleX(var(--pet-squash-x,1))}
 .companion-v8:is([data-mode=drag],[data-mode=flight]) .pet-shadow{opacity:0}
 .pet-caption{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);font:700 10px/1.4 system-ui,sans-serif;white-space:nowrap;color:var(--muted);opacity:.7;pointer-events:none}
@@ -48,4 +44,6 @@
 .companion-v8.is-paused *{animation-play-state:paused!important;transition:none!important}
 .pet-wrap{position:fixed;left:0;top:0;pointer-events:none;width:96px;height:104px;z-index:54;transform:translate3d(var(--wrap-x,-300px),var(--wrap-y,-300px),0)}
 @media(max-width:720px){.companion-v8,.pet-wrap{width:84px;height:92px}.pet-caption{font-size:9px}.pet-bubble{padding:15px;width:min(228px,calc(100vw - 24px))}}
-@media(prefers-reduced-motion:reduce){.companion-v8 *,.pet-wrap *{animation:none!important;transition:none!important}.pet-physical{transform:none;scale:1}.pet-anatomy,.pet-head,.pet-dot-eyes{transform:none}}
+/* Reduced motion mematikan animasi dan transisi. Nilai pose tidak dinolkan di CSS: controller
+   sudah meminta pose statis lewat getPose({motion:false}), dan seret tetap mengikuti tangan. */
+@media(prefers-reduced-motion:reduce){.companion-v8 *,.pet-wrap *{animation:none!important;transition:none!important}}

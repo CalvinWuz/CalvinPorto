@@ -1,0 +1,60 @@
+/* Illustration layer only. Keep travel/drag under the site's existing owner. */
+.calvin-cat10 .pet-rig{display:block;width:100%;height:100%;overflow:visible;pointer-events:none}
+.calvin-cat10 .pet-rig *{pointer-events:none}
+.calvin-cat10 .pet-anatomy{transform-box:view-box;transform-origin:100px 164px;transform:translate(var(--cat10-shift,0px),var(--cat10-lift,0px)) rotate(var(--cat10-lean,0deg)) scale(var(--cat10-sx,1),var(--cat10-sy,1))}
+.calvin-cat10 .pet-head,.calvin-cat10 .pet-arm,.calvin-cat10 .pet-leg,.calvin-cat10 .pet-dot-eyes{transform-box:view-box}
+.calvin-cat10 .pet-head{transform-origin:100px 120px;transform:rotate(var(--cat10-head,0deg))}
+.calvin-cat10 .pet-head-fill{fill:#fff;fill:color-mix(in srgb,#ff8d78 calc(var(--cat10-rage,0)*52%),#fff)}
+.calvin-cat10 .pet-arm-left{transform-origin:64px 139px;transform:rotate(var(--cat10-arm-l,0deg))}
+.calvin-cat10 .pet-arm-right{transform-origin:137px 139px;transform:rotate(var(--cat10-arm-r,0deg))}
+.calvin-cat10 .pet-leg-left{transform-origin:79px 157px;transform:rotate(var(--cat10-leg-l,0deg))}
+.calvin-cat10 .pet-leg-right{transform-origin:123px 157px;transform:rotate(var(--cat10-leg-r,0deg))}
+.calvin-cat10 .pet-dot-eyes{transform-origin:100px 84px;transform:translateX(var(--cat10-gaze,0px)) scaleY(var(--cat10-blink,1))}
+.calvin-cat10 .pet-expression{display:none}
+.calvin-cat10 .pet-face-idle{display:block}
+.calvin-cat10[data-expression]:not([data-expression=idle]) .pet-face-idle{display:none}
+.calvin-cat10 .pet-glasses,.calvin-cat10 .pet-flower,.calvin-cat10 .pet-coffee,.calvin-cat10 .pet-angry-huff,.calvin-cat10 .pet-dizzy-stars{opacity:0}
+.calvin-cat10 .pet-red{opacity:calc(var(--cat10-rage,0)*.7)}
+.calvin-cat10 .pet-rage-mark{opacity:var(--cat10-rage,0)}
+.calvin-cat10 .pet-raised-paws{opacity:var(--cat10-raised,0)}
+.calvin-cat10 .pet-burst-fx{opacity:0}
+.calvin-cat10[data-expression=angry-burst] .pet-burst-fx{opacity:calc(1 - var(--cat10-burst,0))}
+.calvin-cat10 .pet-puff-left{transform-box:view-box;transform-origin:40px 76px;transform:translate(calc(var(--cat10-burst,0)*-9px),calc(var(--cat10-burst,0)*-7px)) scale(calc(.65 + var(--cat10-burst,0)*.6))}
+.calvin-cat10 .pet-puff-right{transform-box:view-box;transform-origin:161px 76px;transform:translate(calc(var(--cat10-burst,0)*9px),calc(var(--cat10-burst,0)*-7px)) scale(calc(.65 + var(--cat10-burst,0)*.6))}
+.calvin-cat10[data-expression=dizzy] .pet-dizzy-stars{opacity:1}
+.calvin-cat10[data-paused=true] .pet-rig *{animation:none!important}
+@media(prefers-reduced-motion:reduce){.calvin-cat10 .pet-rig *{animation:none!important;transition:none!important}}
+/* Expression visibility rules. */
+.calvin-cat10[data-expression="idle"] .pet-expression.pet-face-idle{display:block}
+.calvin-cat10[data-expression="greet"] .pet-expression.pet-face-greet{display:block}
+.calvin-cat10[data-expression="approve"] .pet-expression.pet-face-greet{display:block}
+.calvin-cat10[data-expression="cool"] .pet-expression.pet-face-idle{display:block}
+.calvin-cat10[data-expression="flower"] .pet-expression.pet-face-idle{display:block}
+.calvin-cat10[data-expression="coffee"] .pet-expression.pet-face-idle{display:block}
+.calvin-cat10[data-expression="held"] .pet-expression.pet-face-held{display:block}
+.calvin-cat10[data-expression="wind"] .pet-expression.pet-face-wind{display:block}
+.calvin-cat10[data-expression="dizzy"] .pet-expression.pet-face-dizzy{display:block}
+.calvin-cat10[data-expression="angry-build"] .pet-expression.pet-face-build{display:block}
+.calvin-cat10[data-expression="angry-burst"] .pet-expression.pet-face-burst{display:block}
+.calvin-cat10[data-expression="angry"] .pet-expression.pet-face-angry{display:block}
+.calvin-cat10[data-expression="sulk"] .pet-expression.pet-face-sulk{display:block}
+.calvin-cat10[data-expression="sleep"] .pet-expression.pet-face-sleep{display:block}
+.calvin-cat10[data-expression="curious"] .pet-expression.pet-face-curious{display:block}
+.calvin-cat10[data-expression="laugh"] .pet-expression.pet-face-laugh{display:block}
+.calvin-cat10[data-expression="shy"] .pet-expression.pet-face-shy{display:block}
+.calvin-cat10[data-expression="surprised"] .pet-expression.pet-face-surprised{display:block}
+.calvin-cat10[data-expression="thinking"] .pet-expression.pet-face-thinking{display:block}
+.calvin-cat10[data-expression="mischievous"] .pet-expression.pet-face-mischievous{display:block}
+.calvin-cat10[data-expression="proud"] .pet-expression.pet-face-proud{display:block}
+.calvin-cat10[data-expression="focused"] .pet-expression.pet-face-focused{display:block}
+.calvin-cat10[data-expression="bored"] .pet-expression.pet-face-bored{display:block}
+.calvin-cat10[data-expression="puzzled"] .pet-expression.pet-face-puzzled{display:block}
+.calvin-cat10[data-expression="sad"] .pet-expression.pet-face-sad{display:block}
+.calvin-cat10[data-expression="love"] .pet-expression.pet-face-love{display:block}
+.calvin-cat10[data-expression="wink"] .pet-expression.pet-face-wink{display:block}
+.calvin-cat10[data-expression="yawn"] .pet-expression.pet-face-yawn{display:block}
+.calvin-cat10[data-expression="sneeze"] .pet-expression.pet-face-sneeze{display:block}
+.calvin-cat10[data-expression="determined"] .pet-expression.pet-face-determined{display:block}
+.calvin-cat10[data-expression="cool"] .pet-glasses{opacity:1}
+.calvin-cat10[data-expression="flower"] .pet-flower{opacity:1}
+.calvin-cat10[data-expression="coffee"] .pet-coffee{opacity:1}

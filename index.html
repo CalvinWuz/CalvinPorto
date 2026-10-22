@@ -42,6 +42,8 @@ catch(e){d.setAttribute('data-theme','light');}})();
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="polish-07.css">
 <link rel="stylesheet" href="page-polish.css">
+<link rel="stylesheet" href="archive-10.css">
+<link rel="stylesheet" href="expressions-10.css">
 <link rel="stylesheet" href="companion-08.css">
 </head>
 <body id="top">
@@ -492,13 +494,101 @@ catch(e){d.setAttribute('data-theme','light');}})();
       </div>
     </div>
 
-    <section class="notebook-about__notes" aria-labelledby="h-notes">
-      <header><p class="chapter-kicker">Dari halaman sebelumnya</p><h3 id="h-notes">Catatan dari prosesnya</h3><span class="notebook-about__coffee" aria-hidden="true"></span></header>
-      <ol class="notebook-about__note-list">
-        <li><span class="notebook-about__project-name">Cookies Risk Analyzer</span><div><h4>Pisahkan observasi dari kesimpulan.</h4><p>Bot yang saya kerjakan membantu membaca indikator terkait UU PDP. Cookie yang teramati, indikator otomatis, dan tinjauan manusia punya fungsi berbeda; ketiganya perlu dibaca terpisah.</p><a class="link" href="#studi-cookies">Ke catatan proyek <span aria-hidden="true">↗</span><span class="vh"> Cookies Risk Analyzer</span></a></div></li>
-        <li><span class="notebook-about__project-name">BISINDO Translator</span><div><h4>Tentukan apa yang masuk ke model.</h4><p>Model menerima koordinat sendi dari gambar kamera. Inferensi lokal dan cakupan kosakata perlu dijelaskan bersama batas evaluasinya.</p><a class="link" href="#studi-bisindo">Ke catatan proyek <span aria-hidden="true">↗</span><span class="vh"> BISINDO Translator</span></a></div></li>
-        <li><span class="notebook-about__project-name">PapanTulis</span><div><h4>Periksa kondisi penggunaan.</h4><p>Cahaya, posisi tangan, smoothing, dan resolusi pemrosesan memengaruhi pengenalan gestur. Perilaku prototipe perlu dibaca bersama kondisi penggunaannya.</p><a class="link" href="#studi-papantulis">Ke catatan proyek <span aria-hidden="true">↗</span><span class="vh"> PapanTulis</span></a></div></li>
-      </ol>
+    <!-- Arsip sertifikat. Nilai tiap lembar ditulis ulang dari js/certificates.js saat script
+         aktif; markup di bawah adalah tampilan tanpa JavaScript dan isinya harus ikut
+         diperbarui bila slot benar-benar diisi. -->
+    <section class="cert-archive" id="sertifikat" aria-labelledby="h-notes" data-cert-archive>
+      <header class="cert-archive__head">
+        <div>
+          <p class="chapter-kicker">Arsip</p>
+          <h3 id="h-notes" class="cert-archive__title">Sertifikat,<br>satu tempat.</h3>
+        </div>
+        <p class="cert-archive__intro">Kursus, pelatihan, lomba, dan organisasi. Tempatnya sudah disiapkan; dokumennya menyusul.</p>
+      </header>
+
+      <div class="cert-archive__tabs" role="group" aria-label="Pilih slot sertifikat" data-cert-tabs hidden>
+        <button class="cert-archive__tab" type="button" data-cert-tab aria-pressed="true">Slot A <small>belum diisi</small></button>
+        <button class="cert-archive__tab" type="button" data-cert-tab aria-pressed="false">Slot B <small>belum diisi</small></button>
+        <button class="cert-archive__tab" type="button" data-cert-tab aria-pressed="false">Slot C <small>belum diisi</small></button>
+      </div>
+
+      <article class="cert-archive__panel" data-cert-panel aria-label="Slot sertifikat A">
+        <div class="cert-archive__folder" data-cert-folder>
+          <div class="cert-archive__sheet" data-cert-sheet>
+            <p class="cert-archive__sheet-top"><span class="cert-archive__tag" data-cert-field="tag">Lembar A</span><span class="cert-archive__status" data-cert-field="status">Belum diisi</span></p>
+            <h4 data-cert-field="heading">Tempat untuk sertifikatmu.</h4>
+            <span class="cert-archive__rule" aria-hidden="true"></span><span class="cert-archive__rule" aria-hidden="true"></span>
+            <div class="cert-archive__sheet-foot"><p>Dokumen dan detailnya akan ditambahkan nanti.</p><button class="cert-archive__open" type="button" data-cert-open aria-expanded="false">Buka slot <span aria-hidden="true">↗</span></button></div>
+          </div>
+          <span class="cert-archive__lip" aria-hidden="true"></span>
+        </div>
+        <section class="cert-archive__detail" aria-label="Detail slot sertifikat A" data-cert-detail>
+          <header class="cert-archive__detail-head"><h5 data-cert-field="detailTitle">Isi slot A</h5><button type="button" class="cert-archive__close" data-cert-close>Tutup <span aria-hidden="true">×</span></button></header>
+          <div class="cert-archive__document" data-cert-document><strong>Dokumen belum ditambahkan</strong><span>Nanti gambar atau PDF sertifikat tampil di sini.</span></div>
+          <dl class="cert-archive__fields">
+            <div><dt>Nama sertifikat</dt><dd data-cert-field="title">Belum diisi</dd></div>
+            <div><dt>Penerbit</dt><dd data-cert-field="issuer">Belum diisi</dd></div>
+            <div><dt>Jenis</dt><dd data-cert-field="category">Belum diisi</dd></div>
+            <div><dt>Tanggal terbit</dt><dd data-cert-field="issued">Belum diisi</dd></div>
+            <div><dt>Keterampilan terkait</dt><dd data-cert-field="skills">Belum diisi</dd></div>
+            <div><dt>Tautan verifikasi</dt><dd data-cert-field="verify">Belum ditambahkan</dd></div>
+          </dl>
+          <p class="cert-archive__note">Lembar ini baru menyiapkan tempat. Dokumen, penerbit, tanggal, dan tautan aslinya menyusul.</p>
+        </section>
+      </article>
+
+      <article class="cert-archive__panel" data-cert-panel aria-label="Slot sertifikat B">
+        <div class="cert-archive__folder" data-cert-folder>
+          <div class="cert-archive__sheet" data-cert-sheet>
+            <p class="cert-archive__sheet-top"><span class="cert-archive__tag" data-cert-field="tag">Lembar B</span><span class="cert-archive__status" data-cert-field="status">Belum diisi</span></p>
+            <h4 data-cert-field="heading">Tempat untuk sertifikatmu.</h4>
+            <span class="cert-archive__rule" aria-hidden="true"></span><span class="cert-archive__rule" aria-hidden="true"></span>
+            <div class="cert-archive__sheet-foot"><p>Dokumen dan detailnya akan ditambahkan nanti.</p><button class="cert-archive__open" type="button" data-cert-open aria-expanded="false">Buka slot <span aria-hidden="true">↗</span></button></div>
+          </div>
+          <span class="cert-archive__lip" aria-hidden="true"></span>
+        </div>
+        <section class="cert-archive__detail" aria-label="Detail slot sertifikat B" data-cert-detail>
+          <header class="cert-archive__detail-head"><h5 data-cert-field="detailTitle">Isi slot B</h5><button type="button" class="cert-archive__close" data-cert-close>Tutup <span aria-hidden="true">×</span></button></header>
+          <div class="cert-archive__document" data-cert-document><strong>Dokumen belum ditambahkan</strong><span>Nanti gambar atau PDF sertifikat tampil di sini.</span></div>
+          <dl class="cert-archive__fields">
+            <div><dt>Nama sertifikat</dt><dd data-cert-field="title">Belum diisi</dd></div>
+            <div><dt>Penerbit</dt><dd data-cert-field="issuer">Belum diisi</dd></div>
+            <div><dt>Jenis</dt><dd data-cert-field="category">Belum diisi</dd></div>
+            <div><dt>Tanggal terbit</dt><dd data-cert-field="issued">Belum diisi</dd></div>
+            <div><dt>Keterampilan terkait</dt><dd data-cert-field="skills">Belum diisi</dd></div>
+            <div><dt>Tautan verifikasi</dt><dd data-cert-field="verify">Belum ditambahkan</dd></div>
+          </dl>
+          <p class="cert-archive__note">Lembar ini baru menyiapkan tempat. Dokumen, penerbit, tanggal, dan tautan aslinya menyusul.</p>
+        </section>
+      </article>
+
+      <article class="cert-archive__panel" data-cert-panel aria-label="Slot sertifikat C">
+        <div class="cert-archive__folder" data-cert-folder>
+          <div class="cert-archive__sheet" data-cert-sheet>
+            <p class="cert-archive__sheet-top"><span class="cert-archive__tag" data-cert-field="tag">Lembar C</span><span class="cert-archive__status" data-cert-field="status">Belum diisi</span></p>
+            <h4 data-cert-field="heading">Tempat untuk sertifikatmu.</h4>
+            <span class="cert-archive__rule" aria-hidden="true"></span><span class="cert-archive__rule" aria-hidden="true"></span>
+            <div class="cert-archive__sheet-foot"><p>Dokumen dan detailnya akan ditambahkan nanti.</p><button class="cert-archive__open" type="button" data-cert-open aria-expanded="false">Buka slot <span aria-hidden="true">↗</span></button></div>
+          </div>
+          <span class="cert-archive__lip" aria-hidden="true"></span>
+        </div>
+        <section class="cert-archive__detail" aria-label="Detail slot sertifikat C" data-cert-detail>
+          <header class="cert-archive__detail-head"><h5 data-cert-field="detailTitle">Isi slot C</h5><button type="button" class="cert-archive__close" data-cert-close>Tutup <span aria-hidden="true">×</span></button></header>
+          <div class="cert-archive__document" data-cert-document><strong>Dokumen belum ditambahkan</strong><span>Nanti gambar atau PDF sertifikat tampil di sini.</span></div>
+          <dl class="cert-archive__fields">
+            <div><dt>Nama sertifikat</dt><dd data-cert-field="title">Belum diisi</dd></div>
+            <div><dt>Penerbit</dt><dd data-cert-field="issuer">Belum diisi</dd></div>
+            <div><dt>Jenis</dt><dd data-cert-field="category">Belum diisi</dd></div>
+            <div><dt>Tanggal terbit</dt><dd data-cert-field="issued">Belum diisi</dd></div>
+            <div><dt>Keterampilan terkait</dt><dd data-cert-field="skills">Belum diisi</dd></div>
+            <div><dt>Tautan verifikasi</dt><dd data-cert-field="verify">Belum ditambahkan</dd></div>
+          </dl>
+          <p class="cert-archive__note">Lembar ini baru menyiapkan tempat. Dokumen, penerbit, tanggal, dan tautan aslinya menyusul.</p>
+        </section>
+      </article>
+
+      <p class="cert-archive__foot"><strong>Siap untuk koleksinya.</strong> Belum ada sertifikat yang ditampilkan, jadi tidak ada badge atau nomor kredensial di sini.</p>
+      <p class="vh" aria-live="polite" aria-atomic="true" data-cert-live></p>
     </section>
   </section>
 
@@ -684,7 +774,7 @@ catch(e){d.setAttribute('data-theme','light');}})();
 <div class="companion-v8" id="companion" data-mode="rest" data-expression="idle">
  <span class="pet-shadow" aria-hidden="true"></span>
  <button class="pet-actor" type="button" aria-label="Sapa kucing dan mulai tur singkat" aria-describedby="pet-help" title="Seret aku, atau klik untuk tur singkat">
-  <span class="pet-physical" aria-hidden="true"><span class="pet-skin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none" class="pet-rig" aria-hidden="true">
+  <span class="pet-physical" aria-hidden="true"><span class="pet-skin calvin-cat10" data-expression="idle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none" class="pet-rig" aria-hidden="true">
  <g class="pet-burst-fx" opacity="0" stroke="#d77264" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
   <g class="pet-puff pet-puff-left"><path d="M30 79c-12 1-19-8-13-15-9-8-1-19 8-15 0-12 15-14 18-3 12-2 16 12 7 18 3 10-10 18-20 15Z" fill="#fff8f3"/><path d="M25 67q-5-5 1-9"/></g>
   <g class="pet-puff pet-puff-right"><path d="M173 75c12 3 21-5 16-13 10-6 4-19-6-17 2-12-12-17-17-6-12-4-19 9-11 16-5 10 7 19 18 20Z" fill="#fff8f3"/><path d="M177 61q6-4 1-9"/></g>
@@ -743,6 +833,94 @@ catch(e){d.setAttribute('data-theme','light');}})();
    <g class="pet-expression pet-face-sulk" display="none"><path d="m55 83 18 0m55 0 18 0m-89-10 13-2m61 0 13 3m-50 39q5-6 11 0" stroke-width="3.8"/></g>
    <g class="pet-expression pet-face-sleep" display="none"><path d="M55 83q9 9 18 0m55 0q9 9 18 0m-51 29q6 5 12-1" stroke-width="3.8"/></g>
    <path class="pet-rage-mark" opacity="0" d="m144 57-1 6-6-1m14 1 1-6m-1 14-1-5-6 1" stroke="#d86458" stroke-width="3.1"/>
+   <!-- Native expression extension 10. All facial marks share the approved head frame. -->
+   <g class="pet-expression pet-face-curious" display="none">
+    <ellipse cx="64" cy="84" rx="7" ry="8" fill="#fff" stroke-width="3.5"/>
+    <g class="pet-dot-eyes" fill="#171717" stroke="none"><circle cx="64" cy="84" r="3.2"/><ellipse cx="138" cy="84" rx="4.2" ry="4.6"/></g>
+    <path d="M54 70q9-5 18-2m58 3q9-6 17-2M93 111q7 5 15-2" stroke-width="3.7"/>
+   </g>
+   <g class="pet-expression pet-face-laugh" display="none">
+    <path d="m55 86 9-6 9 6m56 0 9-6 9 6" stroke-width="4.4"/>
+    <path d="M82 101q18 6 37-1c-1 15-9 26-19 26-9 0-16-12-18-25Z" fill="#171717" stroke-width="3.7"/>
+    <path d="M85 103q15 5 30-1l-3 6q-13 3-25-1Z" fill="#fff" stroke="none"/>
+    <path d="M89 120q11-10 22 0-10 8-22 0Z" fill="#f2a1bb" stroke="none"/>
+   </g>
+   <g class="pet-expression pet-face-shy" display="none">
+    <g class="pet-dot-eyes" fill="#171717" stroke="none"><ellipse cx="64" cy="84" rx="3.6" ry="4.3"/><ellipse cx="138" cy="84" rx="3.6" ry="4.3"/></g>
+    <path d="m55 74 17 3m58 0 17-3M93 111q8 6 15-1" stroke-width="3.7"/>
+    <g class="pet-face-detail" stroke="#d56f92" stroke-width="2"><path d="m42 100-2 6m8-6-2 6m107-6-2 6m8-6-2 6"/></g>
+   </g>
+   <g class="pet-expression pet-face-surprised" display="none">
+    <ellipse cx="64" cy="84" rx="8.1" ry="8.8" fill="#fff" stroke-width="3.6"/><ellipse cx="138" cy="84" rx="8.1" ry="8.8" fill="#fff" stroke-width="3.6"/>
+    <g class="pet-dot-eyes" fill="#171717" stroke="none"><circle cx="64" cy="84" r="2.9"/><circle cx="138" cy="84" r="2.9"/></g>
+    <path d="M56 69q8-5 16 0m58 0q8-5 16 0" stroke-width="3.4"/>
+    <ellipse cx="100" cy="112" rx="7.8" ry="9.6" fill="#171717" stroke-width="3.8"/>
+    <path d="M96 117q4-4 8 0" stroke="#f2a1bb" stroke-width="3.7"/>
+   </g>
+   <g class="pet-expression pet-face-thinking" display="none">
+    <g class="pet-dot-eyes" fill="#171717" stroke="none"><ellipse cx="64" cy="84" rx="4" ry="4.3"/><ellipse cx="138" cy="84" rx="4" ry="4.3"/></g>
+    <path d="m55 73 17 0m58-3q8-5 16 0M92 112q7-4 15 0l4-3" stroke-width="3.7"/>
+    <path class="pet-face-detail" d="m152 69 3-5m-3 10 5 0" stroke="#c6c6c6" stroke-width="2.8"/>
+   </g>
+   <g class="pet-expression pet-face-mischievous" display="none">
+    <path d="m55 74 18 5m57 0 16-5" stroke-width="3.5"/>
+    <g class="pet-dot-eyes" fill="#171717" stroke="none"><ellipse cx="64" cy="84" rx="4.2" ry="3.4"/><ellipse cx="138" cy="84" rx="4.2" ry="3.4"/></g>
+    <path d="M78 105q19 10 43-3c-1 12-12 19-24 18-10-1-17-7-19-15Z" fill="#fff" stroke-width="3.9"/>
+    <path d="m96 111 0 7m12-10 0 8" stroke-width="2.8"/>
+   </g>
+   <g class="pet-expression pet-face-proud" display="none">
+    <path d="M55 85q9-13 18 0m56 0q9-13 18 0M82 106q18 12 36-1" stroke-width="4"/>
+    <path class="pet-face-detail" d="m151 67 2 5 5 2-5 2-2 5-2-5-5-2 5-2Z" fill="#fff" stroke="#c6c6c6" stroke-width="2.2"/>
+   </g>
+   <g class="pet-expression pet-face-focused" display="none">
+    <path d="m54 75 19 5m56 0 18-5" stroke-width="3.7"/>
+    <g class="pet-dot-eyes" fill="#171717" stroke="none"><ellipse cx="64" cy="84" rx="4.2" ry="3.4"/><ellipse cx="138" cy="84" rx="4.2" ry="3.4"/></g>
+    <path d="M92 112q8-3 16 0" stroke-width="3.8"/>
+   </g>
+   <g class="pet-expression pet-face-bored" display="none">
+    <path d="m55 82 18 0m56 0 18 0M94 113l13 0" stroke-width="3.8"/>
+    <path d="M64 84v5m74-5v5" stroke-width="3.4"/>
+   </g>
+   <g class="pet-expression pet-face-puzzled" display="none">
+    <g class="pet-dot-eyes" fill="#171717" stroke="none"><ellipse cx="64" cy="84" rx="4.2" ry="4.6"/><ellipse cx="138" cy="84" rx="4.2" ry="4.6"/></g>
+    <path d="M54 72q9-7 18-1m58 6 17-3M89 112q5-5 10 0 5 5 11-1" stroke-width="3.8"/>
+   </g>
+   <g class="pet-expression pet-face-sad" display="none">
+    <path d="m54 77 18-5m58 0 17 5M90 115q10-10 21 0" stroke-width="3.7"/>
+    <g class="pet-dot-eyes" fill="#171717" stroke="none"><ellipse cx="64" cy="84" rx="4.1" ry="4.5"/><ellipse cx="138" cy="84" rx="4.1" ry="4.5"/></g>
+    <path class="pet-tear pet-face-detail" d="M146 94c-1 5-5 9-4 12 1 5 8 4 8 0 0-3-3-8-4-12Z" fill="#c6c6c6" stroke="none"/>
+   </g>
+   <g class="pet-expression pet-face-love" display="none">
+    <g class="pet-heart-eyes" fill="#f2a1bb" stroke="#171717" stroke-width="2.7">
+     <path d="M64 93c-5-4-13-9-10-15 3-5 8-3 10 1 3-5 9-5 11-1 4 6-6 13-11 15Z"/>
+     <path d="M138 93c-5-4-13-9-10-15 3-5 8-3 10 1 3-5 9-5 11-1 4 6-6 13-11 15Z"/>
+    </g>
+    <path d="M88 108q1 7 12 2 10 6 13-2" stroke-width="3.9"/>
+    <path class="pet-face-detail pet-cheek-heart" d="M150 117c-8-5-7-11-2-10 2 0 3 2 3 3 3-4 7-3 7 1 0 2-4 5-8 6Z" fill="#f2a1bb" stroke="none"/>
+   </g>
+   <g class="pet-expression pet-face-wink" display="none">
+    <path d="m55 82 9 4 9-5" stroke-width="4"/>
+    <g class="pet-dot-eyes" fill="#171717" stroke="none"><ellipse cx="138" cy="84" rx="4.3" ry="4.7"/></g>
+    <path d="M80 104q19 7 40-2c-2 13-13 20-25 17-8-1-13-7-15-15Z" fill="#fff" stroke-width="3.9"/>
+    <path d="m94 109 0 8m12-9 0 9" stroke-width="2.7"/>
+   </g>
+   <g class="pet-expression pet-face-yawn" display="none">
+    <path d="M55 84q9 8 18-1m56 0q9 8 18 0" stroke-width="3.8"/>
+    <ellipse cx="100" cy="112" rx="9.8" ry="14" fill="#171717" stroke-width="3.5"/>
+    <path d="M94 121q6-8 12 0" fill="#f2a1bb" stroke="#f2a1bb" stroke-width="3.4"/>
+    <path class="pet-face-detail" d="M149 92c-2 4-4 6-3 9 1 3 6 3 6 0 0-3-2-5-3-9Z" fill="#c6c6c6" stroke="none"/>
+   </g>
+   <g class="pet-expression pet-face-sneeze" display="none">
+    <path d="m56 79 15 6-15 5m89-11-15 6 15 5M91 110q9-8 18 0-9 8-18 0Z" stroke-width="3.9"/>
+    <g class="pet-face-detail pet-sneeze-drops" stroke="#c6c6c6" stroke-width="2.7"><path d="m100 121 0 6m-8-7-3 4m19-4 3 4"/></g>
+   </g>
+   <g class="pet-expression pet-face-determined" display="none">
+    <path d="m54 73 19 7m74-7-18 7" stroke-width="3.9"/>
+    <g class="pet-dot-eyes" fill="#171717" stroke="none"><ellipse cx="64" cy="84" rx="4.1" ry="4.2"/><ellipse cx="138" cy="84" rx="4.1" ry="4.2"/></g>
+    <path d="M84 105q17-4 33 0l-1 13q-16 4-31-1Z" fill="#fff" stroke-width="3.9"/>
+    <path d="m95 106 0 12m11-12 0 12" stroke-width="2.7"/>
+   </g>
+   <!-- End native expression extension 10. -->
    <g class="pet-glasses" opacity="0" stroke-width="4"><path d="m51 78 5 17q11 7 24-2l5-16m31 0 5 16q13 9 25-2l4-14M83 81h34" fill="#20232a"/><path d="m60 82 7 0m59 0h7" stroke="#fff" stroke-width="2.5"/></g>
   </g>
   <g class="pet-raised-paws" opacity="0">

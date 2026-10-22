@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Pemeriksaan ekspresi kucing</title>
+<!--
+  Alat pemeriksaan lokal, bukan bagian portofolio. Berkas ini ada di .vercelignore
+  sehingga tidak ikut ter-deploy. Jalankan server statis dari root repository, lalu buka
+  /dev/expressions.html untuk memeriksa ke-26 wajah pada kedua tema dan ukuran aslinya.
+-->
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../expressions-10.css">
+<link rel="stylesheet" href="../companion-08.css">
+<style>
+  body{margin:0;padding:28px clamp(16px,4vw,40px) 70px;background:var(--bg);color:var(--ink);font:400 15px/1.6 system-ui,sans-serif}
+  h1{font-family:"Barlow Condensed",system-ui,sans-serif;font-size:clamp(30px,5vw,46px);line-height:1;margin:0 0 6px}
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0 26px}
+  .bar button,.bar label{border:1px solid var(--line-strong);background:var(--chip);color:var(--ink);border-radius:8px;padding:8px 13px;font:600 13px/1 inherit;cursor:pointer}
+  .bar input[type=range]{vertical-align:middle;width:150px}
+  .note{color:var(--muted);font-size:13px;max-width:72ch;margin:0 0 4px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+  .cell{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:10px 10px 8px;text-align:center}
+  .cell.is-new{border-color:var(--accent-text-2)}
+  .stage{position:relative;height:120px;display:grid;place-items:center}
+  /* Ukuran karakter di website: 96 x 104 px. Jangan menilai hanya dari gambar besar. */
+  .stage .calvin-cat10{display:block;width:96px;height:104px}
+  .cell b{display:block;font-size:12px;font-weight:700;margin-top:4px}
+  .cell span{display:block;font-size:11px;color:var(--muted)}
+  .big{margin-top:34px;border-top:1px solid var(--line);padding-top:22px}
+  .big .calvin-cat10{width:260px;height:282px}
+</style>
+</head>
+<body>
+<h1>Pemeriksaan ekspresi kucing</h1>
+<p class="note">Setiap sel memakai rig yang sama dengan website pada ukuran aslinya. Pose diambil dari <code>js/expressions.js</code>, jadi perubahan pada library langsung terlihat di sini.</p>
+<p class="note">Periksa: tepat satu wajah aktif, telinga dan kumis mengikuti kepala, pangkal lengan serta kaki tetap tertutup badan, dan garis hitam tetap terbaca pada kedua tema.</p>
+
+<div class="bar">
+  <button type="button" id="tema">Ganti tema</button>
+  <label>Progres <input type="range" id="progres" min="0" max="1" step="0.01" value="0.5"></label>
+  <label>Intensitas <input type="range" id="intensitas" min="0.5" max="1.2" step="0.05" value="1"></label>
+  <label><input type="checkbox" id="gerak" checked> Gerak</label>
+  <span id="status" class="note"></span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<section class="big">
+  <h2>Ukuran besar</h2>
+  <p class="note">Hanya untuk memeriksa detail garis. Keputusan akhir tetap dibuat pada ukuran 96 px di atas.</p>
+  <div id="besar"></div>
+</section>
+
+<script type="module">
+import { CalvinCatExpressions } from '../js/expressions.js';
+
+const ORDER = ['idle','greet','held','wind','dizzy','angry-build','angry-burst','angry','sulk','sleep',
+  'curious','laugh','shy','surprised','thinking','mischievous','proud','focused','bored','puzzled','sad','love','wink','yawn','sneeze','determined'];
+const baru = new Set(CalvinCatExpressions.newExpressions);
+
+const rig = await fetch('../assets/cat-rig.svg').then(r => r.text());
+const grid = document.getElementById('grid');
+const cells = [];
+
+function buatPanggung(parent) {
+  const skin = document.createElement('span');
+  skin.className = 'calvin-cat10';
+  skin.innerHTML = rig;
+  skin.querySelector('svg').classList.add('pet-rig');
+  parent.append(skin);
+  return skin;
+}
+
+for (const id of ORDER) {
+  const cell = document.createElement('div');
+  cell.className = 'cell' + (baru.has(id) ? ' is-new' : '');
+  const stage = document.createElement('div');
+  stage.className = 'stage';
+  cell.append(stage);
+  const label = document.createElement('b'); label.textContent = id;
+  const sub = document.createElement('span'); sub.textContent = CalvinCatExpressions.labels[id] || '';
+  cell.append(label, sub);
+  grid.append(cell);
+  cells.push({ id, skin: buatPanggung(stage) });
+}
+const besar = { id: 'curious', skin: buatPanggung(document.getElementById('besar')) };
+
+const progres = document.getElementById('progres');
+const intensitas = document.getElementById('intensitas');
+const gerak = document.getElementById('gerak');
+const status = document.getElementById('status');
+
+function gambar() {
+  const options = { intensity: Number(intensitas.value), gaze: 0, motion: gerak.checked };
+  for (const cell of cells) CalvinCatExpressions.apply(cell.skin, CalvinCatExpressions.getPose(cell.id, Number(progres.value), options));
+  CalvinCatExpressions.apply(besar.skin, CalvinCatExpressions.getPose(besar.id, Number(progres.value), options));
+  const aktif = cells.map(c => [...c.skin.querySelectorAll('.pet-expression')].filter(e => getComputedStyle(e).display !== 'none').length);
+  const salah = aktif.filter(n => n !== 1).length;
+  status.textContent = `${cells.length} ekspresi, ${salah ? salah + ' sel dengan jumlah wajah salah' : 'tepat satu wajah di tiap sel'}`;
+}
+
+for (const control of [progres, intensitas, gerak]) control.addEventListener('input', gambar);
+document.getElementById('tema').addEventListener('click', () => {
+  const root = document.documentElement;
+  root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+});
+grid.addEventListener('click', event => {
+  const cell = event.target.closest('.cell');
+  if (!cell) return;
+  besar.id = cells[[...grid.children].indexOf(cell)].id;
+  gambar();
+});
+gambar();
+</script>
+</body>
+</html>

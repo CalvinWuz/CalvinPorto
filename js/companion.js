@@ -8,6 +8,8 @@ const LIBRARY_POSES = new Set([
   'bored', 'puzzled', 'sad', 'love', 'wink', 'yawn', 'sneeze', 'determined',
   'greet', 'approve', 'cool', 'flower', 'coffee', 'sleep'
 ]);
+// Skala badan ketika mengintip dari margin pada viewport padat.
+const PERCH_SCALE = 0.56;
 const HEAD_TAPS = ['wink', 'shy', 'love'];
 const BODY_TAPS = ['laugh', 'mischievous', 'surprised'];
 
@@ -60,6 +62,7 @@ export class Companion {
     this.holdTimer = 0; this.holdSatisfied = false;
     this.tickle = { travel: 0, until: 0, cooldownUntil: 0 };
     this.nextExploreReaction = 0; this.boredShown = false;
+    this.perched = false; this.rawRects = [];
   }
 
   now() { return this.logical + (this.anchor === null ? 0 : performance.now() - this.anchor); }
@@ -157,6 +160,9 @@ export class Companion {
     const left = width / 2 + 6, top = Math.min(innerHeight / 2, Math.max(height / 2 + 6, headerBottom + height / 2 + 5));
     this.bounds = { left, right: Math.max(left, innerWidth - width / 2 - 6), top, bottom: Math.max(top, innerHeight - height / 2 - 8) };
     let nodes = typeof this.obstacleSource === 'function' ? this.obstacleSource() : typeof this.obstacleSource === 'string' ? document.querySelectorAll(this.obstacleSource) : this.obstacleSource;
+    // Kotak mentah disimpan supaya bentuk mengintip yang lebih ramping bisa diuji
+    // dengan jejaknya sendiri, bukan dengan jejak kucing ukuran penuh.
+    this.rawRects = [];
     this.obstacles = [...(nodes || [])].flatMap(node => {
       if (!node?.getBoundingClientRect || this.root.contains(node) || node.closest('[hidden]') || !node.getClientRects().length) return [];
       let rects = [node.getBoundingClientRect()];
@@ -171,8 +177,9 @@ export class Companion {
       // Jejak yang terlihat tidak simetris: caption menggantung di bawah badan, jadi sisi
       // atas penghalang perlu jarak lebih agar label itu tidak menimpa teks di bawahnya.
       const padX = width * .45 + 5, padUp = height * .5 + 4, padDown = height * .5 + 22;
-      return rects.filter(r => r.width >= 1 && r.height >= 1 && r.bottom >= -height && r.top <= innerHeight + height)
-        .map(r => ({ left: r.left - padX, right: r.right + padX, top: r.top - padDown, bottom: r.bottom + padUp }));
+      const live = rects.filter(r => r.width >= 1 && r.height >= 1 && r.bottom >= -height && r.top <= innerHeight + height);
+      for (const r of live) this.rawRects.push({ left: r.left, right: r.right, top: r.top, bottom: r.bottom });
+      return live.map(r => ({ left: r.left - padX, right: r.right + padX, top: r.top - padDown, bottom: r.bottom + padUp }));
     });
     const unique = new Set();
     this.obstacles = this.obstacles.filter(r => { const key = [r.left,r.right,r.top,r.bottom].map(v => Math.round(v)).join(','); if (unique.has(key)) return false; unique.add(key); return true; });
@@ -204,6 +211,41 @@ export class Companion {
     const result = [];
     for (const yy of [...new Set(ys)]) for (const x of [b.left, b.right]) result.push({ x, y: yy });
     return result;
+  }
+
+  /**
+   * Bentuk mengintip untuk viewport padat: badan diciutkan dan ditempelkan ke margin
+   * luar, jadi jejaknya jauh lebih kecil daripada kucing berdiri. Dipakai hanya ketika
+   * tidak ada satu pun titik tepi yang benar-benar bebas.
+   */
+  perchFootprint() {
+    const width = (this.size?.width || 96) * PERCH_SCALE;
+    const height = (this.size?.height || 104) * PERCH_SCALE;
+    return { halfX: width / 2, halfY: height / 2 };
+  }
+
+  /** Mencari tempat mengintip yang terbukti kosong terhadap kotak teks yang sebenarnya. */
+  findPerch(y = this.p.y) {
+    if (!this.rawRects) return null;
+    const { halfX, halfY } = this.perchFootprint();
+    const margin = 3;                                   // sisa badan yang tetap terlihat
+    const xs = [halfX + margin, innerWidth - halfX - margin];
+    const preferred = this.mobile ? xs[1] : (this.p.x < innerWidth / 2 ? xs[0] : xs[1]);
+    const top = this.bounds.top, bottom = this.bounds.bottom;
+    const free = (x, yy) => !this.rawRects.some(r =>
+      x + halfX > r.left - 2 && x - halfX < r.right + 2 && yy + halfY > r.top - 2 && yy - halfY < r.bottom + 2);
+    const candidates = [];
+    for (let yy = Math.ceil(top); yy <= bottom; yy += 6) for (const x of xs) if (free(x, yy)) candidates.push({ x, y: yy });
+    if (!candidates.length) return null;
+    candidates.sort((a, b) =>
+      (Math.abs(a.y - y) + (a.x === preferred ? 0 : 70)) - (Math.abs(b.y - y) + (b.x === preferred ? 0 : 70)));
+    return candidates[0];
+  }
+
+  setPerched(on) {
+    if (this.perched === on) return;
+    this.perched = on;
+    if (on) this.root.dataset.perch = 'edge'; else delete this.root.dataset.perch;
   }
 
   pickEdge(y = this.p.y, from = this.p) {
@@ -298,7 +340,7 @@ export class Companion {
     if (this.drag || !e.isPrimary || (e.pointerType === 'mouse' && e.button !== 0)) return;
     e.preventDefault(); this.pointerModality = true; this.keyboardFocus = false;
     this.stopRoute(); this.sequence = null; this.stateUntil = Infinity; this.transientUntil = Infinity;
-    this.windUntilReal = 0; this.interruptedMode = null; this.closeBubble(); this.mode = 'drag'; this.expression = 'held';
+    this.windUntilReal = 0; this.interruptedMode = null; this.closeBubble(); this.setPerched(false); this.mode = 'drag'; this.expression = 'held';
     const real = performance.now();
     this.drag = { id: e.pointerId, offset: { x: e.clientX - this.p.x, y: e.clientY - this.p.y }, start: { x: e.clientX, y: e.clientY }, moved: false, samples: [{ x: e.clientX, y: e.clientY, t: real }], reversals: [], lastAxis: { x: 0, y: 0 }, axisTravel: { x: 0, y: 0 }, lastTurn: 0, shake: false, latest: { x: e.clientX, y: e.clientY }, zone: this.pointerZone(e) };
     try { this.actor.setPointerCapture(e.pointerId); } catch {}
@@ -425,7 +467,10 @@ export class Companion {
   cancelDrag() { if (this.drag) this.pointerUp({ pointerId: this.drag.id }, true); }
   staticReturn() {
     if (this.dirty) this.measure();
-    this.p = this.pickEdge(this.p.y).point; this.stopRoute(); this.mode = 'rest'; this.expression = 'idle'; this.paint();
+    const spot = this.pickEdge(this.p.y);
+    if (spot.free) { this.setPerched(false); this.p = spot.point; }
+    else { const perch = this.findPerch(this.p.y); if (perch) { this.setPerched(true); this.p = perch; } else { this.setPerched(false); this.p = spot.point; } }
+    this.stopRoute(); this.mode = 'rest'; this.expression = 'idle'; this.paint();
   }
 
   beginLanding(harsh) {
@@ -509,11 +554,21 @@ export class Companion {
       if (route) { goal = candidate; break; }
     }
     if (!route) {
-      const fallback = this.pickEdge(y);
-      // Explicit visible egress: brief overlap is preferable to a hide/teleport.
-      goal = fallback.point; route = dist(this.p, goal) > 2 ? [{ ...goal }] : [];
-      this.routeObstacles = []; this.egress = true;
-    } else { this.routeObstacles = allowed; this.egress = containing.length > 0; }
+      // Tidak ada titik tepi yang bebas. Kandidat dengan free:false bukan tempat
+      // istirahat yang sah, jadi kucing mengintip dari margin dengan jejak lebih kecil
+      // sebelum jatuh ke fallback lama. Ia tetap terlihat dan tetap bisa disapa.
+      const perch = this.findPerch(y);
+      if (perch) {
+        this.setPerched(true);
+        goal = perch; route = dist(this.p, goal) > 2 ? [{ ...goal }] : [];
+        this.routeObstacles = []; this.egress = true;
+      } else {
+        const fallback = this.pickEdge(y);
+        // Explicit visible egress: brief overlap is preferable to a hide/teleport.
+        goal = fallback.point; route = dist(this.p, goal) > 2 ? [{ ...goal }] : [];
+        this.routeObstacles = []; this.egress = true;
+      }
+    } else { this.setPerched(false); this.routeObstacles = allowed; this.egress = containing.length > 0; }
     this.route = route; this.routeGoal = goal;
     this.mode = route.length ? (this.egress ? 'recover' : 'walk') : 'rest';
     this.expression = 'idle'; this.settleAt = Infinity; this.request(); return true;
@@ -528,6 +583,7 @@ export class Companion {
     const route = planRoute(this.p, freeGoal, this.bounds, this.obstacles, { preferEdges: true });
     if (!route) return false;
     this.route = route; this.routeGoal = freeGoal; this.routeObstacles = this.obstacles; this.egress = false;
+    this.setPerched(false);
     this.mode = route.length ? 'walk' : 'rest'; this.expression = 'idle'; this.request(); return true;
   }
 
@@ -586,7 +642,7 @@ export class Companion {
 
   /**
    * Intent kosmetik dari UI. Prioritas lebih rendah daripada seret dan rangkaian reaksi,
-   * jadi aksi arsip/explorer tetap jalan walaupun reaksinya diabaikan di sini.
+   * jadi aksi arsip dan studi kasus tetap jalan walaupun reaksinya diabaikan di sini.
    */
   context(kind) {
     if (this.reactionIsProtected()) return;

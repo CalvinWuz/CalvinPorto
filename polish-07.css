@@ -28,16 +28,13 @@ html[data-motion=paused] .ambient-edges span{animation-play-state:paused}
 .learning .marquee-label::after{content:"";display:inline-block;width:26px;height:30px;vertical-align:-9px;margin-left:12px;background:var(--ink-scribble);opacity:.75;mask:url(img/decor/sprout.svg) center/contain no-repeat;-webkit-mask:url(img/decor/sprout.svg) center/contain no-repeat}
 .notebook-about__pull{position:relative}
 .notebook-about__pull::after{content:"";position:absolute;left:0;bottom:-12px;width:120px;height:10px;background:var(--ink-scribble);opacity:.65;mask:url(img/decor/pencil-underline.svg) center/100% 100% no-repeat;-webkit-mask:url(img/decor/pencil-underline.svg) center/100% 100% no-repeat}
-.px-notebook{position:relative}
-.px-notebook::after{content:"";position:absolute;right:-18px;top:-14px;width:48px;height:48px;background:var(--ink-scribble);opacity:.6;mask:url(img/decor/corner-bracket.svg) center/contain no-repeat;-webkit-mask:url(img/decor/corner-bracket.svg) center/contain no-repeat;pointer-events:none}
 .opener-side .decor-07,.closing > .decor-07{animation:paper-idle-07 8s ease-in-out infinite}
 .closing > .decor-07{animation-delay:-3s}
 @keyframes paper-idle-07{0%,100%{translate:0 0;rotate:0deg}50%{translate:0 -5px;rotate:1.5deg}}
 html[data-motion=paused] .decor-07{animation-play-state:paused}
 @media(max-width:1179px){.experience > .decor-07{display:none}}
 @media(max-width:720px){
- .px-notebook::after{display:none}
- .hero{padding-bottom:270px}
+  .hero{padding-bottom:270px}
  .ambient-edges{opacity:.3}.ambient-edges span{width:19px;mask-position:45% 0;-webkit-mask-position:45% 0}
  .opener-side .decor-07{width:140px;margin-top:10px}
  .closing{padding-bottom:165px}

@@ -1,11 +1,13 @@
-import { CERTIFICATE_SLOTS, CATEGORY_LABELS } from './certificates.js';
-
 /**
  * Map arsip sertifikat.
  *
- * Tanpa JavaScript ketiga lembar dan detailnya tampil terbuka dari markup, sama seperti
- * bedah proyek. Script mengubahnya menjadi satu map dengan tab, lalu mengisi ulang nilai
- * tiap lembar dari `certificates.js` supaya datanya punya satu sumber terstruktur.
+ * Tanpa JavaScript kedua lembar dan detailnya tampil terbuka dari markup. Script
+ * mengubahnya menjadi satu map dengan tab, lalu mengisi ulang nilai tiap lembar dari
+ * `certificates.js` supaya datanya punya satu sumber terstruktur.
+ *
+ * Datanya diimpor secara dinamis dengan penanda versi yang diteruskan dari `main.js`.
+ * Import statis relatif tidak ikut membawa query versi, sehingga modul data bisa
+ * tertinggal di cache browser sementara HTML-nya sudah baru.
  *
  * Reaksi kucing dikirim sebagai intent ke controller global lewat `calvin:companion`.
  * Tidak ada actor kedua di dalam katalog, dan katalog tetap berfungsi penuh ketika kucing
@@ -27,13 +29,34 @@ function formatDate(value) {
 
 const intent = action => window.dispatchEvent(new CustomEvent('calvin:companion', { detail: { action } }));
 
-export function initCertificateArchive({ onLayout } = {}) {
+export async function initCertificateArchive({ onLayout, dataVersion = '' } = {}) {
   const root = document.querySelector('[data-cert-archive]');
   if (!root || root.dataset.certReady === 'true') return;
+
+  // Markup sudah memuat data sertifikat yang lengkap. Kalau modul datanya gagal dimuat,
+  // biarkan markup itu apa adanya: lebih baik terbaca daripada berubah jadi serba kosong.
+  let CERTIFICATE_SLOTS, CATEGORY_LABELS;
+  try {
+    const data = await import('./certificates.js' + (dataVersion ? '?v=' + encodeURIComponent(dataVersion) : ''));
+    CERTIFICATE_SLOTS = data.CERTIFICATE_SLOTS; CATEGORY_LABELS = data.CATEGORY_LABELS;
+  } catch (error) {
+    console.error('[portofolio] data sertifikat gagal dimuat, memakai isi dari HTML', error);
+    return;
+  }
+  if (!Array.isArray(CERTIFICATE_SLOTS) || !CERTIFICATE_SLOTS.length) {
+    console.error('[portofolio] data sertifikat kosong, memakai isi dari HTML');
+    return;
+  }
   const tabs = [...root.querySelectorAll('[data-cert-tab]')];
   const panels = [...root.querySelectorAll('[data-cert-panel]')];
   const live = root.querySelector('[data-cert-live]');
   if (!tabs.length || panels.length !== tabs.length) return;
+  // Data dan markup harus berasal dari rilis yang sama. Kalau jumlahnya berbeda, modul
+  // datanya hampir pasti versi lama dari cache; markup yang sudah benar dibiarkan utuh.
+  if (CERTIFICATE_SLOTS.length !== panels.length) {
+    console.error(`[portofolio] data sertifikat (${CERTIFICATE_SLOTS.length} slot) tidak cocok dengan markup (${panels.length} panel); memakai isi dari HTML`);
+    return;
+  }
 
   let selected = 0;
   const announce = text => { if (live) live.textContent = text; };
@@ -50,13 +73,14 @@ export function initCertificateArchive({ onLayout } = {}) {
     const set = (key, value) => { const node = panel.querySelector(`[data-cert-field=${key}]`); if (node) node.textContent = value; };
     set('tag', `Lembar ${label}`);
     set('status', filled(slot) ? 'Terisi' : EMPTY_VALUE);
-    set('heading', filled(slot) ? slot.title : 'Tempat untuk sertifikatmu.');
+    set('heading', filled(slot) ? slot.title : 'Dokumen sertifikat belum ditambahkan.');
     set('detailTitle', `Isi slot ${label}`);
     set('title', (slot && slot.title) || EMPTY_VALUE);
     set('issuer', (slot && slot.issuer) || EMPTY_VALUE);
     set('category', slot && slot.category ? (CATEGORY_LABELS[slot.category] || slot.category) : EMPTY_VALUE);
     set('issued', formatDate(slot && slot.issuedAt));
     set('skills', slot && slot.skills && slot.skills.length ? slot.skills.join(', ') : EMPTY_VALUE);
+    set('note', (slot && slot.note) || EMPTY_VALUE);
 
     // Tautan verifikasi hanya dibuat ketika URL-nya ada; tidak ada href="#" yang berpura-pura.
     const verify = panel.querySelector('[data-cert-field=verify]');
@@ -94,7 +118,11 @@ export function initCertificateArchive({ onLayout } = {}) {
 
   function select(index, { announceChange = true } = {}) {
     selected = index;
-    tabs.forEach((tab, i) => tab.setAttribute('aria-pressed', String(i === index)));
+    tabs.forEach((tab, i) => {
+      tab.setAttribute('aria-pressed', String(i === index));
+      const small = tab.querySelector('small');
+      if (small) small.textContent = filled(slotOf(i)) ? 'terisi' : 'belum diisi';
+    });
     panels.forEach((panel, i) => { panel.hidden = i !== index; });
     const panel = panels[index], sheet = panel.querySelector('[data-cert-sheet]');
     if (sheet && announceChange && document.documentElement.dataset.motion !== 'paused') {

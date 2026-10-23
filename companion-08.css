@@ -47,3 +47,12 @@
 /* Reduced motion mematikan animasi dan transisi. Nilai pose tidak dinolkan di CSS: controller
    sudah meminta pose statis lewat getPose({motion:false}), dan seret tetap mengikuti tangan. */
 @media(prefers-reduced-motion:reduce){.companion-v8 *,.pet-wrap *{animation:none!important;transition:none!important}}
+
+/* Bentuk mengintip untuk viewport padat. Badan diciutkan dan ditempelkan ke margin luar
+   sehingga jejaknya jauh lebih kecil daripada kucing berdiri, tetapi ia tetap terlihat.
+   Area sentuh tombol dijaga tetap besar, jadi menyapanya tidak jadi lebih sulit. */
+.companion-v8[data-perch=edge] .pet-physical{scale:var(--perch-scale,.56);transform-origin:50% 86%}
+.companion-v8[data-perch=edge] .pet-caption{opacity:0}
+.companion-v8[data-perch=edge] .pet-shadow{opacity:.07}
+.companion-v8[data-perch=edge] .pet-actor{min-width:46px;min-height:46px}
+@media(prefers-reduced-motion:reduce){.companion-v8[data-perch=edge] .pet-physical{transition:none}}

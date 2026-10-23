@@ -9,7 +9,11 @@
     "role": "decorative",
     "maskCompatible": true,
     "preserveAspectRatio": true,
-    "tintSuggestions": { "purple": "#7a6bf0", "blue": "#5b8cff", "cyan": "#63d7ff" },
+    "tintSuggestions": {
+      "purple": "#7a6bf0",
+      "blue": "#5b8cff",
+      "cyan": "#63d7ff"
+    },
     "accessibility": "Use alt=\"\" for decorative image elements or aria-hidden=\"true\" for inline SVG. Decorative layers must have pointer-events:none.",
     "placement": "Use only in dedicated margin/edge slots. Hero, project opener and contact may use clusters. Keep case-study reading areas calm. Do not place strokes across copy, faces, important project UI or controls.",
     "motion": "Static by default. An optional one-time reveal may follow existing reduced-motion and manual pause preferences. No permanent spinning or repeated redraw.",
@@ -17,92 +21,95 @@
   },
   "assets": [
     {
-      "file": "loop-arrow.svg",
-      "width": 272, "height": 152,
-      "role": "One loose looping connector at the hero edge or between project-opener material; point it toward a real visual target.",
-      "desktopDisplayWidth": [160, 236], "mobileDisplayWidth": [104, 144],
-      "suggestedOpacity": [0.32, 0.65]
-    },
-    {
-      "file": "orbit-spark.svg",
-      "width": 180, "height": 180,
-      "role": "Small personal spark at an outer corner; pair with one larger narrative cluster, not a field of stars.",
-      "desktopDisplayWidth": [64, 104], "mobileDisplayWidth": [38, 58],
-      "suggestedOpacity": [0.32, 0.58]
-    },
-    {
-      "file": "imperfect-double-oval.svg",
-      "width": 316, "height": 144,
-      "role": "Loose framing around a deliberately empty visual slot or short label. Inner strokes must not intersect meaningful text.",
-      "desktopDisplayWidth": [168, 264], "mobileDisplayWidth": [112, 178],
-      "suggestedOpacity": [0.3, 0.56]
-    },
-    {
       "file": "pencil-underline.svg",
-      "width": 340, "height": 54,
+      "width": 340,
+      "height": 54,
       "role": "A short hand-drawn baseline below one selected statement; reserve vertical space and keep the strokes below the glyphs.",
-      "desktopDisplayWidth": [132, 244], "mobileDisplayWidth": [90, 156],
-      "suggestedOpacity": [0.35, 0.7]
-    },
-    {
-      "file": "corner-bracket.svg",
-      "width": 120, "height": 120,
-      "role": "Loose corner outside a photograph or process note. Rotate only when the target needs the opposite corner.",
-      "desktopDisplayWidth": [58, 90], "mobileDisplayWidth": [34, 54],
-      "suggestedOpacity": [0.32, 0.6]
+      "desktopDisplayWidth": [
+        132,
+        244
+      ],
+      "mobileDisplayWidth": [
+        90,
+        156
+      ],
+      "suggestedOpacity": [
+        0.35,
+        0.7
+      ]
     },
     {
       "file": "tiny-bug.svg",
-      "width": 132, "height": 140,
+      "width": 132,
+      "height": 140,
       "role": "Friendly software-testing doodle near the hero or opener edge; decorative metaphor, not evidence of a found vulnerability.",
-      "desktopDisplayWidth": [56, 84], "mobileDisplayWidth": [34, 48],
-      "suggestedOpacity": [0.4, 0.7]
-    },
-    {
-      "file": "coffee-smile.svg",
-      "width": 156, "height": 164,
-      "role": "A quiet personal object near About or the contact edge. This is a cup, not another mascot.",
-      "desktopDisplayWidth": [64, 96], "mobileDisplayWidth": [38, 56],
-      "suggestedOpacity": [0.35, 0.65]
+      "desktopDisplayWidth": [
+        56,
+        84
+      ],
+      "mobileDisplayWidth": [
+        34,
+        48
+      ],
+      "suggestedOpacity": [
+        0.4,
+        0.7
+      ]
     },
     {
       "file": "sprout.svg",
-      "width": 150, "height": 170,
+      "width": 150,
+      "height": 170,
       "role": "Learning/growth accent near the About/contact boundary; keep clear of the existing cat's dock.",
-      "desktopDisplayWidth": [66, 102], "mobileDisplayWidth": [38, 58],
-      "suggestedOpacity": [0.32, 0.58]
+      "desktopDisplayWidth": [
+        66,
+        102
+      ],
+      "mobileDisplayWidth": [
+        38,
+        58
+      ],
+      "suggestedOpacity": [
+        0.32,
+        0.58
+      ]
     },
     {
       "file": "code-braces.svg",
-      "width": 206, "height": 138,
+      "width": 206,
+      "height": 138,
       "role": "One hand-drawn coding reference near the hero or project-opener margin; avoid turning the whole page into a terminal theme.",
-      "desktopDisplayWidth": [88, 132], "mobileDisplayWidth": [52, 76],
-      "suggestedOpacity": [0.32, 0.58]
+      "desktopDisplayWidth": [
+        88,
+        132
+      ],
+      "mobileDisplayWidth": [
+        52,
+        76
+      ],
+      "suggestedOpacity": [
+        0.32,
+        0.58
+      ]
     },
     {
       "file": "paperclip.svg",
-      "width": 104, "height": 160,
+      "width": 104,
+      "height": 160,
       "role": "Small edge accent for an existing screenshot/photo/process note, with no overlap on evidence or body copy.",
-      "desktopDisplayWidth": [34, 54], "mobileDisplayWidth": [24, 34],
-      "suggestedOpacity": [0.38, 0.65]
-    },
-    {
-      "file": "paper-grain.svg",
-      "width": 160, "height": 160,
-      "role": "Seamless transparent grain tile for a section background; alpha is already gentle (at most about 0.105 before element opacity).",
-      "desktopTileSize": [160, 220], "mobileTileSize": [160, 200],
-      "suggestedOpacity": [0.24, 0.5],
-      "texture": true,
-      "notes": "Static seeded feTurbulence with stitched edges. Use sparingly behind hero/opener/contact and verify device performance. The tile contains no animation. Do not animate filter values or use background-attachment:fixed."
-    },
-    {
-      "file": "sparse-pencil-dots.svg",
-      "width": 216, "height": 180,
-      "role": "Transparent irregular pencil specks, a few loose clusters rather than graph paper or a full grid.",
-      "desktopTileSize": [216, 288], "mobileTileSize": [216, 252],
-      "suggestedOpacity": [0.2, 0.42],
-      "texture": true,
-      "notes": "The drawing uses low-alpha tiny strokes. Avoid shrinking the tile into a dense dotted field. Prefer one texture per section, rather than stacking both at full strength."
+      "desktopDisplayWidth": [
+        34,
+        54
+      ],
+      "mobileDisplayWidth": [
+        24,
+        34
+      ],
+      "suggestedOpacity": [
+        0.38,
+        0.65
+      ]
     }
-  ]
+  ],
+  "note": "Daftar ini mengikuti berkas yang benar-benar dipakai halaman; gambar yang tidak terpakai sudah dikeluarkan dari repository."
 }

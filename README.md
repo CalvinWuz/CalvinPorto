@@ -1,244 +1,178 @@
 # Portofolio Calvin
 
-Situs statis: HTML, CSS, dan JavaScript biasa. Tidak ada build step dan tidak ada
-dependency. Semua yang dibutuhkan ada di folder ini, termasuk fontnya, jadi halaman
-ini tidak memanggil host pihak ketiga sama sekali.
+Website portofolio pribadi Calvin, mahasiswa Computer Science di Bina Nusantara
+University yang mendalami keamanan aplikasi. Halaman ini dipakai untuk melamar magang di
+Application Security, Pentesting, atau Security Engineering: isinya memperkenalkan tiga
+proyek beserta kontribusi pribadi dan batasnya, pengalaman yang relevan, arsip
+sertifikat, serta jalur kontak dan CV.
+
+Situs statis: HTML, CSS, dan JavaScript biasa. Tidak ada build step, tidak ada
+dependency, dan tidak ada permintaan ke host pihak ketiga. Font pun disalin ke dalam
+repository.
+
+## Isi website
+
+- **Tiga proyek** (Cookies Risk Analyzer, BISINDO Translator, PapanTulis). Tiap proyek
+  memperlihatkan masalahnya, bagian yang dikerjakan Calvin, apa yang sudah berjalan, dan
+  tautan bukti ke repository. Pendalamannya ada di satu `<details>` per proyek:
+  keputusan teknis, batas, pembelajaran, dan status.
+- **Tentang dan pengalaman**: pendidikan, kompetisi, kepanitiaan, serta ringkasan
+  organisasi dan sekolah.
+- **Arsip sertifikat**: map dengan dua lembar yang bisa dibuka. Saat ini berisi
+  sertifikat kursus C for Beginners dan sertifikat peserta Capture the Flag I-FEST#13.
+- **Tools** yang membedakan "sudah dipakai di proyek" dari "sedang dipelajari". Tidak ada
+  bar persentase, karena angkanya tidak punya dasar.
+- **Kontak dan CV**: email, LinkedIn, GitHub, dan `resume.pdf`.
+- **Tema terang dan gelap**, maskot kucing yang bisa diseret dan disapa, tiga stiker yang
+  bisa digeser, serta tombol jeda gerak.
+
+Seluruh teks ada di `index.html`. Tanpa JavaScript halaman tetap terbaca lengkap; tidak
+ada konten yang disembunyikan oleh kelas yang hanya bisa dilepas script.
+
+## Struktur
 
 ```text
-portfolio/
-├── index.html          seluruh konten, tetap terbaca tanpa JavaScript
-├── styles.css          token warna, layout dasar, dan kedua tema
-├── polish-07.css       dekorasi, titik tepi, dan penyesuaian komposisi
-├── page-polish.css     perapian tipografi dan jarak antarbagian
-├── archive-10.css      map arsip sertifikat
-├── expressions-10.css  lapisan ilustrasi kucing: sendi, wajah, dan efek (--cat10-*)
-├── companion-08.css    lapisan fisik kucing dan lima override komposisi
-├── main.js             hanya tambahan; setiap bagian dibungkus feature()
-├── js/
-│   ├── companion.js    satu-satunya pemilik posisi, rute, pose, dan tur kucing
-│   ├── expressions.js  renderer pose murni; tanpa listener, timer, atau loop sendiri
-│   ├── route.js        pencarian rute visibility-graph di antara penghalang
-│   ├── explorer.js     bedah proyek: 3 proyek x 4 bab
-│   ├── archive.js      map arsip sertifikat
-│   ├── certificates.js data slot sertifikat; satu-satunya tempat mengisi datanya
-│   └── ambient.js      titik tepi latar
-├── dev/
-│   └── expressions.html alat pemeriksaan 26 wajah; ada di .vercelignore, tidak ikut deploy
-├── assets/
-│   ├── cat-rig.svg     master rig kucing sebagai berkas mandiri (acuan gambar,
-│   │                   bukan aset runtime; rig yang dipakai halaman ditulis inline)
-│   ├── cat-expressions-manifest.json  id, label, dan selector tiap ekspresi
-│   └── edge-dots.svg   mask untuk titik tepi
-├── vercel.json         header keamanan dan aturan cache
-├── robots.txt, sitemap.xml
-├── resume.pdf
-├── fonts/              Barlow Condensed (woff2, subset latin) — lihat catatan lisensi
-└── img/
-    ├── me.webp, bisindo.webp, cookierisk.webp, boardly.webp, og-image.png
-    ├── brand/          logo C, favicon, apple-touch-icon
-    ├── decor/          doodle dan goresan pensil
-    └── tools/          logo tools monokrom
+index.html            seluruh konten dan markup
+main.js               penyalaan fitur; tiap bagian dibungkus feature()
+styles.css            token warna, layout dasar, dua tema
+page-polish.css       tipografi dan jarak antarbagian
+polish-07.css         dekorasi dan titik tepi
+archive-10.css        map arsip sertifikat
+expressions-10.css    lapisan ilustrasi kucing (variabel --cat10-*)
+companion-08.css      lapisan fisik kucing dan override komposisinya
+js/
+  companion.js        pemilik posisi, rute, pose, dan tur kucing
+  expressions.js      pustaka pose murni; tanpa listener atau timer sendiri
+  route.js            pencarian rute di antara penghalang
+  archive.js          perilaku map sertifikat
+  certificates.js     data sertifikat (satu-satunya tempat mengisi)
+  ambient.js          titik tepi latar
+assets/               rig kucing sebagai berkas mandiri dan mask titik tepi
+img/                  foto proyek, logo, dekorasi, logo tools, dokumen sertifikat
+fonts/                Barlow Condensed (woff2) beserta lisensinya
+dev/                  alat bantu lokal; tidak ikut ter-deploy
+resume.pdf            CV
+vercel.json           header keamanan dan aturan cache
+robots.txt, sitemap.xml
 ```
 
-## Pratinjau lokal
+## Menjalankan secara lokal
+
+Perlu Python 3. Halaman memakai ES module, jadi harus lewat HTTP; membuka `index.html`
+langsung dari berkas tidak akan menjalankan modulnya.
 
 ```bash
-python3 -m http.server 8765 --bind 127.0.0.1 --directory .
+python3 dev/serve.py 4321
 ```
 
-Buka http://127.0.0.1:8765. Periksa kedua tema, ketiga studi kasus, bedah proyek,
-tautan repository, dan CV sebelum menerbitkan.
+Buka `http://127.0.0.1:4321/`. Hentikan dengan `Ctrl+C`.
 
-## Cara halaman ini disusun
+Pakai `dev/serve.py`, bukan `python3 -m http.server`. Server bawaan hanya mengirim
+`Last-Modified` tanpa `Cache-Control`, sehingga browser memakai heuristik kesegaran:
+modul yang sudah lama ada di disk dianggap segar berhari-hari dan dipakai ulang tanpa
+bertanya, sementara `index.html` yang baru diubah tetap divalidasi. Hasilnya HTML baru
+bertemu modul lama dan halaman menampilkan campuran dua versi. `dev/serve.py` mengirim
+`Cache-Control: no-cache` untuk HTML, CSS, dan JS, sejajar dengan aturan `vercel.json`.
 
-- **Konten lebih dulu.** Seluruh bagian, termasuk isi studi kasus dan ke-12 bab
-  bedah proyek, ditulis di `index.html`. Tanpa JavaScript halaman tetap terbaca
-  lengkap; tidak ada konten yang disembunyikan oleh kelas yang hanya bisa dilepas
-  oleh script.
-- **`main.js` hanya menambah.** Menu ponsel, tombol tema, stiker yang bisa digeser,
-  huruf nama yang merespons, penanda bagian aktif, marquee tools, dan maskot.
-  Masing-masing ada di dalam `feature()`, jadi satu kegagalan tidak menjatuhkan
-  halaman.
-- **Studi kasus memakai `<details>` dengan `id`.** Membukanya menulis hash ke alamat
-  lewat `replaceState`, jadi tautannya bisa dibagikan tanpa membuat tombol Back
-  membingungkan. Tanpa JavaScript `<details>` tetap bisa dibuka sendiri.
-- **Token warna** ada di `:root`, ditulis ulang pada `html[data-theme=dark]` dan pada
-  `@media (prefers-color-scheme: dark)` untuk kondisi tanpa JavaScript. Warna merek
-  biru, ungu, dan cyan dipakai untuk bidang; untuk teks dipakai turunannya yang
-  sedikit lebih pekat agar kontrasnya memenuhi WCAG AA pada kedua tema.
+`dev/expressions.html` menampilkan seluruh ekspresi kucing pada ukuran aslinya, berguna
+saat mengubah rig. Folder `dev/` ada di `.vercelignore` sehingga tidak ikut ter-deploy.
 
-## Bedah proyek
+## Merawat konten
 
-`js/explorer.js` mengubah tiga artikel proyek menjadi satu catatan yang bisa
-dibuka per bab: Masalah, Keputusan, Kontribusiku, Bukti & batas.
+| Yang diubah | Tempatnya |
+| --- | --- |
+| Teks proyek, studi kasus, pengalaman, About, kontak | `index.html` |
+| Data sertifikat | `js/certificates.js` |
+| Dokumen sertifikat | `img/cert/` |
+| CV | `resume.pdf` |
+| Daftar tools | `index.html`, bagian marquee |
 
-- Tombolnya adalah tombol biasa dengan `aria-pressed` dan `aria-controls`, bukan
-  widget tab palsu, jadi Tab/Shift+Tab dan Enter/Space bekerja seperti biasanya dan
-  fokus tetap pada tombol yang ditekan.
-- Nav proyek dan kontrol bab ditulis `hidden` di HTML dan baru dibuka oleh script.
-  Tanpa JavaScript ketiga proyek dan keduabelas babnya tampil terbuka semua, dan
-  tidak ada tombol yang menjanjikan interaksi yang tidak ada.
-- Pergantian diumumkan sekali lewat satu live region `aria-live="polite"`.
-- Gambar bukti memakai `loading="lazy"`. Selama babnya belum dibuka gambarnya memang
-  belum dimuat; itu perilaku yang diharapkan, bukan aset yang hilang.
+### Mengisi sertifikat
 
-## Maskot
+`js/certificates.js` memuat satu entri per lembar. Field yang tersedia: `id`, `category`,
+`title`, `issuer`, `issuedAt`, `skills`, `note`, `documentUrl`, `documentType`, dan
+`verificationUrl`. Nilai yang belum ada ditulis `null` atau array kosong, dan tampil apa
+adanya sebagai "Belum diisi" atau "Belum ditambahkan". Tautan verifikasi hanya muncul
+bila URL-nya benar-benar ada, jadi tidak ada tautan kosong. `note` diisi konteks yang
+memang tertulis di dokumen, misalnya peran, nama tim, tingkat lomba, atau nomor
+sertifikat.
 
-`js/companion.js` dan `js/route.js` adalah satu-satunya pemilik posisi, rute, ritme
-kaki, pose, dan tur kucing.
+Markup di `index.html` memuat salinan statis isi tiap lembar untuk pembaca tanpa
+JavaScript. Setelah mengubah data, perbarui juga salinan statis itu agar keduanya cocok.
 
-- **Rig SVG, bukan atlas PNG.** Seluruh anatominya digambar inline di `index.html`.
-  Peran node dipisah: posisi viewport, lean badan, arah hadap, pose, dan gait tidak
-  pernah menulis transform node yang sama. Fase kaki dihitung dari jarak yang
-  benar-benar ditempuh.
-- **26 wajah, satu yang aktif.** Sepuluh wajah lama ditambah 16 ekspresi paket 10
-  (penasaran, tertawa, malu, kaget, berpikir, usil, bangga, fokus, bosan, bingung,
-  sedih, sayang, mengedip, menguap, bersin, bertekad). Semuanya berada di dalam
-  `.pet-head` yang sama, jadi telinga, dahi, pipi, dan kumis ikut kepala.
-- **Satu pemilik transform ilustrasi.** `expressions-10.css` memegang anatomi, sendi,
-  wajah, dan efek lewat variabel `--cat10-*`. `companion-08.css` hanya memegang
-  lapisan fisik (posisi, pantulan, skala saat diangkat) dan lima override yang memang
-  perlu mengomposisikan nilai tambahan: anatomi (squash saja, karena lift/lean ada di
-  lapisan fisik), kepala (pengaruh telinga dan pembesaran marah), dua kaki (scaleY saat
-  melangkah), dan mata (animasi kedip). Jangan menambah stylesheet baru yang menyentuh
-  node yang sama.
-- **`js/expressions.js` adalah renderer, bukan controller.** Ia tidak mengatur rute,
-  kecepatan, pointer, waktu, tur, atau fokus. `paint()` di `companion.js` menyusun satu
-  pose, menumpuknya di atas gait perjalanan, lalu menuliskannya sekali lewat
-  `CalvinCatExpressions.apply()`.
-- **Karakter tidak berbicara.** Tidak ada bubble reaksi, teks marah, atau suara. Yang
-  tersisa hanyalah cue kecil "geser / sapa" dan panel tur yang sengaja dibuka pengunjung.
-- **Tidak ada lajur khusus kucing.** `--catlane` sudah dihapus seluruhnya dari semua
-  stylesheet; isi halaman memakai grid yang sama di semua lebar. Kucing hidup di
-  lapisan interaksi terpisah dan menghindari materi lewat daftar penghalang.
-- **Penghalang dipasang pada blok materi, bukan wadahnya.** Daftar selektornya ada di
-  `main.js`. Untuk paragraf dan judul yang dipakai adalah kotak tiap baris teks,
-  bukan kotak bloknya, supaya baris terakhir yang pendek tidak menjadi dinding
-  selebar kolom.
-- **Jejak kucing tidak simetris.** Caption kecil di bawah badan ikut terlihat, jadi
-  penghalang diberi jarak lebih besar di sisi atasnya (`padDown`) daripada di sisi
-  bawahnya (`padUp`). Tanpa itu label tersebut menimpa baris teks di bawah kucing
-  saat ia berhenti.
-- **Tumpang tindih sesaat diterima.** Saat diseret, dijatuhkan, atau saat halaman
-  di-scroll cepat kucing boleh melewati materi; setelah berhenti ia berjalan ke tepi
-  yang paling sedikit mengganggu. Yang dijaga adalah CTA, CV, email, dan tombol
-  kontak tetap bisa diklik — ini yang diukur, bukan nol overlap.
-- **Reaksi jatuh berjalan tanpa teks.** Lempar cepat atau guncangan: held → dizzy →
-  angry-build → angry-burst → angry → sulk → wink, lalu kembali ke tepi. Jatuh pelan:
-  surprised → proud → wink. Caption dan bubble dimatikan di sepanjang kedua urutan.
-- **Sentuhan dibedakan.** Seret dimulai setelah perpindahan sekitar 6 px. Tahan diam
-  sekitar 350 ms memberi respons nyaman (`love`), lalu `shy` dan `wink` saat dilepas.
-  Tap singkat di kepala bergantian wink/shy/love, di badan laugh/mischievous/surprised
-  (kejutan boleh berlanjut ke puzzled lalu sneeze, sekali saja). Usapan panjang di atas
-  karakter memicu satu tawa dengan cooldown, bukan puluhan respons.
-- **Satu jalur aktivasi.** Tap singkat memberi ekspresi sekaligus membuka tawaran tur
-  bila belum terbuka; tap berikutnya tidak membuka ulang atau merebut fokus. Enter dan
-  Space mengikuti jalur yang sama. Seret, tahan, dan input yang dibatalkan tidak
-  membuka tawaran.
-- **Prioritas intent.** Seret dan rangkaian pendaratan/marah tidak bisa dipotong intent
-  kosmetik dari UI; intent arsip dan sapaan boleh saling menggantikan.
-- **Menguap dulu, baru tidur.** Sekitar 13 detik tanpa interaksi memunculkan `yawn`,
-  lalu `sleep` sampai ada input yang relevan.
-- **Tur bersifat sukarela.** Klik atau Enter pada kucing membuka tawaran dengan
-  pilihan "Mulai tur" dan "Main saja". Escape menutupnya. Saat bubble ditutup,
-  fokus dikembalikan ke kucing supaya tidak jatuh ke `<body>`; modalitas dibaca
-  sebelum fokus dipindah, jadi menutup dengan mouse tidak menahan kucing di tempat.
-- **Menyeberang layar** hanya dilakukan bila benar-benar ada koridor bebas selebar
-  viewport. Bila tidak ada, kucing tidak memaksakannya; tidak ada teleport sebagai
-  jalan biasa.
+### Menaikkan versi aset
 
-## Arsip sertifikat
+Modul dirantai: `index.html` memuat `main.js`, yang mengimpor `js/archive.js`, yang
+mengimpor `js/certificates.js`. Import relatif tidak mewarisi query versi dari modul
+induknya, jadi menaruh `?v=` pada satu berkas saja tidak cukup. `main.js` membaca `?v=`
+dari tag `<script>` miliknya sendiri lalu meneruskannya ke modul anak.
 
-Bagian "Catatan dari prosesnya" yang mengulang ketiga proyek diganti map arsip
-sertifikat. Tidak ada fakta yang hilang: isinya sudah ada di studi kasus dan di bedah
-proyek. Map-nya ada di dalam About, dengan id `#sertifikat`.
+Setiap kali modul JavaScript berubah, naikkan satu angka ini saja:
 
-- **Datanya ada di `js/certificates.js`, bukan di markup.** Tiga slot berisi `null` dan
-  array kosong. Mengisi berarti mengganti nilainya; markup dan perilaku tidak perlu
-  disentuh. Berkas itu memuat penjelasan tiap field dan contoh bentuk terisi.
-- **Yang kosong ditulis apa adanya**: "Belum diisi" dan "Belum ditambahkan". Tidak ada
-  badge verified, nomor kredensial, tanggal, ranking, atau gambar sertifikat palsu.
-  Tautan verifikasi dan tombol dokumen hanya dibuat ketika URL-nya benar-benar ada,
-  jadi tidak ada `href="#"` yang berpura-pura memverifikasi.
-- **Tanpa JavaScript ketiga lembar dan detailnya tampil terbuka** dari markup, dan tab
-  pemilih slot tetap `hidden` supaya tidak menjanjikan interaksi yang tidak ada. Karena
-  itu, kalau slot benar-benar diisi, perbarui juga ringkasan statis di `index.html`.
-- **Reaksi kucing memakai kucing global yang sama.** Membuka slot mengirim intent
-  `archive-open` (penasaran lalu bangga), menutup mengirim `archive-close` (mengedip).
-  Tidak ada actor kedua di dalam katalog, dan katalog tetap berfungsi penuh ketika
-  kucing sedang diseret, dijeda, atau gerak dimatikan.
-- **Fokus**: membuka memindahkan fokus ke tombol Tutup, menutup dan Escape
-  mengembalikannya ke tombol Buka slot. Detail berada di alur halaman, jadi fokusnya
-  tidak diperangkap.
-
-## Alat pemeriksaan
-
-`dev/expressions.html` menampilkan ke-26 wajah pada ukuran karakter yang sebenarnya
-(96 x 104 px), dengan penggeser progres dan intensitas serta tombol ganti tema. Berkas
-itu ada di `.vercelignore`, jadi tidak ikut ter-deploy. Jalankan server statis dari root
-repository lalu buka `/dev/expressions.html`.
-
-## Satu pemilik state gerak
-
-Effective pause = jeda manual (`calvin-motion`) ATAU reduced motion ATAU tab
-tersembunyi. Keputusannya dihitung sekali di `main.js`, ditulis ke
-`html[data-motion]`, lalu disiarkan ke kucing, marquee, titik tepi, dan dekorasi.
-Fitur lain ikut siaran itu dan tidak mendengarkan `visibilitychange` sendiri-sendiri.
-
-Tombol jeda gerakan di topbar mengendalikan semuanya sekaligus.
-
-## Perilaku lain di halaman
-
-- **Posisi stiker disusun ulang saat ruang berubah** selama pengguna belum
-  memindahkannya; posisi hasil drag atau keyboard dipertahankan dan hanya di-clamp
-  ke bidang baru. Bidang stiker tidak membaca posisi kucing.
-- **Satu sumber state untuk marquee.** Jeda bila manual, reduced motion, tab
-  tersembunyi, di luar layar, atau pointer/fokus sedang di atasnya. Hover sementara
-  tidak pernah menulis preferensi manual yang tersimpan.
-- **Titik tepi** (`js/ambient.js` dan `.ambient-edges`) bergeser sangat pelan di dua
-  tepi luar dengan `pointer-events:none`, dan ikut berhenti saat gerak dijeda.
-
-## Perawatan konten
-
-- Isi proyek dan studi kasusnya ada langsung di `index.html`.
-- Cookies Risk Analyzer adalah proyek kampus tim lima orang; peran Calvin adalah
-  pengembang bot analisis indikator terkait UU PDP. Jangan menulisnya sebagai
-  sertifikasi, jaminan, atau keputusan kepatuhan.
-- BISINDO mencakup 26 huruf dan 32 isyarat kata terpisah. Evaluasi pada penutur baru
-  belum dibuktikan, jadi jangan memasang angka akurasi tanpa metode dan batasnya.
-- PapanTulis adalah proyek pribadi, bukan proyek tim. Jangan mengarang angka FPS atau
-  hasil pengujian.
-- Tulis "sertifikasi" hanya jika memang ada sertifikasi bernama yang dimiliki.
-- Jaga agar situs, CV, dan dokumentasi repository tetap konsisten.
-
-## Logo
-
-Logo C yang disetujui ada di `img/brand/`. Berkasnya **PNG**, bukan SVG: tidak ada
-master vektor untuk aset ini. `logo-c.png` sudah dipangkas ke bentuknya (padding
-transparan asli sekitar 14 persen dibuang), jadi ukuran CSS 30 px juga 30 px optis.
-Logo dipakai apa adanya tanpa kotak bergradasi. Favicon dan apple-touch-icon berasal
-dari bentuk yang sama.
-
-## Kredit aset
-
-- Font Barlow Condensed berada di bawah SIL Open Font License 1.1, disalin ke
-  `fonts/` agar tidak ada permintaan ke host font pihak ketiga.
-- Logo tools berasal dari Simple Icons (CC0). Rincian per berkas, termasuk alasan
-  Frida dan jadx tampil sebagai teks, ada di `img/tools/CREDITS.md`.
-- Rig kucing dan 16 ekspresi tambahan berasal dari paket aset 10 milik Calvin; rig 08
-  di dalamnya tidak diubah (sha256 cocok dengan master sebelumnya).
-- Doodle di `img/decor/` disimpan sebagai WebP 560 px. Sumbernya PNG 1254 px dari
-  paket dekorasi; ukuran tampilnya tidak pernah lebih dari 250 px, jadi versi PNG
-  (1,6 MB untuk tiga berkas) tidak dibawa ke repository.
-
-## Menerbitkan
-
-Deployment statis di Vercel. Framework preset: Other; tanpa build command; output
-directory: root.
-
-```bash
-npx vercel --prod --yes --scope calvinwuzs-projects
+```html
+<script src="main.js?v=2026-10-23" defer></script>
 ```
 
-`vercel.json` memuat header keamanan, CSP tanpa origin eksternal, serta cache satu
-tahun untuk `fonts/` dan satu minggu untuk `img/`.
+Tanggal rilis sudah cukup; yang penting nilainya berubah. Tanpa itu, pengunjung yang
+pernah membuka situs bisa mendapat HTML baru dengan modul lama dari cache.
+
+Dua penjaga melengkapinya di `js/archive.js`: bila modul data gagal dimuat, atau jumlah
+slotnya tidak sama dengan jumlah lembar di markup, script berhenti dan membiarkan isi
+HTML apa adanya, lalu menulis pesan `console.error` yang menyebut angkanya. Kegagalan
+import tidak pernah mengubah sertifikat yang sudah benar menjadi serba kosong.
+
+## Interaksi dan aksesibilitas
+
+- **Kucing** bisa diseret, ditahan, diusap, dan disapa. Reaksinya nonverbal: tidak ada
+  teks atau suara yang keluar darinya. Menekannya membuka tawaran tur portofolio yang
+  sepenuhnya opsional; Escape menutupnya.
+- **Keyboard**: tombol kucing menerima Enter dan Space, tombol panah memindahkannya saat
+  fokus, dan Escape mengembalikannya ke tepi. Tab sertifikat dan `<details>` memakai
+  kontrol native, jadi urutan fokusnya wajar. Menutup detail mengembalikan fokus ke
+  tombol pembukanya.
+- **Stiker** di hero bisa digeser dengan pointer maupun tombol panah, dan ada tombol
+  untuk mengembalikan posisinya.
+- **Tombol jeda** di topbar menghentikan maskot, deretan logo, dan titik tepi sekaligus.
+  Jeda efektif dihitung sekali: jeda manual, `prefers-reduced-motion`, atau tab
+  tersembunyi. Saat gerak dijeda, semua kontrol tetap bisa dipakai.
+- Pada layar sempit yang padat, kucing memakai bentuk mengintip yang lebih ramping di
+  margin agar tidak menutupi teks, dan tetap bisa disapa.
+
+## Deployment
+
+Konfigurasi yang ada menargetkan hosting statis: `vercel.json` memuat header keamanan,
+Content-Security-Policy tanpa origin eksternal, dan aturan cache. HTML, CSS, serta JS
+wajib divalidasi ulang; font dan gambar boleh di-cache. Tidak ada build command dan
+output directory-nya adalah root.
+
+Repository ini hanya menyiapkan isinya. Menerbitkan adalah langkah manual terpisah, dan
+URL publik tidak otomatis mengikuti perubahan di sini.
+
+## Pemeriksaan
+
+Tidak ada test runner di repository ini. Pemeriksaan dilakukan dengan menjalankan server
+lokal lalu memeriksa di browser: kedua tema pada lebar desktop dan sekitar 390 px,
+ketiga proyek beserta studi kasusnya, kedua lembar sertifikat beserta gambarnya, tautan
+CV dan kontak, perilaku keyboard, serta tampilan tanpa JavaScript.
+
+## Batas yang perlu diketahui
+
+- BISINDO Translator dan PapanTulis masih prototipe. Tidak ada angka akurasi, FPS, atau
+  hasil pengujian pengguna di halaman ini karena pengukurannya memang belum dilakukan.
+- Cookies Risk Analyzer adalah proyek kampus lima orang. Kontribusi Calvin adalah bot
+  analisis indikator terkait UU PDP; scanner, dashboard, scoring, dan arsitektur
+  keseluruhan dikerjakan tim. Hasil alat itu bukan sertifikasi kepatuhan.
+- Sertifikat yang ditampilkan mengikuti dokumen aslinya. Tidak ada badge, peringkat, atau
+  nomor kredensial yang ditambahkan sendiri.
+
+## Kredit dan lisensi
+
+- Barlow Condensed berada di bawah SIL Open Font License 1.1. Teks lisensinya ada di
+  `fonts/OFL.txt` dan ringkasan sumbernya di `fonts/README.md`.
+- Logo tools berasal dari Simple Icons (CC0). Rincian per berkas ada di
+  `img/tools/CREDITS.md`.
+- Logo C, foto, dan gambar dekorasi adalah aset milik Calvin.
+- Dokumen sertifikat diterbitkan oleh Great Learning Academy dan Universitas Atma Jaya
+  Yogyakarta; keduanya ditampilkan apa adanya.
+
+Lisensi untuk kode repository ini belum ditetapkan.

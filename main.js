@@ -3,6 +3,18 @@
 (function () {
   'use strict';
 
+  /* Penanda rilis aset. Satu-satunya tempat menaikkannya adalah query pada <script src>
+     di index.html; nilainya dibaca kembali dari situ lalu diteruskan ke modul anak,
+     karena import relatif tidak mewarisi query versi dari modul induknya. */
+  var ASSET_VERSION = (function () {
+    try {
+      var tag = document.currentScript || document.querySelector('script[src^="main.js"]');
+      var hit = tag && /[?&]v=([^&]+)/.exec(tag.getAttribute('src') || '');
+      return hit ? decodeURIComponent(hit[1]) : '';
+    } catch (e) { return ''; }
+  })();
+  function versioned(path) { return ASSET_VERSION ? path + '?v=' + encodeURIComponent(ASSET_VERSION) : path; }
+
   var motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   var reduced = motionQuery.matches;
   var hasIO = 'IntersectionObserver' in window;
@@ -554,13 +566,13 @@
         bubble: root.querySelector('.pet-bubble'),
         // Teks seluruh section dilindungi, bukan hanya judul dan tombolnya: paragraf
         // penjelas di .section-head sempat tertutup kucing pada lebar ponsel.
-        obstacles: '.topbar,.nav.is-open,.sticker,.eyebrow,.name,.role,.motto,.lede,.cta,.hint,.chapter-kicker,.display,.bridge,.section-head p,.section-head h2,.case-tag,.case h3,.case-lede,.case-sub,.case-fact,.case-role,.flow-step,.pipe li,.pipeline figcaption,.stack,.link,details.study,.notebook-about p,.notebook-about h3,.notebook-about a,.px-notebook,.case-media,.case-visual,.notebook-about__portrait,.marquee-label,.marquee-view,.learn-list,.tools-note,.tl-group,.timeline li,.mailto,.contact-lede,.contact-actions,.contact-list,.cert-archive,.foot-top,.foot-note',
+        obstacles: '.topbar,.nav.is-open,.sticker,.eyebrow,.name,.role,.motto,.lede,.cta,.hint,.chapter-kicker,.display,.bridge,.section-head p,.section-head h2,.case-tag,.case h3,.case-lede,.case-sub,.case-fact,.case-role,.flow-step,.pipe li,.pipeline figcaption,.stack,.link,details.study,.notebook-about p,.notebook-about h3,.notebook-about a,.case-media,.case-visual,.notebook-about__portrait,.marquee-label,.marquee-view,.learn-list,.tools-note,.tl-group,.timeline li,.mailto,.contact-lede,.contact-actions,.contact-list,.cert-archive,.foot-top,.foot-note,.case-now,.case-evidence,.tl-compact,.cert-archive__sheet,.cert-archive__detail',
         sections: [
           {id:'p-cookies',title:'Cookies Risk Analyzer',text:'Di proyek tim lima orang ini, bagianku mengembangkan bot analisis indikator terkait UU PDP.'},
           {id:'p-bisindo',title:'BISINDO Translator',text:'Prototipe pribadiku untuk mengenali huruf dan isyarat kata melalui koordinat tangan, dengan inferensi lokal.'},
           {id:'p-papantulis',title:'PapanTulis',text:'Eksperimen pribadiku mengubah gerakan tangan menjadi kontrol menggambar dan presentasi.'},
           {id:'tentang',title:'Sedikit tentang Calvin',text:'Teliti, tuntas, dan lintas bidang. Ini cara belajarku lewat proyek yang masih terus diperbaiki.'},
-          {id:'kontak',title:'Mari terhubung',text:'Aku mencari magang 6 atau 12 bulan di bidang keamanan aplikasi atau posisi Computer Science yang relevan.'}
+          {id:'kontak',title:'Mari terhubung',text:'Aku mencari kesempatan magang di bidang keamanan aplikasi, atau posisi Computer Science lain yang relevan.'}
         ]
       }).start();
       // Manual dan preferensi OS tetap dibedakan oleh mesin karakter.
@@ -584,15 +596,10 @@
     }).catch(function (e) { console.error('[portofolio] companion', e); });
   });
 
-  feature(function () {
-    import('./js/explorer.js').then(function (mod) {
-      mod.initProjectExplorer({onLayout: announceLayout});
-    }).catch(function (e) { console.error('[portofolio] explorer', e); });
-  });
 
   feature(function () {
-    import('./js/archive.js').then(function (mod) {
-      mod.initCertificateArchive({onLayout: announceLayout});
+    import(versioned('./js/archive.js')).then(function (mod) {
+      return mod.initCertificateArchive({onLayout: announceLayout, dataVersion: ASSET_VERSION});
     }).catch(function (e) { console.error('[portofolio] arsip sertifikat', e); });
   });
 })();
